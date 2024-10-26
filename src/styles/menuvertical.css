@@ -11,6 +11,12 @@
     align-items: center;
     border: solid 1px #e2e6eb; /* Borde gris claro */
     box-shadow: 0 5px 5px #023a75(0, 0, 0, 0.1);
+    position: fixed; /* Fija el menú en la parte izquierda */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    
+
     
 }
 
@@ -157,5 +163,10 @@
     color: #b5c7c7; /* Color del texto de cerrar sesión más oscuro */
     cursor: pointer;
     transition: color 0.3s ease;
+}
+
+
+.Contador-citas{
+    justify-content: end;
 }
 

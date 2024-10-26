@@ -3,15 +3,15 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Menuvertical from './components/Menuvertical'; // Importa el componente MenuVertical
 import Perfilusuario  from './components/Perfilusuario'; // Importa el componente Perfilusuario
-import Dashboard from './components/Dashboard';
+import ContadorCitas from './components/ContadorCitas'; // Importa el componente ContadorCitas
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/Login" element={<Login />} />
-        <Route path="/Menuvertical" element={<Menuvertical />} />
+        <Route path="/" element={<Menuvertical />} />
         <Route path="/Perfilusuario" element={<Perfilusuario />} />
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/ContadorCitas" element={<ContadorCitas />} />
 
       </Routes>
     </Router>

@@ -1,29 +1,25 @@
 
-.dashboard-container{
-    margin-top: 50px;
-    margin-left: 400px;
-    margin-right: 50px;
-    padding: 50px;
+.dashboard-container {
+    margin-top: -250px;
+    margin-left: 500px;
+    padding: 40px;
     border-radius: 15px;
     background-color: #f5f5f5;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 20%;
-    background-color: rgb(10, 10, 95);
+    width: 50%;
+    background-color: rgb(1, 52, 110);
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: width 0.5s ease, background-color 0.5s ease;
-   
-    
+    position: unset;
+    z-index: 999;
 
 }
 
-.dashboard-container:hover{
-    background-color: rgb(31, 31, 114);
-    color: whitesmoke;
-    transition: 0.5s;
-    width: 220px;
-    background-color: #2c0b79;
+.dashboard-container:hover {
+    background-color: #1f5997; /* Color de fondo al hacer hover */
+    color: white; /* Color de texto */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Suaviza la transición */
 }
-
 
 
 .citas-reservadas{

@@ -5,7 +5,7 @@ import '../styles/menuvertical.css'; // Archivo CSS para estilos personalizados
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faCalendarAlt, faClipboardList, faStore, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import DropdownMenu from './DropdownMenu'; // Importa el componente DropdownMenu
-import Dashboard from './Dashboard';
+import ContadorCitas from './ContadorCitas';
 
 function MenuVertical() {
   return (
@@ -15,8 +15,9 @@ function MenuVertical() {
       </div>
       <div className='menu-user'>
         <DropdownMenu /> {/* Componente DropdownMenu */}
-        
       </div>
+        
+      
       
       <nav>
         <ul>
@@ -50,7 +51,12 @@ function MenuVertical() {
       <div className='footer'>
         <p>© ForAgend Colombia V2.0.23.76 2024</p>
       </div>
+      <div className='contador-citas'>
+        <ContadorCitas /> {/* Componente ContadorCitas */}
+        </div>
     </div>
+
+    
 
     
   );
