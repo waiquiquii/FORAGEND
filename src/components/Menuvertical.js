@@ -5,7 +5,8 @@ import '../styles/menuvertical.css'; // Archivo CSS para estilos personalizados
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faCalendarAlt, faClipboardList, faStore, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import DropdownMenu from './DropdownMenu'; // Importa el componente DropdownMenu
-import ContadorCitas from './ContadorCitas';
+import { Boton } from './Boton';
+
 
 function MenuVertical() {
   return (
@@ -15,9 +16,8 @@ function MenuVertical() {
       </div>
       <div className='menu-user'>
         <DropdownMenu /> {/* Componente DropdownMenu */}
+       
       </div>
-        
-      
       
       <nav>
         <ul>
@@ -36,11 +36,7 @@ function MenuVertical() {
               <FontAwesomeIcon icon={faClipboardList} /> Reporte Citas
             </Link>
           </li>
-          <li>
-            <Link to="/comercios-aliados">
-              <FontAwesomeIcon icon={faStore} /> Comercios Aliados
-            </Link>
-          </li>
+         
           <li>
             <Link to="/logout">
               <FontAwesomeIcon icon={faSignOutAlt} /> Cerrar sesión
@@ -51,15 +47,10 @@ function MenuVertical() {
       <div className='footer'>
         <p>© ForAgend Colombia V2.0.23.76 2024</p>
       </div>
-      <div className='contador-citas'>
-        <ContadorCitas /> {/* Componente ContadorCitas */}
-        </div>
-    </div>
 
-    
+    </div>
 
     
   );
 }
-
 export default MenuVertical;
