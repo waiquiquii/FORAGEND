@@ -1,6 +1,8 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css"; // Importa los estilos de Bootstrap
-import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Importa el JS necesario para Bootstrap
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+
 import "../../styles/DropdownMenu.css"; // Importa los estilos personalizados
 import { Link } from "react-router-dom";
 function DropdownMenu() {

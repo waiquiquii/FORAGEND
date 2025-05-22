@@ -2,8 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom"; // Importación correcta de Link desde react-router-dom
 import Home from "../adapters/Home";
 
-import "bootstrap/dist/css/bootstrap.min.css"; // Importación correcta de Bootstrap
-import "../../styles/perfilUsuario.css"; // Asegúrate de que la ruta del archivo CSS sea correcta
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../../styles/perfilUsuario.css";
 
 function Perfilusuario() {
   return (
