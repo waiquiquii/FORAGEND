@@ -1,0 +1,48 @@
+.calendario {
+    width: 300px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.calendario__mes {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.calendarioList {
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 columnas para los días de la semana */
+    gap: 0.2rem;
+    list-style: none;
+    justify-items: center;
+}
+
+.calendarioList__nombreDia {
+    font-weight: bold;
+    text-align: center;
+}
+
+.calendarioList__dia {
+    width: 15px;
+    height: 10px;
+    padding: 0.2rem;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.calendarioList__dia--actual {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.calendarioList__dia--cita {
+    background-color: #ffcccb;
+}

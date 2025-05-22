@@ -1,20 +1,18 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './components/Login';
-import Menuvertical from './components/Menuvertical'; // Importa el componente MenuVertical
-import Perfilusuario  from './components/Perfilusuario'; // Importa el componente Perfilusuario
-import ContadorCitas from './components/ContadorCitas'; // Importa el componente ContadorCitas
-import Agendar from './components/Agendar'; // Importa el componente Agendar
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./components/pages/Login";
+import Perfilusuario from "./components/pages/Perfilusuario";
+import Agendar from "./components/pages/Agendar";
+import Inicio from "./components/pages/Inicio";
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Inicio />} />
         <Route path="/Login" element={<Login />} />
-        <Route path="/" element={<Menuvertical />} />
         <Route path="/Perfilusuario" element={<Perfilusuario />} />
-        <Route path="/ContadorCitas" element={<ContadorCitas />} />
-        <Route path="/Agendar" element={<Agendar />} />
+        <Route path="/agendar" element={<Agendar />} />
       </Routes>
     </Router>
   );

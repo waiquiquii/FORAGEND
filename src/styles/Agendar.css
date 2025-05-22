@@ -1,82 +1,75 @@
-/* Archivo Agendar.css */
-
-/* Contenedor principal */
-.app-container {
-    display: flex;
-    flex-direction: row; /* El menú y el contenido estarán en fila */
-    height: 100vh;
+/* .app-container {
+  display: flex;
+  flex-direction: row; 
+  height: 100vh;
 }
 
-/* Contenido principal */
 .main-content {
-    flex-grow: 1;
-    padding: 20px;
-    margin-left: 250px; /* Ajusta según el tamaño del menú lateral */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+  flex-grow: 1;
+  padding: 20px;
+  margin-left: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
 
-/* Contenedor del formulario */
 .form-container {
-    width: 100%;
-    max-width: 900px; /* Ancho máximo del formulario */
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
 }
 
 /* Estilos para alinear los campos en fila */
 .form-row {
-    display: flex;
-    justify-content: space-between; /* Espacio entre los campos */
-    gap: 20px; /* Espacio entre los campos */
-    margin-bottom: 20px; /* Espacio entre las filas */
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
 /* Los campos dentro de la fila tienen un tamaño fijo */
 .form-group {
-    display: flex;
-    flex-direction: column; /* Los elementos del formulario estarán apilados dentro de la fila */
-    width: 48%; /* Ajusta el tamaño fijo de los campos */
+  display: flex;
+  flex-direction: column;
+  width: 48%;
 }
 
 /* Etiquetas */
 .form-group label {
-    font-weight: bold;
-    margin-bottom: 5px;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
 /* Campos de entrada (inputs, selects) */
 .form-group input,
 .form-group select {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    width: 100%; /* Los campos se ajustan al tamaño de su contenedor */
-    box-sizing: border-box;
-    margin-bottom: 10px; /* Espacio entre los campos */
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
 }
 
 /* Botón de envío */
 button {
-    padding: 10px 20px;
-    background-color: #023a75;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 10px 20px;
+  background-color: #023a75;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 button:hover {
-    background-color: #015080;
+  background-color: #015080;
 }
 
-.form-container h2{
+.form-container h2 {
+  text-align: center;
 
-    text-align: center;
-  
-    font-size: 30px;
+  font-size: 30px;
 }

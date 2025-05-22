@@ -1,203 +1,161 @@
 /* Archivo menuvertical.css */
 
 .menu-vertical {
-    width: 250px;
-    height: 100vh; /* Ocupa toda la altura de la pantalla */
-    background-color: hsl(0, 0%, 100%); /* Fondo blanco semitransparente */
-    display: flex;
-    flex-direction: column;
-    font-family: 'Roboto', sans-serif;
-    padding: 20px;
-    align-items: center;
-    border: solid 1px #e2e6eb; /* Borde gris claro */
-    box-shadow: 0 5px 5px #023a75(0, 0, 0, 0.1);
-    position: fixed; /* Fija el menú en la parte izquierda */
-    top: 0;
-    left: 0;
-    z-index: 1000;
+  width: 98%;
+  height: 100vh;
+  font-family: "Roboto", sans-serif;
+  background-color: #ffffff;
+  border: solid 1px #e2e6eb;
+  box-shadow: 0 5px 5px #023a75(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+
+  background-color: hsl(0, 0%, 100%);
+  font-family: "Roboto", sans-serif;
+  padding: 20px;
+  align-items: center;
+  border: solid 1px #e2e6eb;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
 }
 
-.menu-vertical .logo {
-    width: 80px; /* Asegúrate de que el ancho y la altura sean iguales para una forma redonda */
-    height: 80px;
-    background-image: url('../Elementos_Proyecto/Fondos_Login/Logo-ForAgend.png'); /* Ruta de la imagen del logo */
-    background-size: cover; /* Ajusta el tamaño de la imagen para cubrir el contenedor */
-    background-repeat: no-repeat;
-    background-position: center;
-    margin-bottom: 40px;
-    border-radius: 50%; /* Forma redonda */
-
+.menu-vertical__nav {
+  width: 100%;
+  /* padding: 20px; */
+  align-items: center;
 }
 
-
-
-.menu-vertical nav ul {
-    list-style: none; /* Elimina los puntos de la lista */
-    padding: 0;
-    margin: 0;
+.menu-vertical__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.menu-vertical nav ul li {
-    margin-bottom: 20px; /* Espacio entre los elementos */
+/* .menu-vertical__item {} */
+
+.menu-vertical__link {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  /* justify-content: center; */
+  text-decoration: none;
+  color: #050505;
+  font-size: 15px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
-.menu-vertical nav ul li a {
-    text-decoration: none; /* Elimina subrayado */
-    color: #050505; /* Color de texto oscuro */
-    font-size: 15px; /* Tamaño de letra */
-    padding: 10px 15px;
-    border-radius: 5px;
-    display: flex; /* Utiliza flexbox para alinear ícono y texto */
-    align-items: center; /* Centra verticalmente los elementos */
-    transition: background-color 0.3s ease;
+.menu-vertical__link:hover {
+  background-color: #023a75;
+  color: white;
 }
 
-.menu-vertical nav ul li a:hover {
-    background-color: #023a75; /* Color al pasar el mouse */
-    color: white; /* Color del texto al hacer hover */
-}
-
-.menu-footer {
-    text-align: center;
-    margin-top: 200px;
+/* .menu-footer {
+  text-align: center;
+  margin-top: 200px;
 }
 
 .menu-footer p {
-    margin: 0;
-    color: #333333; /* Color del texto de cerrar sesión más oscuro */
-    font-size: 16px;
-    cursor: pointer;
-    transition: color 0.3s ease;
+  margin: 0;
+  color: #333333;
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 .menu-footer p:hover {
-    color: #dc3545; /* Rojo al hacer hover */
+  color: #dc3545;
 }
-
 
 .menu-vertical nav ul li a svg {
-    margin-right: 10px; /* Espacio entre el ícono y el texto */
-    font-size: 20px; /* Tamaño del ícono */
+  margin-right: 10px;
+  font-size: 20px;
 }
 
+.menu-vertical nav ul li a {
+  border-bottom: 1px solid #e0e0e0;
+} */
 
-.menu-vertical nav ul li a{
-
-    border-bottom: 1px solid #e0e0e0; /* Línea divisoria entre elementos del menu*/
+/* .menu-header {
+  width: calc(100% - 250px);
+  height: 60px;
+  background-color: #023a75;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 250px;
+  z-index: 1000;
+  border-bottom: 1px solid rgb(235, 235, 235);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
-.menu-header{
-
-    width: calc(100% - 250px); /* Resta el ancho del menú vertical */
-    height: 60px;
-    background-color: #023a75; /* Color de fondo de la barra */
-    color:#ffffff ; /* Color del texto */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed; /* Fija la barra en la parte superior */
-    top: 0;
-    left: 250px; /* Comienza justo al lado del menú vertical */
-    z-index: 1000;
-    border-bottom: 1px solid rgb(235, 235, 235);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-
+.menu-header p {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+  font-size: 35px;
 }
 
-.menu-header p{
-    margin: 0;
-    font-size: 20px;
-    font-weight: bold;
-    font-size: 35px;
-    
-   
-}
-
-.menu-header .btn{
-
-    margin-left: auto; /* Empuja el botón a la derecha */
+.menu-header .btn {
+  margin-left: auto;
 }
 
 .menu-user {
+  position: fixed;
+  margin-left: 175%;
+  flex-direction: column;
+  z-index: 1000;
+  margin-top: -10px;
+} */
 
-    position: fixed;
-    margin-left: 175%;
-    flex-direction: column;
-    z-index: 1000;
-    margin-top: -10px;
-   
+/* .btn-primary {
+  background-color: #023a75;
+  color: white;
+  border: #333333;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+} */
+
+/* .menu-vertical .footer {
+  width: calc(100% - 250px);
+  background-color: #ffffff;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 250px;
+  border: solid 2px #e3e8ec;
+  box-shadow: 0 5px 5px #023a75(0, 0, 0, 0.1);
 }
 
-.btn-primary {
-    background-color: #023a75;
-    color: white;
-    border:#333333;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.menu-vertical .footer p {
+  margin: 0;
+  font-size: 16px;
+  color: #b5c7c7;
+  cursor: pointer;
+  transition: color 0.3s ease;
+} */
+
+/* .app-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
 }
 
-.menu-vertical .footer{
-
-
-    width: calc(100% - 250px); /* Resta el ancho del menú vertical */
-    background-color: #ffffff; /* Color de fondo de la barra */
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position:fixed;
-    bottom: 0;
-    left: 250px; /* Comienza justo al lado del menú vertical */
-    border: solid 2px #e3e8ec; /* Borde gris claro */
-    box-shadow: 0 5px 5px #023a75(0, 0, 0, 0.1);
-    
-}
-
-.menu-vertical .footer p{
-    margin: 0;
-    font-size: 16px;
-    color: #b5c7c7; /* Color del texto de cerrar sesión más oscuro */
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-
-.Contador-citas{
-    justify-content: end;
-}
-
-.menu-vertical {
-    width: 250px;
-    height: 100vh;
-    background-color: hsl(0, 0%, 100%);
-    display: flex;
-    flex-direction: column;
-    font-family: 'Roboto', sans-serif;
-    padding: 20px;
-    align-items: center;
-    border: solid 1px #e2e6eb;
-    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-}
-
-/* Contenedor principal */
-.app-container {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-  }
-  
-  /* Área de contenido dinámico */
-  .content-area {
-    margin-left: 250px; /* Alineado con el ancho del menú vertical */
-    width: calc(100% - 250px); /* Resta el ancho del menú */
-    padding: 20px;
-    overflow-y: auto; /* Habilita scroll si el contenido es extenso */
-    background-color: #f8f9fa; /* Fondo claro */
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05); /* Sutil sombra interna */
-  }
-  
+.content-area {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+} */

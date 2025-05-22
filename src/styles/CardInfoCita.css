@@ -1,0 +1,63 @@
+.card-info-cita {
+    padding: 1rem;
+    margin: 10px auto;
+    width: 400px;
+    height: 280px;
+    display: grid;
+    grid-template-rows: 10px auto 2fr;
+    grid-template-columns: 1fr;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-info-cita__id-container {
+    text-align: left;
+    padding: 0 0 0 1rem;
+}
+
+.card-info-cita__id {
+    font-size: 12px;
+    font-weight: bold;
+    color: #555;
+}
+
+.card-info-cita__title-container {
+    text-align: center;
+}
+
+.card-info-cita__title {
+    font-size: 1.5rem;
+    line-height: 0.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.card-info-cita__content-container {
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* gap: 0.5rem; */
+}
+
+.card-info-cita__content--left,
+.card-info-cita__content--right {
+    display: flex;
+    flex-direction: column;
+    line-height: 5px;
+    /* gap: 0.5rem; */
+}
+
+.card-info-cita__content--left{
+    text-align: left;
+}
+.card-info-cita__content--right{
+    text-align: right;
+}
+
+.card-info-cita__text {
+    font-size: 1rem;
+    color: #666;
+}
