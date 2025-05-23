@@ -12,12 +12,12 @@ function Perfilusuario() {
         <h1>Perfil de Usuario</h1>
         <form className="form-group formperfil">
           <label className="label-usuario">
-            Nombre:
+            Nombres:
             <input
               type="text"
               className="form-control my-hover-input"
               name="nombre"
-              placeholder="Nombre"
+              placeholder="Nombres"
             />
           </label>
           <label className="label-usuario">
