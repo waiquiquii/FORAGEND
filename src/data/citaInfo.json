@@ -1,0 +1,42 @@
+[
+  {
+    "cita_id": "CITA-1234",
+    "tipo_cita": "Consulta General",
+    "cita_fecha": "2025-06-01",
+    "cita_hora": "10:40 AM",
+    "cita_doctor": "Dr. Juan Pérez",
+    "cita_consultorio": "Consultorio 3"
+  },
+  {
+    "cita_id": "CITA-1235",
+    "tipo_cita": "Odontología",
+    "cita_fecha": "2025-06-02",
+    "cita_hora": "11:00 AM",
+    "cita_doctor": "Dra. Laura Gómez",
+    "cita_consultorio": "Consultorio 5"
+  },
+  {
+    "cita_id": "CITA-1236",
+    "tipo_cita": "Pediatría",
+    "cita_fecha": "2025-06-03",
+    "cita_hora": "09:20 AM",
+    "cita_doctor": "Dr. Carlos Rodríguez",
+    "cita_consultorio": "Consultorio 1"
+  },
+  {
+    "cita_id": "CITA-1237",
+    "tipo_cita": "Dermatología",
+    "cita_fecha": "2025-06-04",
+    "cita_hora": "02:00 PM",
+    "cita_doctor": "Dra. Liliana Suárez",
+    "cita_consultorio": "Consultorio 2"
+  },
+  {
+    "cita_id": "CITA-1238",
+    "tipo_cita": "Psicología",
+    "cita_fecha": "2025-06-05",
+    "cita_hora": "03:40 PM",
+    "cita_doctor": "Dr. Alberto Murillo",
+    "cita_consultorio": "Consultorio 4"
+  }
+]

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-
 function App() {
   const [contador, setContador] = useState(0);
   const [contadorTexto, setContadorTexto] = useState("cero");
