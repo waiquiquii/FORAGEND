@@ -1,0 +1,111 @@
+.inicio {
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 250px;
+  gap: 20px;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Contenedor de las tarjetas del carrusel */
+.inicio-cards-container {
+  /* Esta es la celda izquierda del grid */
+  width: 100%;
+  height: 400px;
+  grid-column: 1 / 2;
+  position: relative; /* Para posicionar los botones de control */
+  display: flex;
+  justify-content: center; /* Centra el carrusel dentro de su contenedor */
+  align-items: center;
+  gap: 10px;
+  perspective: 1000px; /* Perspectiva para el efecto 3D */
+  overflow: hidden; /* Oculta las partes de las tarjetas que se salen */
+}
+
+/* El contenedor interno que aplica las transformaciones 3D a las tarjetas */
+.carousel {
+  position: relative; /* Las tarjetas absolutas dentro de este */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-style: preserve-3d; /* Crucial para el efecto 3D en los hijos */
+  /* NOTA: No agregar transition: transform aquí, ya que las transformaciones se aplican directamente a las tarjetas */
+}
+
+/* Controles del carrusel (flechas) */
+.carousel-controls {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  padding: 0 10px;
+  z-index: 10; /* Asegura que los botones estén por encima de las tarjetas */
+}
+
+.carousel-control-button {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: background-color 0.3s ease;
+  /* Ajustes para el tema claro/oscuro si no se heredan bien */
+  /* background-color: var(--color-carousel-button-bg, rgba(0, 0, 0, 0.5)); */
+  /* color: var(--color-carousel-button-text, white); */
+}
+
+.carousel-control-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Contenedor del calendario */
+.banner-calendario {
+  /* Esta es la celda derecha del grid */
+  max-width: 250px;
+  grid-column: 2 / 3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10px;
+  /* NOTA: pendiente añadir estilos de fondo, borde, etc. para el calendario */
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 900px) {
+  .inicio {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .inicio-cards-container,
+  .banner-calendario {
+    grid-column: 1 / -1;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  /* Ajustes específicos del carrusel para pantallas pequeñas */
+  .inicio-cards-container {
+    height: 350px;
+    perspective: 800px;
+  }
+}
+
+@media (max-width: 600px) {
+  .inicio-cards-container {
+    height: 300px;
+    perspective: 600px;
+  }
+  /* NOTA: queda pendiente ajustar los valores de translateX, scale, rotateY, translateZ en JavaScript
+       para que el efecto 3D se vea bien en pantallas muy pequeñas. */
+}
