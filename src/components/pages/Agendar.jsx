@@ -39,7 +39,7 @@ const AppointmentForm = () => {
   return (
     <Home>
       <div className="form-container">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="form">
           {/* Datos del solicitante */}
           <div className="form-row">
             <div className="form-group">
@@ -52,6 +52,7 @@ const AppointmentForm = () => {
                 onChange={handleChange}
                 required
                 placeholder="Ingrese su nombre"
+                className="form-input__texto"
               />
             </div>
             <div className="form-group">
@@ -64,6 +65,7 @@ const AppointmentForm = () => {
                 onChange={handleChange}
                 required
                 placeholder="Ingrese su correo electrónico"
+                className="form-input__texto"
               />
             </div>
           </div>
@@ -78,6 +80,7 @@ const AppointmentForm = () => {
                 onChange={handleChange}
                 required
                 placeholder="Ingrese su número de teléfono"
+                className="form-input__texto"
               />
             </div>
             <div className="form-group">
@@ -88,6 +91,7 @@ const AppointmentForm = () => {
                 name="fecha"
                 value={formData.fecha}
                 onChange={handleChange}
+                className="form-input__texto"
                 required
               />
             </div>
@@ -103,6 +107,7 @@ const AppointmentForm = () => {
                 value={formData.hora}
                 onChange={handleChange}
                 required
+                className="form-input__seleccion"
               >
                 <option value="">Seleccione una hora</option>
                 <option value="08:00">08:00 AM</option>
@@ -126,6 +131,7 @@ const AppointmentForm = () => {
                 value={formData.medico}
                 onChange={handleChange}
                 required
+                className="form-input__seleccion"
               >
                 <option value="">Seleccione un médico</option>
                 <option value="medico1">Dr. Juan Pérez</option>
@@ -140,7 +146,7 @@ const AppointmentForm = () => {
           </div>
 
           {/* Deslizador para pasar al campo de síntoma */}
-          <div className="form-group">
+          <div className="form-group__slider">
             <label htmlFor="sintomaSlider">
               Desliza para describir tu síntoma:
             </label>
@@ -151,8 +157,8 @@ const AppointmentForm = () => {
               min="0"
               max="1"
               value={step}
+              className="form-input__slider"
               onChange={handleSliderChange}
-              style={{ width: "100%" }}
             />
           </div>
 

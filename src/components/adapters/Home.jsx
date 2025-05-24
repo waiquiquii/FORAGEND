@@ -7,12 +7,12 @@ import "../../styles/Home.css";
 function Home({ children }) {
   return (
     <div className="home-container">
+      <BarraSuperior />
       <MenuVertical />
       <div className="main-content">
-        <BarraSuperior />
         <div className="contenido">{children}</div>
         <div className="footer">
-          <p>© 2023 Todos los derechos reservados</p>
+          <p>© 2025 Todos los derechos reservados</p>
         </div>
       </div>
     </div>
