@@ -1,21 +1,21 @@
 .barra-superior {
-    padding: 20px;
-    background-color: rgb(29, 29, 119);
-    color: #ffffff;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 2.5rem;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 20px;
+  background-color: rgb(29, 29, 119);
+  color: #ffffff;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 2.5rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .bS-logo-container {
-    width: 70px;
-    height: 70px;
+  width: 150px;
+  height: 80px;
 }
 
 .bS-logo {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }

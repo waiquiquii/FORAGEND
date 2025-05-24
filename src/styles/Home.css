@@ -1,4 +1,33 @@
 .home-container {
+  max-width: 100vw;
+  max-height: 100vh;
+  height: 100vh;
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 100px repeat(4, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+.barra-superior {
+  grid-area: 1 / 1 / 1 / 6;
+}
+.menu-vertical {
+  grid-area: 2 / 1 / 6 / 2;
+}
+.main-content {
+  width: 100%;
+  height: 100%;
+  grid-area: 2 / 2 / 6 / 6;
+  display: grid;
+  grid-template-rows: 1fr 30px;
+  align-items: center;
+  & .contenido {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.footer {
+  text-align: center;
 }
