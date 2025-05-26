@@ -1,0 +1,62 @@
+[
+  {
+    "id": "TimeOFF001",
+    "fechaInicio": "2023-01-01",
+    "horaInicio": "08:00",
+    "fechaFin": "2023-01-10",
+    "horaFin": "17:00",
+    "motivo": "Vacaciones",
+    "doctorId": "DOC001",
+    "estado": "Aprobado"
+  },
+  {
+    "id": "TimeOFF002",
+    "fechaInicio": "2023-02-01",
+    "horaInicio": "08:00",
+    "fechaFin": "2023-02-05",
+    "horaFin": "17:00",
+    "motivo": "Congreso Médico",
+    "doctorId": "DOC002",
+    "estado": "Aprobado"
+  },
+  {
+    "id": "TimeOFF003",
+    "fechaInicio": "2023-03-01",
+    "horaInicio": "08:00",
+    "fechaFin": "2023-03-03",
+    "horaFin": "17:00",
+    "motivo": "Capacitación Profesional",
+    "doctorId": "DOC003",
+    "estado": "Pendiente"
+  },
+  {
+    "id": "TimeOFF004",
+    "fechaInicio": "2023-04-01",
+    "horaInicio": null,
+    "fechaFin": null,
+    "horaFin": null,
+    "motivo": null,
+    "doctorId": null,
+    "estado": null
+  },
+  {
+    "id": "TimeOFF005",
+    "fechaInicio": "2023-05-01",
+    "horaInicio": "08:00",
+    "fechaFin": "2023-05-05",
+    "horaFin": "17:00",
+    "motivo": "Maternidad",
+    "doctorId": "DOC006",
+    "estado": "Aprobado"
+  },
+  {
+    "id": "TimeOFF006",
+    "fechaInicio": "2023-06-01",
+    "horaInicio": null,
+    "fechaFin": null,
+    "horaFin": null,
+    "motivo": null,
+    "doctorId": null,
+    "estado": null
+  }
+]

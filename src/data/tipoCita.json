@@ -1,0 +1,40 @@
+{
+  "general": {
+    "id": "general",
+    "nombre": "Consulta General"
+  },
+  "especialista": {
+    "id": "especialista",
+    "nombre": "Consulta con Especialista",
+    "subTipos": {
+      "cardiologia": {
+        "id": "cardiologia",
+        "nombre": "Cardiología"
+      },
+      "dermatologia": {
+        "id": "dermatologia",
+        "nombre": "Dermatología"
+      },
+      "pediatria": {
+        "id": "pediatria",
+        "nombre": "Pediatría"
+      },
+      "ginecologia": {
+        "id": "ginecologia",
+        "nombre": "Ginecología"
+      },
+      "odontologia": {
+        "id": "odontologia",
+        "nombre": "Odontología"
+      },
+      "psicologia": {
+        "id": "psicologia",
+        "nombre": "Psicología"
+      }
+    }
+  },
+  "control": {
+    "id": "control",
+    "nombre": "Consulta de control de Salud"
+  }
+}

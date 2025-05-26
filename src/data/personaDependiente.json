@@ -1,0 +1,38 @@
+[
+  {
+    "id": "DEPEND001",
+    "primer_nombre": "Carlos",
+    "segundo_nombre": "Andrés",
+    "primer_apellido": "Pérez",
+    "segundo_apellido": "García",
+    "parentesco": "Hijo",
+    "tipo de identificación": "Tarjeta de Identidad",
+    "numero de identificación": "123456789",
+    "Fecha nacimiento": "2010-05-15",
+    "Genero": "Masculino"
+  },
+  {
+    "id": "DEPEND002",
+    "primer_nombre": "Ana",
+    "segundo_nombre": "María",
+    "primer_apellido": "Gómez",
+    "segundo_apellido": "Restrepo",
+    "parentesco": "Hija",
+    "tipo de identificación": "Tarjeta de Identidad",
+    "numero de identificación": "987654321",
+    "Fecha nacimiento": "2012-03-22",
+    "Genero": "Femenino"
+  },
+  {
+    "id": "DEPEND003",
+    "primer_nombre": "Luis",
+    "segundo_nombre": "",
+    "primer_apellido": "Rodríguez",
+    "segundo_apellido": "",
+    "parentesco": "Hermano",
+    "tipo de identificación": "Registro Civil",
+    "numero de identificación": "456789123",
+    "Fecha nacimiento": "1988-07-30",
+    "Genero": "Masculino"
+  }
+]

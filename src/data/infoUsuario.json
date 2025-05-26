@@ -1,0 +1,15 @@
+{
+  "id": "USER001",
+  "primerNombre": "Juan",
+  "segundoNombre": "Pablo",
+  "primerApellido": "Pérez",
+  "segundoApellido": "García",
+  "nombreCompleto": "Juan Pablo Pérez García",
+  "correo": "juan.perez@pasiente.com",
+  "telefono": "321-654-4567",
+  "direccion": "Calle 123, Ciudad",
+  "fechaNacimiento": "1980-05-15",
+  "genero": "Masculino",
+  "tipoDocumento": "Cédula de Ciudadanía",
+  "numeroDocumento": "123456789"
+}

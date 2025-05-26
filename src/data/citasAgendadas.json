@@ -1,0 +1,42 @@
+[
+  {
+    "cita_id": "CITA001",
+    "paciente_id": "PAC001",
+    "paciente_nombre": "Paciente de Prueba",
+    "tipo_cita": "Consulta General",
+    "cita_fecha": "25/05/2025",
+    "cita_hora": "09:00 AM",
+    "cita_doctor": "Dr. Juan Pérez Acosta",
+    "cita_consultorio": "Consultorio 3"
+  },
+  {
+    "cita_id": "CITA002",
+    "paciente_id": "PAC001",
+    "paciente_nombre": "Paciente de Prueba",
+    "tipo_cita": "Cardiología",
+    "cita_fecha": "28/05/2025",
+    "cita_hora": "02:30 PM",
+    "cita_doctor": "Dr. Carlos Ochoa Marín",
+    "cita_consultorio": "Consultorio 7"
+  },
+  {
+    "cita_id": "CITA003",
+    "paciente_id": "PAC002",
+    "paciente_nombre": "Otro Paciente",
+    "tipo_cita": "Pediatría",
+    "cita_fecha": "01/06/2025",
+    "cita_hora": "10:00 AM",
+    "cita_doctor": "Dr. Carlos Rodríguez Vargas",
+    "cita_consultorio": "Consultorio 1"
+  },
+  {
+    "cita_id": "CITA004",
+    "paciente_id": "PAC001",
+    "paciente_nombre": "Paciente de Prueba",
+    "tipo_cita": "Odontología",
+    "cita_fecha": "30/05/2025",
+    "cita_hora": "11:00 AM",
+    "cita_doctor": "Dra. Laura Gómez Restrepo",
+    "cita_consultorio": "Consultorio 5"
+  }
+]
