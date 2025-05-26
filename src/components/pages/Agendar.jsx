@@ -1,190 +1,70 @@
-import React, { useState } from "react";
-import "../../styles/Agendar.css"; // Archivo CSS para estilos personalizados
+import React, { useState, useContext } from "react";
+import { createContext } from "react";
+import "../../styles/Agendar.css";
 import Home from "../adapters/Home";
+import SeleccionadorDeCita from "../elementos/SeleccionadorDeCita.jsx";
+import Calendario from "../elementos/Calendario.jsx";
+import FormAddFamiliar from "../elementos/FormAddFamiliar.jsx";
+// import FormDetallesCita from "../elementos/FormDetallesCita.jsx";
 
-const AppointmentForm = () => {
-  const [formData, setFormData] = useState({
-    nombre: "",
-    email: "",
-    telefono: "",
-    fecha: "",
-    hora: "",
-    medico: "",
-    sintoma: "", // Añadir estado para los síntomas
-  });
+// Importar constantes para los pasos del agendamiento
+import { PASOS_AGENDAR } from "../../utils/pasosAndOpciones.js";
 
-  const [step, setStep] = useState(0); // Paso del slider (inicialmente 0, significa que aún no se ha llegado al campo de síntoma)
+import FormDetallesCita from "../elementos/FormDetallesCita.jsx";
 
-  // Maneja los cambios de los inputs
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+export const CalendarioContexto = createContext(null);
 
-  // Maneja el envío del formulario
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Cita solicitada con éxito");
-    console.log(formData); // Aquí puedes manejar los datos (enviarlos a un servidor, etc.)
-  };
+function Agendar() {
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(null); // Aquí se guarda la fecha selecionada del usuario
+  const [horariosDisponibles, setHorariosDisponibles] = useState({});
 
-  // Maneja el cambio de paso en el slider
-  const handleSliderChange = (e) => {
-    setStep(Number(e.target.value)); // Aseguramos que el valor sea un número
+  // const [mostrar, setMostrar] = useState(
+  //   renderizar.SELECCIONAR_SOLICITANTE.componente
+  // );
+
+  const renderizar = {
+    [PASOS_AGENDAR.SELECCIONAR_SOLICITANTE.id]: {
+      componente: (
+        <SeleccionadorDeCita
+          titulo={PASOS_AGENDAR.SELECCIONAR_SOLICITANTE.title}
+          opciones={PASOS_AGENDAR.SELECCIONAR_SOLICITANTE.opciones}
+          opcionPorDefecto={
+            PASOS_AGENDAR.SELECCIONAR_SOLICITANTE.opciones.default
+          }
+        />
+      ),
+    },
+    // [PASOS_AGENDAR.SELECCIONAR_DETALLES.id]: {
+    //   componente: <FormDetallesCita />,
+    // },
+    // [PASOS_AGENDAR.AGREGAR_DEPENDIENTE.id]: {
+    //   componente: (
+    //     <FormAddFamiliar
+    //       otroBoton={<BotonAtras onClick={manejarIrAtras} />}
+    //       siguientePaso={manejarEnvioFamiliar}
+    //     />
+    //   ),
+    // },
   };
 
   return (
     <Home>
-      <div className="form-container">
-        <form onSubmit={handleSubmit} className="form">
-          {/* Datos del solicitante */}
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="nombre">Nombre Completo:</label>
-              <input
-                type="text"
-                id="nombre"
-                name="nombre"
-                value={formData.nombre}
-                onChange={handleChange}
-                required
-                placeholder="Ingrese su nombre"
-                className="form-input__texto"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Correo Electrónico:</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                placeholder="Ingrese su correo electrónico"
-                className="form-input__texto"
-              />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="telefono">Teléfono:</label>
-              <input
-                type="tel"
-                id="telefono"
-                name="telefono"
-                value={formData.telefono}
-                onChange={handleChange}
-                required
-                placeholder="Ingrese su número de teléfono"
-                className="form-input__texto"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="fecha">Fecha de la cita:</label>
-              <input
-                type="date"
-                id="fecha"
-                name="fecha"
-                value={formData.fecha}
-                onChange={handleChange}
-                className="form-input__texto"
-                required
-              />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="hora">
-                Hora de la cita (solo en intervalos de 20 minutos):
-              </label>
-              <select
-                id="hora"
-                name="hora"
-                value={formData.hora}
-                onChange={handleChange}
-                required
-                className="form-input__seleccion"
-              >
-                <option value="">Seleccione una hora</option>
-                <option value="08:00">08:00 AM</option>
-                <option value="08:20">08:20 AM</option>
-                <option value="08:40">08:40 AM</option>
-                <option value="09:00">09:00 AM</option>
-                <option value="09:20">09:20 AM</option>
-                <option value="09:40">09:40 AM</option>
-                <option value="10:00">10:00 AM</option>
-                <option value="10:20">10:20 AM</option>
-                <option value="10:40">10:40 AM</option>
-                <option value="11:00">11:00 AM</option>
-              </select>
-            </div>
+      <CalendarioContexto.Provider
+        value={{
+          fechaSeleccionada,
+          setFechaSeleccionada,
+          horariosDisponibles,
+          setHorariosDisponibles,
+        }}
+      >
+        <div className="agendar-contenedor">
+          <h1>Agendar Cita Médica</h1>
 
-            <div className="form-group">
-              <label htmlFor="medico">Seleccionar médico:</label>
-              <select
-                id="medico"
-                name="medico"
-                value={formData.medico}
-                onChange={handleChange}
-                required
-                className="form-input__seleccion"
-              >
-                <option value="">Seleccione un médico</option>
-                <option value="medico1">Dr. Juan Pérez</option>
-                <option value="medico2">Dra. Laura Gómez</option>
-                <option value="medico3">Dr. Carlos Rodríguez</option>
-                <option value="medico3">Dr. Alberto Murillo</option>
-                <option value="medico3">Dr. Sofia Perea</option>
-                <option value="medico3">Dr. Carlos Ochoa</option>
-                <option value="medico3">Dr. Liliana Suarez</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Deslizador para pasar al campo de síntoma */}
-          <div className="form-group__slider">
-            <label htmlFor="sintomaSlider">
-              Desliza para describir tu síntoma:
-            </label>
-            <input
-              type="range"
-              id="sintomaSlider"
-              name="sintomaSlider"
-              min="0"
-              max="1"
-              value={step}
-              className="form-input__slider"
-              onChange={handleSliderChange}
-            />
-          </div>
-
-          {/* Campo de descripción del síntoma, solo visible si el paso es 1 */}
-          {step === 1 && (
-            <div className="form-group">
-              <label htmlFor="sintoma">Descripción del síntoma:</label>
-              <textarea
-                id="sintoma"
-                name="sintoma"
-                value={formData.sintoma}
-                onChange={handleChange}
-                placeholder="Describe tu síntoma"
-                required
-              />
-            </div>
-          )}
-
-          {/* Botón de envío */}
-          <div className="form-group">
-            <button type="submit">Solicitar Cita</button>
-          </div>
-        </form>
-      </div>
+          <Calendario />
+        </div>
+      </CalendarioContexto.Provider>
     </Home>
   );
-};
+}
 
-export default AppointmentForm;
+export default Agendar;

@@ -1,6 +1,10 @@
 import React from "react";
 import "../../styles/Calendario.css";
 
+import { useContext } from "react";
+
+import { generarHorariosDisponibles } from "../../utils/horariosUtils";
+
 const Calendario = () => {
   const obtenerMes = (fecha) => {
     const { año, mes: numeroMes } = fecha;
@@ -68,10 +72,20 @@ const Calendario = () => {
   //     "America/New_York"
   // };
 
-  console.log(obtenerFechaActual("America/Bogota")); // { año: 2023, mes: 10, dia: 5 }
-
   const fechaActual = obtenerFechaActual("America/Bogota");
   const mesActual = obtenerMes(fechaActual);
+
+  const clickEnDia = (numDia) => {
+    const miFechaSeleccionada = {
+      numeroDia: numDia,
+      mes: fechaActual.mes,
+      año: fechaActual.año,
+    };
+    console.log(miFechaSeleccionada);
+    generarHorariosDisponibles({ fechaSelecionada: miFechaSeleccionada });
+  };
+
+  console.log(obtenerFechaActual("America/Bogota")); // { año: 2023, mes: 10, dia: 5 }
 
   return (
     <div className="calendario">
@@ -103,6 +117,10 @@ const Calendario = () => {
           return (
             <li
               key={dia}
+              data-id={dia}
+              onClick={(e) => {
+                clickEnDia(e.currentTarget.dataset.id);
+              }}
               className={`calendarioList__dia ${
                 esDiaActual ? "calendarioList__dia--actual" : ""
               } ${tieneCita ? "calendarioList__dia--cita" : ""}`}
