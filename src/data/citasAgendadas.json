@@ -1,42 +1,42 @@
-[
-  {
-    "cita_id": "CITA001",
-    "paciente_id": "PAC001",
-    "paciente_nombre": "Paciente de Prueba",
-    "tipo_cita": "Consulta General",
-    "cita_fecha": "25/05/2025",
-    "cita_hora": "09:00 AM",
-    "cita_doctor": "Dr. Juan Pérez Acosta",
-    "cita_consultorio": "Consultorio 3"
-  },
-  {
-    "cita_id": "CITA002",
-    "paciente_id": "PAC001",
-    "paciente_nombre": "Paciente de Prueba",
-    "tipo_cita": "Cardiología",
-    "cita_fecha": "28/05/2025",
-    "cita_hora": "02:30 PM",
-    "cita_doctor": "Dr. Carlos Ochoa Marín",
-    "cita_consultorio": "Consultorio 7"
-  },
-  {
-    "cita_id": "CITA003",
-    "paciente_id": "PAC002",
-    "paciente_nombre": "Otro Paciente",
-    "tipo_cita": "Pediatría",
-    "cita_fecha": "01/06/2025",
-    "cita_hora": "10:00 AM",
-    "cita_doctor": "Dr. Carlos Rodríguez Vargas",
-    "cita_consultorio": "Consultorio 1"
-  },
-  {
-    "cita_id": "CITA004",
-    "paciente_id": "PAC001",
-    "paciente_nombre": "Paciente de Prueba",
-    "tipo_cita": "Odontología",
-    "cita_fecha": "30/05/2025",
-    "cita_hora": "11:00 AM",
-    "cita_doctor": "Dra. Laura Gómez Restrepo",
-    "cita_consultorio": "Consultorio 5"
+{
+    "04/06/2025": {
+      "Consulta_General": {
+        "MedicoID": "15DNEMKDL39",
+        "PacienteId": "NMFIR293ML",
+        "SolicitanteId": "NMIFO039L",
+        "Fecha_solicitud": "31/05/2025",
+        "CitaID": "NKD2930C",
+        "Hora": "08:30"
+      }
+    },
+    "16/06/2025": {
+      "Cardiologia": {
+        "MedicoID": "28FJDKEL40",
+        "PacienteId": "PLMKO294NL",
+        "SolicitanteId": "KJIFO040M",
+        "Fecha_solicitud": "01/06/2025",
+        "CitaID": "MKD3041D",
+        "Hora": "10:00"
+      }
+    },
+    "17/06/2025": {
+      "Pediatria": {
+        "MedicoID": "37GKFLDM41",
+        "PacienteId": "QWKLP295OL",
+        "SolicitanteId": "LKJFO041N",
+        "Fecha_solicitud": "05/06/2025",
+        "CitaID": "OKD4152E",
+        "Hora": "13:30"
+      }
+    },
+    "18/06/2025": {
+      "Dermatologia": {
+        "MedicoID": "46HLGMEN42",
+        "PacienteId": "RTMLQ296PL",
+        "SolicitanteId": "MLKFO042O",
+        "Fecha_solicitud": "10/06/2025",
+        "CitaID": "PKD5263F",
+        "Hora": "16:00"
+      }
+    }
   }
-]

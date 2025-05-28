@@ -1,15 +1,48 @@
 {
-  "id": "USER001",
-  "primerNombre": "Juan",
-  "segundoNombre": "Pablo",
-  "primerApellido": "Pérez",
-  "segundoApellido": "García",
-  "nombreCompleto": "Juan Pablo Pérez García",
-  "correo": "juan.perez@pasiente.com",
-  "telefono": "321-654-4567",
-  "direccion": "Calle 123, Ciudad",
-  "fechaNacimiento": "1980-05-15",
+  "idPublica":"3894nii39",
+  "primer_nombre": "Juan",
+  "segundo_nombre": "",
+  "primer_apellido": "Gomez",
+  "segundo_apellido": "Pérez",
+  "correo": "juanperez@gmail.com",
   "genero": "Masculino",
-  "tipoDocumento": "Cédula de Ciudadanía",
-  "numeroDocumento": "123456789"
+  "tipo_documento": "CC",
+  "numero_documento": "156654665",
+  "fecha_nacimiento": "02/03/2004",
+  "citasAgendadas": [
+    {
+      "citaId": "NKD2930C",
+      "fecha": "04/06/2025",
+      "hora":"09:00",
+      "tipo": "Consulta_General",
+      "paciente": "493mfmi84",
+      "acudiente": null,
+      "nombre_doctor": "Juan David Giraldo Castañeda",
+      "cosultorio": "consultorio 5",
+      "estado": "pendiente"
+    },
+    {
+      "citaId": "NKD2930C",
+      "fecha": "07/06/2025",
+      "hora":"02:00",
+      "tipo": "Consulta_General",
+      "paciente": "3894nii39",
+      "acudiente": null,
+      "nombre_doctor": "Breiner Domingo Robles",
+      "cosultorio": "consultorio 2",
+      "estado": "cancelada"
+    }
+  ],
+  "dependientes": [{
+    "idPublica":"493mfmi84",
+    "primer_nombre": "camilo",
+    "segundo_nombre": "andres",
+    "primer_apellido": "Gomez",
+    "segundo_apellido": "jacinto",
+    "correo": "camilojacionto21@gmail.com",
+    "genero": "Masculino",
+    "tipo_documento": "TI",
+    "numero_documento": "11234665",
+    "fecha_nacimiento": "02/03/2013"
+  }]
 }
