@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import "./../../styles/SelectStep.css"; // Asegúrate de que esta ruta sea correcta
+import React, { useState, useEffect } from "react"; // Importa useEffect
+import "./../../styles/SelectStep.css";
 
-function SelectStep({ onSelectChange = () => {} }) {
-  // <-- Añade la prop onSelectChange
+// Añade la prop initialValue
+function SelectStep({ onSelectChange = () => {}, initialValue = "" }) {
   const title = "Selecciona una opción";
 
   const options = {
@@ -14,13 +14,23 @@ function SelectStep({ onSelectChange = () => {} }) {
 
   const disabledOption = options.default;
 
-  const [selectedValue, setSelectedValue] = useState(disabledOption);
+  // Inicializa el estado con initialValue o el valor por defecto
+  const [selectedValue, setSelectedValue] = useState(
+    initialValue || disabledOption
+  );
 
-  // Handler de cambio local para el dropdown
+  // Usa useEffect para actualizar selectedValue si initialValue cambia (al navegar hacia atrás/adelante)
+  useEffect(() => {
+    if (initialValue !== selectedValue) {
+      // Evita bucles infinitos
+      setSelectedValue(initialValue || disabledOption);
+    }
+  }, [initialValue]); // Se ejecuta cuando initialValue cambia
+
   const onChange = (e) => {
     const value = e.target.value;
     setSelectedValue(value);
-    onSelectChange(value); // <-- Llama a la función padre con el valor seleccionado
+    onSelectChange(value);
     console.log("Opción seleccionada localmente:", value);
   };
 
@@ -33,7 +43,7 @@ function SelectStep({ onSelectChange = () => {} }) {
         id="select-step"
         className="paso-seleccion__selector"
         onChange={onChange}
-        value={selectedValue}
+        value={selectedValue} // El valor del select ahora está controlado por selectedValue
       >
         {Object.values(options).map((option) => (
           <option
