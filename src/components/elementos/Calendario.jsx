@@ -1,136 +1,134 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/Calendario.css";
 
-import { useContext } from "react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
-import { generarHorariosDisponibles } from "../../utils/horariosUtils";
-
-const Calendario = () => {
-  const obtenerMes = (fecha) => {
-    const { año, mes: numeroMes } = fecha;
-    const meses = {
-      1: { nombre: "enero", dias: 31 },
-      2: {
-        nombre: "febrero",
-        dias: año % 4 === 0 && (año % 100 !== 0 || año % 400 === 0) ? 29 : 28,
-      }, // Verifica años bisiestos
-      3: { nombre: "marzo", dias: 31 },
-      4: { nombre: "abril", dias: 30 },
-      5: { nombre: "mayo", dias: 31 },
-      6: { nombre: "junio", dias: 30 },
-      7: { nombre: "julio", dias: 31 },
-      8: { nombre: "agosto", dias: 31 },
-      9: { nombre: "septiembre", dias: 30 },
-      10: { nombre: "octubre", dias: 31 },
-      11: { nombre: "noviembre", dias: 30 },
-      12: { nombre: "diciembre", dias: 31 },
-    };
-
-    return meses[numeroMes] || { nombre: "mes inválido", dias: 0 };
-  };
-
-  const diasDeLaSemana = {
-    1: "lunes",
-    2: "martes",
-    3: "miércoles",
-    4: "jueves",
-    5: "viernes",
-    6: "sábado",
-    7: "domingo",
-  };
-
-  /**
-   * Obtiene la fecha actual desglosada en día, mes y año según una zona horaria específica.
-   *
-   * @param {string} zonaHoraria - La zona horaria en formato IANA (por ejemplo, "Europe/Madrid").
-   * @returns {{año: number, mes: number, dia: number}} Un objeto que contiene el año, mes y día como números enteros.
-   *
-   * Nota: El número 10 en `parseInt(valor, 10)` especifica que el valor debe ser interpretado en base decimal.
-   */
-  const obtenerFechaActual = (zonaHoraria) => {
-    const fecha = new Date().toLocaleString("es-ES", { timeZone: zonaHoraria });
-    const [dia, mes, año] = fecha.split(/[\s/]+/);
-    const diaDeLaSemana = new Date().toLocaleString("es-ES", {
-      timeZone: zonaHoraria,
-      weekday: "long",
-    });
+const Calendario = ({ onFechaSeleccionadaChange }) => {
+  const [mesActualMostrado, setMesActualMostrado] = useState(() => {
+    const today = new Date();
     return {
-      año: parseInt(año, 10),
-      mes: parseInt(mes, 10),
-      dia: {
-        numero: parseInt(dia, 10),
-        nombre: diaDeLaSemana,
-      },
+      año: today.getFullYear(),
+      mes: today.getMonth() + 1, // getMonth() es 0-indexado
+    };
+  });
+
+  const obtenerDatosMes = (año, numeroMes) => {
+    const primerDiaDelMes = new Date(año, numeroMes - 1, 1);
+    const ultimoDiaDelMes = new Date(año, numeroMes, 0);
+    const nombreMes = format(primerDiaDelMes, "MMMM", { locale: es });
+    const diasEnMes = ultimoDiaDelMes.getDate();
+
+    let primerDiaSemanaIndex = primerDiaDelMes.getDay();
+    if (primerDiaSemanaIndex === 0) {
+      primerDiaSemanaIndex = 7;
+    }
+
+    return {
+      nombre: nombreMes,
+      dias: diasEnMes,
+      primerDiaSemanaIndex: primerDiaSemanaIndex,
     };
   };
 
-  // Zonas horarias de ejemplo
-  // const zonasHorarias = {
-  //     "America/Bogota",
-  //     "Europe/Madrid",
-  //     "Asia/Tokyo",
-  //     "America/New_York"
-  // };
+  const diasDeLaSemanaNombres = [
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
+    "Domingo",
+  ];
 
-  const fechaActual = obtenerFechaActual("America/Bogota");
-  const mesActual = obtenerMes(fechaActual);
+  const obtenerFechaActualSimple = () => {
+    const hoy = new Date();
+    return {
+      año: hoy.getFullYear(),
+      mes: hoy.getMonth() + 1,
+      numeroDia: hoy.getDate(),
+      nombreDia: format(hoy, "eeee", { locale: es }),
+    };
+  };
 
-  const clickEnDia = (numDia) => {
+  const fechaDeHoy = obtenerFechaActualSimple();
+  const datosMesActualMostrado = obtenerDatosMes(
+    mesActualMostrado.año,
+    mesActualMostrado.mes
+  );
+
+  const clickEnDia = (diaNumero) => {
     const miFechaSeleccionada = {
-      numeroDia: numDia,
-      mes: fechaActual.mes,
-      año: fechaActual.año,
+      numeroDia: parseInt(diaNumero, 10),
+      mes: mesActualMostrado.mes,
+      año: mesActualMostrado.año,
     };
-    console.log(miFechaSeleccionada);
-    generarHorariosDisponibles({ fechaSelecionada: miFechaSeleccionada });
+
+    // Llama a la función de prop para actualizar la fecha seleccionada en el padre
+    if (onFechaSeleccionadaChange) {
+      onFechaSeleccionadaChange(miFechaSeleccionada);
+    }
+
+    console.log("Fecha seleccionada (local):", miFechaSeleccionada);
   };
 
-  console.log(obtenerFechaActual("America/Bogota")); // { año: 2023, mes: 10, dia: 5 }
+  // El useEffect que generaba horarios iniciales también se elimina,
+  // ya que no hay necesidad de pasar horarios al padre al inicio.
 
   return (
     <div className="calendario">
-      <h2 className="calendario__mes">{mesActual.nombre.toUpperCase()}</h2>
+      <h2 className="calendario__mes">
+        {datosMesActualMostrado.nombre.toUpperCase()} {mesActualMostrado.año}
+      </h2>
       <ol className="calendarioList">
-        {Object.values(diasDeLaSemana).map((nombreDia, index) => (
+        {diasDeLaSemanaNombres.map((nombreDia, index) => (
           <li key={index} className="calendarioList__nombreDia">
             {nombreDia}
           </li>
         ))}
-        {Array.from({ length: mesActual.dias }, (_, index) => {
+        {Array.from({ length: datosMesActualMostrado.dias }, (_, index) => {
           const dia = index + 1;
-          const esDiaActual = dia === fechaActual.dia.numero;
-          const esPrimerDia = dia === 1;
-          const tieneCita = false; // Aquí puedes agregar lógica para determinar si hay una cita en este día
+          const esDiaActual =
+            dia === fechaDeHoy.numeroDia &&
+            mesActualMostrado.mes === fechaDeHoy.mes &&
+            mesActualMostrado.año === fechaDeHoy.año;
 
-          // Calcula la posición del primer día del mes
-          const primerDiaSemana = new Date(
-            fechaActual.año,
-            fechaActual.mes - 1,
-            1
-          ).getDay(); // 0 (domingo) a 6 (sábado)
-          const gridColumnStart = esPrimerDia
-            ? primerDiaSemana === 0
-              ? 7
-              : primerDiaSemana
-            : undefined;
+          const gridColumnStart =
+            dia === 1 ? datosMesActualMostrado.primerDiaSemanaIndex : undefined;
+
+          const tieneCita = false; // Puedes pasar esto como prop si es necesario
 
           return (
             <li
               key={dia}
-              data-id={dia}
-              onClick={(e) => {
-                clickEnDia(e.currentTarget.dataset.id);
-              }}
+              onClick={() => clickEnDia(dia)}
               className={`calendarioList__dia ${
                 esDiaActual ? "calendarioList__dia--actual" : ""
               } ${tieneCita ? "calendarioList__dia--cita" : ""}`}
-              style={esPrimerDia ? { gridColumnStart } : {}}
+              style={dia === 1 ? { gridColumnStart } : {}}
             >
               {dia}
             </li>
           );
         })}
       </ol>
+      {/* Opcional: Botones para navegar entre meses */}
+      {/* <div className="calendario-nav">
+        <button
+          onClick={() =>
+            setMesActualMostrado((prev) => ({ ...prev, mes: prev.mes - 1 }))
+          }
+        >
+          Anterior
+        </button>
+        <button
+          onClick={() =>
+            setMesActualMostrado((prev) => ({ ...prev, mes: prev.mes + 1 }))
+          }
+        >
+          Siguiente
+        </button>
+      </div> */}
     </div>
   );
 };
