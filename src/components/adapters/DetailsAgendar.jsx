@@ -1,13 +1,16 @@
 import React from "react";
 import { PASOS_AGENDAR } from "../../utils/pasosAgendar";
 
-// importacion de componentes
+// Importación de componentes
 import Calendario from "../elementos/Calendario";
 import CardInfoPaciente from "../elementos/CardInfoPaciente";
 import CardInfoCita from "../elementos/CardInfoCita";
 
-// importacion de datos de prueba
+// Importación de datos de prueba
 import citaInfo from "../../data/citaInfo.json";
+
+// ¡Aquí importamos el CSS directamente!
+import "../../styles/details-agendar.css";
 
 const DetailsAgendar = ({ children, pasoActual }) => {
   // Ejemplo de datos de paciente a agendar
@@ -29,17 +32,23 @@ const DetailsAgendar = ({ children, pasoActual }) => {
 
   return (
     <div className="details-agendar">
-      <div className="">
-        <h2 className="details-agendar__title">
-          {PASOS_AGENDAR.SELECCIONAR_FECHA.title}
-        </h2>
-        <Calendario />
-      </div>
-      <div>
-        <div className="details-agendar__card">
-          {renderizarCard(pasoActual)}
+      <div className="details-agendar__header">
+        {/* Contenedor de la derecha: Título y Calendario */}
+        <div className="details-agendar__contenedor--derecha">
+          <h2 className="details-agendar__title">
+            {PASOS_AGENDAR.SELECCIONAR_FECHA.title}
+          </h2>
+          {/* Asegúrate de que el componente Calendario reciba la clase 'calendario'
+              para que los estilos en el CSS se apliquen correctamente. */}
+          <Calendario className="calendario" />
         </div>
-        <div className="details-agendar__selectConteiner">{children}</div>
+        {/* Contenedor de la izquierda: Card y Select */}
+        <div className="details-agendar__contenedor--izquierda">
+          <div className="details-agendar__card-container">
+            {renderizarCard(pasoActual)}
+          </div>
+          <div className="details-agendar__select-container">{children}</div>
+        </div>
       </div>
     </div>
   );

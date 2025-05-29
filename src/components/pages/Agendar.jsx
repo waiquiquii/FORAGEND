@@ -8,6 +8,9 @@ import FormDependiente from "../elementos/FormDependiente";
 import SelectStep from "../elementos/SelectStep";
 import Botones from "../elementos/Botones";
 
+// Importamos el CSS para este componente
+import "../../styles/agendar.css";
+
 // Definimos los "estados" o "vistas" de nuestro flujo
 const FLUJO_VISTAS = {
   INICIO_SELECT_STEP: "inicio_select_step",
@@ -15,8 +18,8 @@ const FLUJO_VISTAS = {
   FORMULARIO_DEPENDIENTE: "formulario_dependiente",
   PRIMER_DETALLE_SELECT_STEP: "primer_detalle_select_step",
   SEGUNDO_DETALLE_SELECT_STEP: "segundo_detalle_select_step",
-  TERCER_DETALLE_SELECT_STEP: "tercer_detalle_select_step", // <-- Nueva vista
-  CUARTO_DETALLE_SELECT_STEP: "cuarto_detalle_select_step", // <-- Nueva vista
+  TERCER_DETALLE_SELECT_STEP: "tercer_detalle_select_step",
+  CUARTO_DETALLE_SELECT_STEP: "cuarto_detalle_select_step",
   FINAL_VERIFICAR: "final_verificar",
   FINAL_AGENDAR: "final_agendar",
 };
@@ -27,8 +30,15 @@ function Agendar() {
   );
   const [acudienteData, setAcudienteData] = useState(null);
   const [dependienteData, setDependienteData] = useState(null);
-  const [initialSelectedOption, setInitialSelectedOption] = useState("");
-  const [secondSelectOption, setSecondSelectOption] = useState(""); // <-- Nuevo estado para la opción del segundo SelectStep
+
+  // --- NUEVO ESTADO: Objeto para guardar todas las selecciones de SelectStep ---
+  const [selectOptions, setSelectOptions] = useState({
+    initialSelect: "",
+    firstDetailSelect: "",
+    secondSelect: "",
+    thirdSelect: "",
+    fourthSelect: "",
+  });
 
   // --- Manejadores de Formularios ---
   const handleAcudienteValidatedSubmit = (data) => {
@@ -50,26 +60,25 @@ function Agendar() {
     // console.log("Dependiente data en tiempo real:", data);
   };
 
-  const handleInitialSelectChange = (value) => {
-    setInitialSelectedOption(value);
-    console.log("Opción inicial seleccionada:", value);
-  };
-
-  // <-- Nuevo manejador para el segundo SelectStep
-  const handleSecondSelectChange = (value) => {
-    setSecondSelectOption(value);
-    console.log("Opción del segundo SelectStep seleccionada:", value);
+  // --- Manejador genérico para todas las selecciones de SelectStep ---
+  const handleSelectChange = (key, value) => {
+    setSelectOptions((prevOptions) => ({
+      ...prevOptions,
+      [key]: value,
+    }));
+    console.log(`Opción ${key} seleccionada:`, value);
   };
 
   // --- Manejadores de Navegación (para el componente Botones) ---
   const handleSiguiente = () => {
     switch (currentView) {
       case FLUJO_VISTAS.INICIO_SELECT_STEP:
-        if (initialSelectedOption === "Primera Opción") {
+        if (selectOptions.initialSelect === "Primera Opción") {
           setCurrentView(FLUJO_VISTAS.FORMULARIO_ACUDIENTE);
-        } else if (initialSelectedOption === "Segunda Opción") {
+        } else if (selectOptions.initialSelect === "Segunda Opción") {
           setCurrentView(FLUJO_VISTAS.FORMULARIO_DEPENDIENTE);
         } else {
+          // Esto ya no debería ocurrir si el botón está deshabilitado
           alert("Por favor, selecciona una opción válida para continuar.");
         }
         break;
@@ -77,22 +86,13 @@ function Agendar() {
         setCurrentView(FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP);
         break;
       case FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP:
-        // Lógica condicional basada en la selección del segundo SelectStep
-        if (secondSelectOption === "Primera Opción") {
+        if (selectOptions.secondSelect === "Primera Opción") {
           setCurrentView(FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP);
-        } else if (
-          secondSelectOption === "Seleccionar" ||
-          !secondSelectOption
-        ) {
-          alert("Por favor, selecciona una opción válida para continuar.");
-          return; // Detiene la función si no se ha seleccionado nada
         } else {
-          // Si selecciona algo diferente a "Primera Opción", va al cuarto
           setCurrentView(FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP);
         }
         break;
       case FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP:
-        // El tercer SelectStep siempre lleva al cuarto
         setCurrentView(FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP);
         break;
       case FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP:
@@ -124,28 +124,18 @@ function Agendar() {
       case FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP:
         setCurrentView(FLUJO_VISTAS.PRIMER_DETALLE_SELECT_STEP);
         break;
-      case FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP: // Atrás desde el tercer SelectStep
+      case FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP:
         setCurrentView(FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP);
         break;
-      case FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP: // Atrás desde el cuarto SelectStep
-        // Si llegamos al cuarto desde el tercero, volvemos al tercero.
-        // Si llegamos al cuarto directamente desde el segundo, volvemos al segundo.
-        // Podríamos guardar el 'path' de navegación o inferirlo. Por simplicidad, volvamos al tercero por ahora,
-        // asumiendo que el flujo es lineal desde tercero a cuarto, o del segundo directamente al cuarto.
-        // Para una lógica más robusta, podrías necesitar un historial de vistas.
-        // Por ahora, si estás en el cuarto, siempre puedes volver al segundo o al tercero.
-        // Vamos a asumir que si llegas al cuarto, el último paso fue o el segundo o el tercero.
-        // Aquí puedes ajustar según tu lógica específica.
-        if (secondSelectOption === "Primera Opción") {
-          // Si la opción del segundo fue "Primera", significa que pasamos por el tercero
+      case FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP:
+        if (selectOptions.secondSelect === "Primera Opción") {
           setCurrentView(FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP);
         } else {
-          // Si no, significa que pasamos directamente del segundo al cuarto
           setCurrentView(FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP);
         }
         break;
       case FLUJO_VISTAS.FINAL_VERIFICAR:
-        setCurrentView(FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP); // Volver al cuarto
+        setCurrentView(FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP);
         break;
       case FLUJO_VISTAS.FINAL_AGENDAR:
         setCurrentView(FLUJO_VISTAS.FINAL_VERIFICAR);
@@ -165,10 +155,17 @@ function Agendar() {
 
   const handleAgendar = () => {
     console.log("¡Cita agendada!");
+    // Limpiar todos los estados al agendar
     setAcudienteData(null);
     setDependienteData(null);
-    setInitialSelectedOption("");
-    setSecondSelectOption(""); // Limpiar también la opción del segundo SelectStep
+    setSelectOptions({
+      // Resetear todas las selecciones
+      initialSelect: "",
+      firstDetailSelect: "",
+      secondSelect: "",
+      thirdSelect: "",
+      fourthSelect: "",
+    });
     setCurrentView(FLUJO_VISTAS.INICIO_SELECT_STEP);
   };
 
@@ -193,17 +190,16 @@ function Agendar() {
       modoActualBotones = ["atras", "siguiente"];
       break;
     case FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP:
-      // El botón siguiente se habilita/deshabilita en base a secondSelectOption
       modoActualBotones = ["atras", "siguiente"];
       break;
-    case FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP: // Tercer SelectStep, siempre va al cuarto
+    case FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP:
       modoActualBotones = ["atras", "siguiente"];
       break;
-    case FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP: // Cuarto SelectStep
-      modoActualBotones = ["atras", "siguiente"]; // Va a Verificar
+    case FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP:
+      modoActualBotones = ["atras", "siguiente"];
       break;
     case FLUJO_VISTAS.FINAL_VERIFICAR:
-      modoActualBotones = ["atras", "verificar"];
+      modoActualBotones = ["atras", "confirmar"];
       break;
     case FLUJO_VISTAS.FINAL_AGENDAR:
       modoActualBotones = ["agendar"];
@@ -214,21 +210,26 @@ function Agendar() {
   }
 
   // Lógica para deshabilitar el botón "Siguiente" condicionalmente
+  const isOptionInvalid = (option) => option === "Seleccionar" || !option;
+
   const isSiguienteDisabled = () => {
-    if (
-      currentView === FLUJO_VISTAS.INICIO_SELECT_STEP &&
-      (initialSelectedOption === "Seleccionar" || !initialSelectedOption)
-    ) {
-      return true;
+    switch (currentView) {
+      case FLUJO_VISTAS.INICIO_SELECT_STEP:
+        return isOptionInvalid(selectOptions.initialSelect);
+      case FLUJO_VISTAS.FORMULARIO_ACUDIENTE:
+      case FLUJO_VISTAS.FORMULARIO_DEPENDIENTE:
+        return false;
+      case FLUJO_VISTAS.PRIMER_DETALLE_SELECT_STEP:
+        return isOptionInvalid(selectOptions.firstDetailSelect);
+      case FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP:
+        return isOptionInvalid(selectOptions.secondSelect);
+      case FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP:
+        return isOptionInvalid(selectOptions.thirdSelect);
+      case FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP:
+        return isOptionInvalid(selectOptions.fourthSelect);
+      default:
+        return false;
     }
-    if (
-      currentView === FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP &&
-      (secondSelectOption === "Seleccionar" || !secondSelectOption)
-    ) {
-      return true;
-    }
-    // Añade más condiciones para deshabilitar el botón "Siguiente" en otras vistas si es necesario
-    return false;
   };
 
   return (
@@ -239,137 +240,157 @@ function Agendar() {
           Por favor, complete los siguientes pasos para agendar su cita.
         </p>
 
-        {/* --- Renderizado Condicional Basado en currentView --- */}
-
-        {currentView === FLUJO_VISTAS.INICIO_SELECT_STEP && (
-          <>
-            <SelectStep onSelectChange={handleInitialSelectChange} />
-            <Botones
-              modoBoton={modoActualBotones}
-              handleFunctions={allHandleFunctionsBotons}
-              disabledSiguiente={isSiguienteDisabled()} // Usa la función para deshabilitar
-            />
-          </>
-        )}
-
-        {currentView === FLUJO_VISTAS.FORMULARIO_ACUDIENTE && (
-          <>
-            <FormAcudiente
-              onChange={handleAcudienteChange}
-              onValidatedSubmit={handleAcudienteValidatedSubmit}
-              data={acudienteData || {}}
-            />
-            <Botones
-              modoBoton={modoActualBotones}
-              handleFunctions={allHandleFunctionsBotons}
-            />
-          </>
-        )}
-
-        {currentView === FLUJO_VISTAS.FORMULARIO_DEPENDIENTE && (
-          <>
-            <FormDependiente
-              onChange={handleDependienteChange}
-              onValidatedSubmit={handleDependienteValidatedSubmit}
-              data={dependienteData || {}}
-            />
-            <Botones
-              modoBoton={modoActualBotones}
-              handleFunctions={allHandleFunctionsBotons}
-            />
-          </>
-        )}
-
-        {currentView === FLUJO_VISTAS.PRIMER_DETALLE_SELECT_STEP && (
-          <DetailsAgendar>
-            <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-              Primer Detalle - Selecciona una opción
-            </h2>
-            <SelectStep />
-            <Botones
-              modoBoton={modoActualBotones}
-              handleFunctions={allHandleFunctionsBotons}
-            />
-          </DetailsAgendar>
-        )}
-
-        {currentView === FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP && (
-          <DetailsAgendar>
-            <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-              Segundo Detalle - Otra selección
-            </h2>
-            {/* Pasamos el manejador de cambio para el segundo SelectStep */}
-            <SelectStep onSelectChange={handleSecondSelectChange} />
-            <Botones
-              modoBoton={modoActualBotones}
-              handleFunctions={allHandleFunctionsBotons}
-              disabledSiguiente={isSiguienteDisabled()} // Usa la función para deshabilitar
-            />
-          </DetailsAgendar>
-        )}
-
-        {/* <-- Nuevo: Tercer SelectStep */}
-        {currentView === FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP && (
-          <DetailsAgendar>
-            <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-              Tercer Detalle - Opción Condicional
-            </h2>
-            <p>Has seleccionado "Primera Opción" en el segundo detalle.</p>
-            <SelectStep />
-            <Botones
-              modoBoton={modoActualBotones}
-              handleFunctions={allHandleFunctionsBotons}
-            />
-          </DetailsAgendar>
-        )}
-
-        {/* <-- Nuevo: Cuarto SelectStep */}
-        {currentView === FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP && (
-          <DetailsAgendar>
-            <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-              Cuarto Detalle - Final de Selecciones
-            </h2>
-            <p>Continuamos con las últimas selecciones de detalle.</p>
-            <SelectStep />
-            <Botones
-              modoBoton={modoActualBotones}
-              handleFunctions={allHandleFunctionsBotons}
-            />
-          </DetailsAgendar>
-        )}
-
-        {currentView === FLUJO_VISTAS.FINAL_VERIFICAR && (
-          <DetailsAgendar>
-            <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-              Verifica tu información
-            </h2>
-            <div className="resumen-datos">
-              <h3>Datos del Acudiente:</h3>
-              <pre>{JSON.stringify(acudienteData, null, 2)}</pre>
-              <h3>Datos del Dependiente:</h3>
-              <pre>{JSON.stringify(dependienteData, null, 2)}</pre>
+        <div className="main-content__contenido-scrollable">
+          {currentView === FLUJO_VISTAS.INICIO_SELECT_STEP && (
+            <div className="agendar-contenedor__paso">
+              <SelectStep
+                onSelectChange={(value) =>
+                  handleSelectChange("initialSelect", value)
+                }
+                initialValue={selectOptions.initialSelect} // Pasar el valor para precargar
+              />
             </div>
-            <Botones
-              modoBoton={modoActualBotones}
-              handleFunctions={allHandleFunctionsBotons}
-            />
-          </DetailsAgendar>
-        )}
+          )}
 
-        {currentView === FLUJO_VISTAS.FINAL_AGENDAR && (
-          <DetailsAgendar>
-            <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-              Confirmación de Agendamiento
-            </h2>
-            <p style={{ textAlign: "center", fontSize: "1.1em" }}>
-              ¡Tu cita ha sido agendada con éxito!
-            </p>
-            <Botones
-              modoBoton={modoActualBotones}
-              handleFunctions={allHandleFunctionsBotons}
-            />
-          </DetailsAgendar>
-        )}
+          {currentView === FLUJO_VISTAS.FORMULARIO_ACUDIENTE && (
+            <div className="agendar-contenedor__paso">
+              <FormAcudiente
+                onChange={handleAcudienteChange}
+                onValidatedSubmit={handleAcudienteValidatedSubmit}
+                data={acudienteData || {}}
+              />
+            </div>
+          )}
+
+          {currentView === FLUJO_VISTAS.FORMULARIO_DEPENDIENTE && (
+            <div className="agendar-contenedor__paso">
+              <FormDependiente
+                onChange={handleDependienteChange}
+                onValidatedSubmit={handleDependienteValidatedSubmit}
+                data={dependienteData || {}}
+              />
+            </div>
+          )}
+
+          {currentView === FLUJO_VISTAS.PRIMER_DETALLE_SELECT_STEP && (
+            <div className="agendar-contenedor__paso">
+              <DetailsAgendar>
+                <h2 className="agendar-contenedor__titulo-detalle">
+                  Primer Detalle - Selecciona una opción
+                </h2>
+                <SelectStep
+                  onSelectChange={(value) =>
+                    handleSelectChange("firstDetailSelect", value)
+                  }
+                  initialValue={selectOptions.firstDetailSelect} // Pasar el valor para precargar
+                />
+              </DetailsAgendar>
+            </div>
+          )}
+
+          {currentView === FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP && (
+            <div className="agendar-contenedor__paso">
+              <DetailsAgendar>
+                <h2 className="agendar-contenedor__titulo-detalle">
+                  Segundo Detalle - Otra selección
+                </h2>
+                <SelectStep
+                  onSelectChange={(value) =>
+                    handleSelectChange("secondSelect", value)
+                  }
+                  initialValue={selectOptions.secondSelect} // Pasar el valor para precargar
+                />
+              </DetailsAgendar>
+            </div>
+          )}
+
+          {currentView === FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP && (
+            <div className="agendar-contenedor__paso">
+              <DetailsAgendar>
+                <h2 className="agendar-contenedor__titulo-detalle">
+                  Tercer Detalle - Opción Condicional
+                </h2>
+                <p className="agendar-contenedor__texto-informativo">
+                  Has seleccionado "Primera Opción" en el segundo detalle.
+                </p>
+                <SelectStep
+                  onSelectChange={(value) =>
+                    handleSelectChange("thirdSelect", value)
+                  }
+                  initialValue={selectOptions.thirdSelect} // Pasar el valor para precargar
+                />
+              </DetailsAgendar>
+            </div>
+          )}
+
+          {currentView === FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP && (
+            <div className="agendar-contenedor__paso">
+              <DetailsAgendar>
+                <h2 className="agendar-contenedor__titulo-detalle">
+                  Cuarto Detalle - Final de Selecciones
+                </h2>
+                <p className="agendar-contenedor__texto-informativo">
+                  Continuamos con las últimas selecciones de detalle.
+                </p>
+                <SelectStep
+                  onSelectChange={(value) =>
+                    handleSelectChange("fourthSelect", value)
+                  }
+                  initialValue={selectOptions.fourthSelect} // Pasar el valor para precargar
+                />
+              </DetailsAgendar>
+            </div>
+          )}
+
+          {currentView === FLUJO_VISTAS.FINAL_VERIFICAR && (
+            <div className="agendar-contenedor__paso">
+              <DetailsAgendar>
+                <h2 className="agendar-contenedor__titulo-detalle">
+                  Verifica tu información
+                </h2>
+                <div className="agendar-contenedor__resumen-datos">
+                  <h3 className="agendar-contenedor__subtitulo-resumen">
+                    Datos del Acudiente:
+                  </h3>
+                  <pre className="agendar-contenedor__preformato-datos">
+                    {JSON.stringify(acudienteData, null, 2)}
+                  </pre>
+                  <h3 className="agendar-contenedor__subtitulo-resumen">
+                    Datos del Dependiente:
+                  </h3>
+                  <pre className="agendar-contenedor__preformato-datos">
+                    {JSON.stringify(dependienteData, null, 2)}
+                  </pre>
+                  <h3 className="agendar-contenedor__subtitulo-resumen">
+                    Selecciones:
+                  </h3>
+                  <pre className="agendar-contenedor__preformato-datos">
+                    {JSON.stringify(selectOptions, null, 2)}
+                  </pre>
+                </div>
+              </DetailsAgendar>
+            </div>
+          )}
+
+          {currentView === FLUJO_VISTAS.FINAL_AGENDAR && (
+            <div className="agendar-contenedor__paso">
+              <DetailsAgendar>
+                <h2 className="agendar-contenedor__titulo-detalle">
+                  Confirmación de Agendamiento
+                </h2>
+                <p className="agendar-contenedor__texto-confirmacion">
+                  ¡Tu cita ha sido agendada con éxito!
+                </p>
+              </DetailsAgendar>
+            </div>
+          )}
+        </div>
+
+        <Botones
+          modoBoton={modoActualBotones}
+          handleFunctions={allHandleFunctionsBotons}
+          disabledSiguiente={isSiguienteDisabled()}
+        />
       </div>
     </Home>
   );

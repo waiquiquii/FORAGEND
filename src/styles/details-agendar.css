@@ -1,0 +1,110 @@
+/* details-agendar.css */
+
+/* Bloque principal, solo para dimensiones y desbordamiento */
+.details-agendar {
+  width: 100%;
+  height: 100%; /* Ocupa la altura del padre */
+  overflow: hidden;
+  /* Podrías añadir un padding aquí si el contenido no debe tocar los bordes */
+}
+
+/* El header ahora define la cuadrícula principal de dos columnas */
+.details-agendar__header {
+  display: grid;
+  /* Define las dos columnas:
+     - La primera para el contenedor izquierdo (card y select)
+     - La segunda para el contenedor derecho (título y calendario) */
+  grid-template-columns: minmax(auto, 400px) 1fr;
+  grid-template-rows: 1fr; /* Una sola fila principal */
+  gap: 20px; /* Espacio entre las dos columnas */
+  width: 100%;
+  height: 100%; /* El header ocupa toda la altura del details-agendar */
+}
+
+/* Contenedor de la derecha: Título y Calendario */
+.details-agendar__contenedor--derecha {
+  /* Posicionamos este contenedor en la segunda columna */
+  grid-column: 2 / 3;
+  grid-row: 1 / 2; /* Ocupa la única fila principal */
+
+  /* Este contenedor también es un Grid para apilar el título y el calendario */
+  display: grid;
+  grid-template-columns: 1fr; /* Una sola columna interna */
+  grid-template-rows: auto 1fr; /* Título (auto) y Calendario (ocupa el resto) */
+  gap: 15px; /* Espacio entre el título y el calendario */
+  align-items: start; /* Alinea los elementos al inicio verticalmente */
+  justify-items: center; /* Centra el título horizontalmente (y calendario si no fuera 100% ancho) */
+}
+
+/* Título dentro del contenedor derecho */
+.details-agendar__title {
+  /* No necesita grid-column/row aquí, su padre ya lo organiza */
+  margin-bottom: 0; /* El gap del padre maneja la separación */
+  text-align: center;
+}
+
+/* Calendario dentro del contenedor derecho */
+.calendario {
+  /* No necesita grid-column/row aquí, su padre ya lo organiza */
+  width: 100%;
+  height: 100%; /* Ocupa el espacio restante de la fila en el contenedor derecho */
+  overflow: auto; /* Permite desplazamiento si el calendario es muy grande */
+}
+
+/* Contenedor de la izquierda: Card y Select */
+.details-agendar__contenedor--izquierda {
+  /* Posicionamos este contenedor en la primera columna */
+  grid-column: 1 / 2;
+  grid-row: 1 / 2; /* Ocupa la única fila principal */
+
+  /* Este contenedor también es un Grid para apilar la tarjeta y el select */
+  display: grid;
+  grid-template-columns: 1fr; /* Una sola columna interna */
+  grid-template-rows: auto auto; /* Tarjeta (auto) y Select (auto) */
+  gap: 20px; /* Espacio entre la tarjeta y el select */
+  align-items: start; /* Alinea los elementos al inicio verticalmente */
+  justify-items: start; /* Alinea al inicio horizontalmente */
+}
+
+/* Contenedor de la Card */
+.details-agendar__card-container {
+  width: 100%;
+}
+
+/* Contenedor del Select */
+.details-agendar__select-container {
+  width: 100%;
+}
+
+/* --- Media Queries para responsividad --- */
+
+@media (max-width: 768px) {
+  .details-agendar__header {
+    /* En pantallas pequeñas, apilamos todo en una sola columna */
+    grid-template-columns: 1fr;
+    /* Orden vertical: Contenedor derecho (Título+Calendario), luego Contenedor izquierdo (Card+Select) */
+    grid-template-rows: auto auto;
+    gap: 30px; /* Espacio vertical entre los dos contenedores principales */
+  }
+
+  /* Reposicionamos los contenedores en la nueva cuadrícula de una columna */
+  .details-agendar__contenedor--derecha {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2; /* El contenedor derecho (título/calendario) va primero */
+    /* Resetea la justificación horizontal si se desea centrar el contenido en móvil */
+    justify-items: center;
+  }
+
+  .details-agendar__contenedor--izquierda {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3; /* El contenedor izquierdo (card/select) va segundo */
+    /* Resetea la justificación horizontal si se desea centrar el contenido en móvil */
+    justify-items: center;
+  }
+
+  /* Dentro de los sub-grids, el apilamiento ya debería ser automático,
+     pero puedes ajustar el gap si es necesario. */
+  .details-agendar__contenedor--derecha .details-agendar__title {
+    text-align: center;
+  }
+}
