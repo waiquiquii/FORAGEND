@@ -1,4 +1,6 @@
 import React from "react";
+// import { Spinner } from "./Spinner";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/pages/Login";
 import Perfilusuario from "./components/pages/Perfilusuario";
