@@ -67,3 +67,5 @@ pnpm-lock.yaml
 
 # Other common ignored files
 .idx/
+public/dist/
+public/dist/

@@ -10,7 +10,9 @@ function Home({ children }) {
       <BarraSuperior />
       <MenuVertical />
       <div className="main-content">
-        <div className="contenido">{children}</div>
+        <div className="contenido main-content__contenido-scrollable">
+          {children}
+        </div>
         <div className="footer">
           <p>© 2025 Todos los derechos reservados</p>
         </div>
