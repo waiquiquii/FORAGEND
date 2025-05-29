@@ -1,72 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+import "./../../styles/SelectStep.css"; // Asegúrate de que esta ruta sea correcta
 
-// Puedes definir los botones afuera del componente
-const botones = (handleNextStep, handlePrevStep) => ({
-  siguiente: (
-    <button onClick={handleNextStep} className="agendar__boton--siguiente">
-      Siguiente
-    </button>
-  ),
-  atras: (
-    <button onClick={handlePrevStep} className="agendar__boton--anterior">
-      Anterior
-    </button>
-  ),
-  verificar: (
-    <button onClick={handleNextStep} className="agendar__boton--verificar">
-      Verificar
-    </button>
-  ),
-  agendar: (
-    <button onClick={handleNextStep} className="agendar__boton--agendar">
-      Agendar
-    </button>
-  ),
-});
+function SelectStep({ onSelectChange = () => {} }) {
+  // <-- Añade la prop onSelectChange
+  const title = "Selecciona una opción";
 
-// Esta función renderiza los botones según el paso actual
-function renderizarBotones(pasoActual, PASOS_AGENDAR, handleNextStep, handlePrevStep) {
-  const b = botones(handleNextStep, handlePrevStep);
-  if (pasoActual === PASOS_AGENDAR.SELECCIONAR_SOLICITANTE.id) {
-    return <>{b.siguiente}</>;
-  } else if (pasoActual === PASOS_AGENDAR.SELECCIONAR_HORA.id) {
-    return (
-      <>
-        {b.atras}
-        {b.siguiente}
-      </>
-    );
-  } else if (pasoActual === PASOS_AGENDAR.CONFIRMAR.id) {
-    return (
-      <>
-        {b.atras}
-        {b.verificar}
-      </>
-    );
-  } else {
-    return <>{b.agendar}</>;
-  }
-}
+  const options = {
+    default: "Seleccionar",
+    opcion1: "Primera Opción",
+    opcion2: "Segunda Opción",
+    opcion3: "Tercera Opción",
+  };
 
-function SelectStep({
-  title,
-  options,
-  selectedValue,
-  onChange,
-  onNext,
-  onPrev,
-  pasoActual,
-  PASOS_AGENDAR,
-  disabledOption = "seleccionar",
-}) {
+  const disabledOption = options.default;
+
+  const [selectedValue, setSelectedValue] = useState(disabledOption);
+
+  // Handler de cambio local para el dropdown
+  const onChange = (e) => {
+    const value = e.target.value;
+    setSelectedValue(value);
+    onSelectChange(value); // <-- Llama a la función padre con el valor seleccionado
+    console.log("Opción seleccionada localmente:", value);
+  };
+
   return (
-    <div className="agendar-persona">
-      <label htmlFor="select-step" className="step-label">
+    <div className="paso-seleccion">
+      <label htmlFor="select-step" className="paso-seleccion__etiqueta">
         {title}
       </label>
       <select
         id="select-step"
-        className="select__opcion"
+        className="paso-seleccion__selector"
         onChange={onChange}
         value={selectedValue}
       >
@@ -75,19 +40,20 @@ function SelectStep({
             key={option}
             value={option}
             disabled={option === disabledOption}
-            className="select__opcion"
+            className="paso-seleccion__opcion"
           >
             {option}
           </option>
         ))}
       </select>
 
-      <div className="botones__container">
-        {renderizarBotones(pasoActual, PASOS_AGENDAR, onNext, onPrev)}
-      </div>
+      {selectedValue !== disabledOption && (
+        <p className="paso-seleccion__valor-mostrado">
+          Seleccionado: **{selectedValue}**
+        </p>
+      )}
     </div>
   );
 }
 
 export default SelectStep;
-
