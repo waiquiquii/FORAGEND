@@ -8,36 +8,40 @@ import FormDependiente from "../elementos/FormDependiente";
 import SelectStep from "../elementos/SelectStep";
 import Botones from "../elementos/Botones";
 
+// Componentes específicos de la página
+import SelectDestinatario from "../registro-citas/SelectDestinatario";
+import SelectTipoCita from "../registro-citas/SelectTipoCita";
+import SelectSubTipoCita from "../registro-citas/SelectSubTipoCita";
+import SelectHorario from "../registro-citas/SelectHorario";
+
 // Importamos el CSS para este componente
 import "../../styles/agendar.css";
 
 // Definimos los "estados" o "vistas" de nuestro flujo
 const FLUJO_VISTAS = {
-  INICIO_SELECT_STEP: "inicio_select_step",
+  PACIENTE_SELECT: "paciente_select",
   FORMULARIO_ACUDIENTE: "formulario_acudiente",
   FORMULARIO_DEPENDIENTE: "formulario_dependiente",
-  PRIMER_DETALLE_SELECT_STEP: "primer_detalle_select_step",
-  SEGUNDO_DETALLE_SELECT_STEP: "segundo_detalle_select_step",
-  TERCER_DETALLE_SELECT_STEP: "tercer_detalle_select_step",
-  CUARTO_DETALLE_SELECT_STEP: "cuarto_detalle_select_step",
+  PRIMER_DETALLE_SELECT_STEP: "10025asr",
+  TIPO_CITA_SELECT: "tipo_cita_select",
+  SUB_TIPO_CITA_SELECT: "sub_tipo_cita_select",
+  HORA_SELECT: "hora_select",
   FINAL_VERIFICAR: "final_verificar",
   FINAL_AGENDAR: "final_agendar",
 };
 
 function Agendar() {
-  const [currentView, setCurrentView] = useState(
-    FLUJO_VISTAS.INICIO_SELECT_STEP
-  );
+  const [currentView, setCurrentView] = useState(FLUJO_VISTAS.PACIENTE_SELECT);
   const [acudienteData, setAcudienteData] = useState(null);
   const [dependienteData, setDependienteData] = useState(null);
 
   // --- NUEVO ESTADO: Objeto para guardar todas las selecciones de SelectStep ---
   const [selectOptions, setSelectOptions] = useState({
-    initialSelect: "",
+    forWhomCita: "",
     firstDetailSelect: "",
-    secondSelect: "",
-    thirdSelect: "",
-    fourthSelect: "",
+    tipoCitaSelect: "",
+    subTipoCitaSelect: "",
+    horaSelect: "",
   });
 
   // --- Manejadores de Formularios ---
@@ -72,30 +76,32 @@ function Agendar() {
   // --- Manejadores de Navegación (para el componente Botones) ---
   const handleSiguiente = () => {
     switch (currentView) {
-      case FLUJO_VISTAS.INICIO_SELECT_STEP:
-        if (selectOptions.initialSelect === "Primera Opción") {
+      case FLUJO_VISTAS.PACIENTE_SELECT:
+        if (selectOptions.forWhomCita === "Para mi (menor de edad)") {
           setCurrentView(FLUJO_VISTAS.FORMULARIO_ACUDIENTE);
-        } else if (selectOptions.initialSelect === "Segunda Opción") {
+        } else if (selectOptions.forWhomCita === "Para otra persona") {
           setCurrentView(FLUJO_VISTAS.FORMULARIO_DEPENDIENTE);
+        } else if (selectOptions.forWhomCita === "Para mi") {
+          setCurrentView(FLUJO_VISTAS.PRIMER_DETALLE_SELECT_STEP);
         } else {
           // Esto ya no debería ocurrir si el botón está deshabilitado
           alert("Por favor, selecciona una opción válida para continuar.");
         }
         break;
       case FLUJO_VISTAS.PRIMER_DETALLE_SELECT_STEP:
-        setCurrentView(FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP);
+        setCurrentView(FLUJO_VISTAS.TIPO_CITA_SELECT);
         break;
-      case FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP:
-        if (selectOptions.secondSelect === "Primera Opción") {
-          setCurrentView(FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP);
+      case FLUJO_VISTAS.TIPO_CITA_SELECT:
+        if (selectOptions.tipoCitaSelect === "Consulta de especialidad") {
+          setCurrentView(FLUJO_VISTAS.SUB_TIPO_CITA_SELECT);
         } else {
-          setCurrentView(FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP);
+          setCurrentView(FLUJO_VISTAS.HORA_SELECT);
         }
         break;
-      case FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP:
-        setCurrentView(FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP);
+      case FLUJO_VISTAS.SUB_TIPO_CITA_SELECT:
+        setCurrentView(FLUJO_VISTAS.HORA_SELECT);
         break;
-      case FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP:
+      case FLUJO_VISTAS.HORA_SELECT:
         setCurrentView(FLUJO_VISTAS.FINAL_VERIFICAR);
         break;
       default:
@@ -110,7 +116,7 @@ function Agendar() {
     switch (currentView) {
       case FLUJO_VISTAS.FORMULARIO_ACUDIENTE:
       case FLUJO_VISTAS.FORMULARIO_DEPENDIENTE:
-        setCurrentView(FLUJO_VISTAS.INICIO_SELECT_STEP);
+        setCurrentView(FLUJO_VISTAS.PACIENTE_SELECT);
         break;
       case FLUJO_VISTAS.PRIMER_DETALLE_SELECT_STEP:
         if (acudienteData) {
@@ -118,24 +124,24 @@ function Agendar() {
         } else if (dependienteData) {
           setCurrentView(FLUJO_VISTAS.FORMULARIO_DEPENDIENTE);
         } else {
-          setCurrentView(FLUJO_VISTAS.INICIO_SELECT_STEP);
+          setCurrentView(FLUJO_VISTAS.PACIENTE_SELECT);
         }
         break;
-      case FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP:
+      case FLUJO_VISTAS.TIPO_CITA_SELECT:
         setCurrentView(FLUJO_VISTAS.PRIMER_DETALLE_SELECT_STEP);
         break;
-      case FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP:
-        setCurrentView(FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP);
+      case FLUJO_VISTAS.SUB_TIPO_CITA_SELECT:
+        setCurrentView(FLUJO_VISTAS.TIPO_CITA_SELECT);
         break;
-      case FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP:
-        if (selectOptions.secondSelect === "Primera Opción") {
-          setCurrentView(FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP);
+      case FLUJO_VISTAS.HORA_SELECT:
+        if (selectOptions.tipoCitaSelect === "Consulta de especialidad") {
+          setCurrentView(FLUJO_VISTAS.SUB_TIPO_CITA_SELECT);
         } else {
-          setCurrentView(FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP);
+          setCurrentView(FLUJO_VISTAS.TIPO_CITA_SELECT);
         }
         break;
       case FLUJO_VISTAS.FINAL_VERIFICAR:
-        setCurrentView(FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP);
+        setCurrentView(FLUJO_VISTAS.HORA_SELECT);
         break;
       case FLUJO_VISTAS.FINAL_AGENDAR:
         setCurrentView(FLUJO_VISTAS.FINAL_VERIFICAR);
@@ -160,13 +166,13 @@ function Agendar() {
     setDependienteData(null);
     setSelectOptions({
       // Resetear todas las selecciones
-      initialSelect: "",
+      forWhomCita: "",
       firstDetailSelect: "",
-      secondSelect: "",
-      thirdSelect: "",
-      fourthSelect: "",
+      tipoCitaSelect: "",
+      subTipoCitaSelect: "",
+      horaSelect: "",
     });
-    setCurrentView(FLUJO_VISTAS.INICIO_SELECT_STEP);
+    setCurrentView(FLUJO_VISTAS.PACIENTE_SELECT);
   };
 
   const allHandleFunctionsBotons = {
@@ -179,7 +185,7 @@ function Agendar() {
   // --- Lógica para el control de botones según la vista actual ---
   let modoActualBotones = [];
   switch (currentView) {
-    case FLUJO_VISTAS.INICIO_SELECT_STEP:
+    case FLUJO_VISTAS.PACIENTE_SELECT:
       modoActualBotones = ["siguiente"];
       break;
     case FLUJO_VISTAS.FORMULARIO_ACUDIENTE:
@@ -189,13 +195,13 @@ function Agendar() {
     case FLUJO_VISTAS.PRIMER_DETALLE_SELECT_STEP:
       modoActualBotones = ["atras", "siguiente"];
       break;
-    case FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP:
+    case FLUJO_VISTAS.TIPO_CITA_SELECT:
       modoActualBotones = ["atras", "siguiente"];
       break;
-    case FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP:
+    case FLUJO_VISTAS.SUB_TIPO_CITA_SELECT:
       modoActualBotones = ["atras", "siguiente"];
       break;
-    case FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP:
+    case FLUJO_VISTAS.HORA_SELECT:
       modoActualBotones = ["atras", "siguiente"];
       break;
     case FLUJO_VISTAS.FINAL_VERIFICAR:
@@ -214,19 +220,19 @@ function Agendar() {
 
   const isSiguienteDisabled = () => {
     switch (currentView) {
-      case FLUJO_VISTAS.INICIO_SELECT_STEP:
-        return isOptionInvalid(selectOptions.initialSelect);
+      case FLUJO_VISTAS.PACIENTE_SELECT:
+        return isOptionInvalid(selectOptions.forWhomCita);
       case FLUJO_VISTAS.FORMULARIO_ACUDIENTE:
       case FLUJO_VISTAS.FORMULARIO_DEPENDIENTE:
         return false;
       case FLUJO_VISTAS.PRIMER_DETALLE_SELECT_STEP:
         return isOptionInvalid(selectOptions.firstDetailSelect);
-      case FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP:
-        return isOptionInvalid(selectOptions.secondSelect);
-      case FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP:
-        return isOptionInvalid(selectOptions.thirdSelect);
-      case FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP:
-        return isOptionInvalid(selectOptions.fourthSelect);
+      case FLUJO_VISTAS.TIPO_CITA_SELECT:
+        return isOptionInvalid(selectOptions.tipoCitaSelect);
+      case FLUJO_VISTAS.SUB_TIPO_CITA_SELECT:
+        return isOptionInvalid(selectOptions.subTipoCitaSelect);
+      case FLUJO_VISTAS.HORA_SELECT:
+        return isOptionInvalid(selectOptions.horaSelect);
       default:
         return false;
     }
@@ -241,13 +247,13 @@ function Agendar() {
         </p>
 
         <div className="main-content__contenido-scrollable">
-          {currentView === FLUJO_VISTAS.INICIO_SELECT_STEP && (
+          {currentView === FLUJO_VISTAS.PACIENTE_SELECT && (
             <div className="agendar-contenedor__paso">
-              <SelectStep
+              <SelectDestinatario
                 onSelectChange={(value) =>
-                  handleSelectChange("initialSelect", value)
+                  handleSelectChange("forWhomCita", value)
                 }
-                initialValue={selectOptions.initialSelect} // Pasar el valor para precargar
+                initialValue={selectOptions.forWhomCita} // Pasar el valor para precargar
               />
             </div>
           )}
@@ -288,55 +294,52 @@ function Agendar() {
             </div>
           )}
 
-          {currentView === FLUJO_VISTAS.SEGUNDO_DETALLE_SELECT_STEP && (
+          {currentView === FLUJO_VISTAS.TIPO_CITA_SELECT && (
             <div className="agendar-contenedor__paso">
               <DetailsAgendar>
                 <h2 className="agendar-contenedor__titulo-detalle">
-                  Segundo Detalle - Otra selección
+                  ¿Qué tipo de cita deseas agendar?
                 </h2>
-                <SelectStep
+                <SelectTipoCita
                   onSelectChange={(value) =>
-                    handleSelectChange("secondSelect", value)
+                    handleSelectChange("tipoCitaSelect", value)
                   }
-                  initialValue={selectOptions.secondSelect} // Pasar el valor para precargar
+                  initialValue={selectOptions.tipoCitaSelect} // Pasar el valor para precargar
                 />
               </DetailsAgendar>
             </div>
           )}
 
-          {currentView === FLUJO_VISTAS.TERCER_DETALLE_SELECT_STEP && (
+          {currentView === FLUJO_VISTAS.SUB_TIPO_CITA_SELECT && (
             <div className="agendar-contenedor__paso">
               <DetailsAgendar>
                 <h2 className="agendar-contenedor__titulo-detalle">
-                  Tercer Detalle - Opción Condicional
+                  Selecciona una especialidad médica
                 </h2>
-                <p className="agendar-contenedor__texto-informativo">
-                  Has seleccionado "Primera Opción" en el segundo detalle.
-                </p>
-                <SelectStep
+                <SelectSubTipoCita
                   onSelectChange={(value) =>
-                    handleSelectChange("thirdSelect", value)
+                    handleSelectChange("subTipoCitaSelect", value)
                   }
-                  initialValue={selectOptions.thirdSelect} // Pasar el valor para precargar
+                  initialValue={selectOptions.subTipoCitaSelect} // Pasar el valor para precargar
                 />
               </DetailsAgendar>
             </div>
           )}
 
-          {currentView === FLUJO_VISTAS.CUARTO_DETALLE_SELECT_STEP && (
+          {currentView === FLUJO_VISTAS.HORA_SELECT && (
             <div className="agendar-contenedor__paso">
               <DetailsAgendar>
                 <h2 className="agendar-contenedor__titulo-detalle">
-                  Cuarto Detalle - Final de Selecciones
+                  Selecciona una hora para tu cita
                 </h2>
-                <p className="agendar-contenedor__texto-informativo">
+                {/* <p className="agendar-contenedor__texto-informativo">
                   Continuamos con las últimas selecciones de detalle.
-                </p>
-                <SelectStep
+                </p> */}
+                <SelectHorario
                   onSelectChange={(value) =>
-                    handleSelectChange("fourthSelect", value)
+                    handleSelectChange("horaSelect", value)
                   }
-                  initialValue={selectOptions.fourthSelect} // Pasar el valor para precargar
+                  initialValue={selectOptions.horaSelect} // Pasar el valor para precargar
                 />
               </DetailsAgendar>
             </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { PASOS_AGENDAR } from "../../utils/pasosAgendar";
 
 // Importación de componentes
-import Calendario from "../elementos/Calendario";
+import CalendarioInteractivo from "../registro-citas/CalendarioInteractivo";
 import CardInfoPaciente from "../elementos/CardInfoPaciente";
 import CardInfoCita from "../elementos/CardInfoCita";
 
@@ -40,7 +40,7 @@ const DetailsAgendar = ({ children, pasoActual }) => {
           </h2>
           {/* Asegúrate de que el componente Calendario reciba la clase 'calendario'
               para que los estilos en el CSS se apliquen correctamente. */}
-          <Calendario className="calendario" />
+          <CalendarioInteractivo className="calendario" />
         </div>
         {/* Contenedor de la izquierda: Card y Select */}
         <div className="details-agendar__contenedor--izquierda">

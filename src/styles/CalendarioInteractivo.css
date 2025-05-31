@@ -1,0 +1,77 @@
+/* CalendarioInteractivo.css - Estilos BEM en español */
+
+.calendario-interactivo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: sans-serif;
+}
+
+.calendario-interactivo__mes {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.calendario-interactivo__navegacion {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.calendario-interactivo__boton-navegacion {
+  background-color: transparent;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.calendario-interactivo__boton-navegacion:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.calendario-interactivo__lista {
+  display: grid;
+  grid-template-columns: repeat(7, 2rem);
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.calendario-interactivo__dia-nombre {
+  text-align: center;
+  font-weight: bold;
+}
+
+.calendario-interactivo__dia {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+calendario-interactivo__dia:hover {
+  background-color: #e0f7fa;
+}
+
+.calendario-interactivo__dia--vacio {
+  visibility: hidden;
+}
+
+.calendario-interactivo__dia--hoy {
+  background-color: #e0f7fa;
+  font-weight: bold;
+}
+
+.calendario-interactivo__dia--seleccionado {
+  background-color: #00838f;
+  color: white;
+  font-weight: bold;
+}
