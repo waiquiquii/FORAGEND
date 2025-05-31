@@ -57,11 +57,11 @@ function SelectStep({ onSelectChange = () => {}, initialValue = "" }) {
         ))}
       </select>
 
-      {/* {selectedValue !== disabledOption && (
+      {selectedValue !== disabledOption && (
         <p className="paso-seleccion__valor-mostrado">
           Seleccionado: **{selectedValue}**
         </p>
-      )} */}
+      )}
     </div>
   );
 }
