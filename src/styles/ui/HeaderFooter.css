@@ -1,0 +1,93 @@
+.layout-header {
+  padding: 20px;
+  background-color: rgb(29, 29, 119);
+  color: #ffffff;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 2.5rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.layout-header__logo {
+  display: flex;
+  align-items: center;
+}
+
+.layout-header__logo-img {
+  height: 48px;
+  width: auto;
+}
+
+.layout-header__title {
+  margin-left: 16px;
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.layout-header__dropdown {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: relative; /* Importante para el posicionamiento absoluto del menú */
+}
+
+.layout-header__dropdown-button {
+  background: #fff;
+  color: rgb(29, 29, 119);
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.layout-header__dropdown-button:hover {
+  background: #e0e7ff;
+}
+
+.layout-header__dropdown-menu {
+  background: #fff;
+  color: rgb(29, 29, 119);
+  margin-top: 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  min-width: 140px;
+  font-size: 1rem;
+  display: none;
+  position: absolute; /* Hace que el menú se superponga */
+  right: 0; /* Alinea el menú al borde derecho del botón */
+  top: 100%; /* Lo coloca justo debajo del botón */
+  z-index: 100; /* Se asegura de que esté por encima de otros elementos */
+  list-style: none;
+}
+
+.layout-header__dropdown--open .layout-header__dropdown-menu {
+  display: block;
+}
+
+.layout-header__dropdown-item {
+  display: block;
+  padding: 10px 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+}
+
+.layout-header__dropdown-item:hover {
+  background: #e0e7ff;
+}
+
+.layout-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  padding: 5px 0;
+  width: 100%;
+}

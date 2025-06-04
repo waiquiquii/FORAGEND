@@ -1,48 +1,41 @@
 // src/components/layout/UserLayout.jsx
 import React from "react";
 import { Outlet, Link } from "react-router-dom";
+import Footer from "../ui/Footer";
+import Header from "../ui/Header";
+import "../../styles/layouts/Layout.css"; // Importa la hoja de estilos
 
 const UserLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="bg-blue-600 text-white p-4">
-        <h1 className="text-2xl">Área de Usuario</h1>
-      </header>
+    <div className="layout">
+      <Header />
 
-      <div className="flex flex-1">
-        <nav className="w-48 bg-gray-100 p-4">
-          <ul>
-            <li className="mb-2">
-              <Link to="/user/agendar" className="hover:underline">
-                Agendar Cita
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link to="/user/mis-citas" className="hover:underline">
+      <div className="layout__body">
+        <nav className="layout-nav__lateral">
+          <ul className="layout-nav__list">
+            <li className="layout-nav__item">
+              <Link to="/user/mis-citas" className="layout-nav__link">
                 Mis Citas
               </Link>
             </li>
-            <li className="mb-2">
-              <Link to="/user/perfil" className="hover:underline">
-                Mi Perfil
+            <li className="layout-nav__item">
+              <Link to="/user/agendar" className="layout-nav__link">
+                Agendar Cita
               </Link>
             </li>
-            <li className="mt-4">
-              <Link to="/logout" className="text-red-600 hover:underline">
-                Cerrar sesión
+            <li className="layout-nav__item">
+              <Link to="/user/perfil" className="layout-nav__link">
+                Mi Perfil
               </Link>
             </li>
           </ul>
         </nav>
-
-        <main className="flex-1 p-6 bg-white">
+        <main className="layout__main">
           <Outlet />
         </main>
       </div>
 
-      <footer className="bg-blue-600 text-white p-2 text-center">
-        &copy; {new Date().getFullYear()} FORAGEND
-      </footer>
+      <Footer />
     </div>
   );
 };

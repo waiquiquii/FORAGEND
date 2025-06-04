@@ -1,0 +1,63 @@
+/* Normalización básica y estilos base para toda la app */
+html,
+#root {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+  background: #fafafa;
+  color: #222;
+}
+
+body {
+  width: 100vw;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+  background: #fafafa;
+  color: #222;
+}
+
+/* Asegura que todos los elementos usen border-box */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Elimina decoraciones y márgenes por defecto en enlaces y listas */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Mejora la apariencia del scroll en navegadores modernos */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Evita el resaltado azul en móviles */
+input,
+textarea,
+button,
+select {
+  font-family: inherit;
+  outline: none;
+  border: none;
+  background: none;
+}
+
+/* Imágenes responsivas */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
