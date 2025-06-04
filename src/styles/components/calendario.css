@@ -1,0 +1,121 @@
+/* Contenedor principal del calendario */
+.calendario {
+  width: 100%;
+  max-width: 420px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Header del calendario */
+.calendario__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
+.calendario__header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.calendario__header button {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.calendario__header button:hover {
+  background: #1253a2;
+}
+
+/* Grid de días */
+.calendario__dias {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.3rem;
+}
+
+/* Nombres de los días */
+.calendario__dia-nombre {
+  text-align: center;
+  font-weight: 600;
+  color: #1976d2;
+  padding: 0.3rem 0;
+  background: #f0f6ff;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+/* Días del mes */
+.calendario__dia {
+  text-align: center;
+  padding: 0.7rem 0;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  background: #f8f9fa;
+  border: 1px solid transparent;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  min-height: 2.2rem;
+  min-width: 2.2rem;
+  aspect-ratio: 1/1;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Día actual */
+.calendario__dia--hoy {
+  border: 2px solid #1976d2;
+  background: #e3f0ff;
+  color: #1976d2;
+  font-weight: bold;
+}
+
+/* Día hábil */
+.calendario__dia--habil {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.calendario__dia--habil:hover {
+  background: #c8e6c9;
+  color: #1b5e20;
+}
+
+/* Día no hábil */
+.calendario__dia--no-habil {
+  background: #fbe9e7;
+  color: #d32f2f;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.calendario__dia--no-habil:hover {
+  background: #fbe9e7;
+  color: #d32f2f;
+}
+
+/* Días deshabilitados */
+.calendario__dia--deshabilitado {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* Para que el primer día del mes empiece en el lugar correcto */
+.calendario__dia[data-grid-start] {
+  grid-column-start: var(--grid-start);
+}
