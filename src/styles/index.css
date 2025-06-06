@@ -1,22 +1,20 @@
 /* Normalización básica y estilos base para toda la app */
-html,
-#root {
-  height: 100%;
-  width: 100%;
+html {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
   box-sizing: border-box;
-  font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
-  background: #fafafa;
-  color: #222;
 }
 
 body {
   width: 100vw;
-  height: 100%;
+  height: 100vh;
   margin: 0;
   padding: 0;
   font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
   background: #fafafa;
   color: #222;
+  overflow: hidden;
 }
 
 /* Asegura que todos los elementos usen border-box */

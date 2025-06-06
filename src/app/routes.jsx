@@ -61,7 +61,7 @@ const AppRoutes = () => {
       {/* Rutas Usuario protegidas */}
       <Route element={<PrivateRoute allowedRoles={["userClient"]} />}>
         <Route path="/user" element={<UserLayout />}>
-          <Route index element={<UserAgendar />} />
+          <Route index element={<UserMisCitas />} />
           <Route path="agendar" element={<UserAgendar />} />
           <Route path="mis-citas" element={<UserMisCitas />} />
           <Route path="perfil" element={<UserPerfil />} />

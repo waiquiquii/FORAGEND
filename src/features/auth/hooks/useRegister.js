@@ -2,19 +2,44 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase";
 
+// Helper to calculate age from birthdate (expects 'YYYY-MM-DD')
+function calculateAge(fechaNacimiento) {
+  const today = new Date();
+  const birthDate = new Date(fechaNacimiento);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+}
+
+// Helper to determine tipoDocumento by age
+function getTipoDocumentoByAge(age) {
+  if (age < 18) return "TI"; // Tarjeta de Identidad
+  return "CC"; // Cédula de Ciudadanía
+}
+
 export async function registerUser(formData) {
   const {
     primerNombre,
     segundoNombre,
     primerApellido,
     segundoApellido,
-    tipoDocumento,
     numeroDocumento,
     fechaNacimiento,
     cel,
     email,
     password,
   } = formData;
+
+  const age = calculateAge(fechaNacimiento);
+
+  if (age < 15) {
+    throw new Error("Debes tener al menos 15 años para registrarte.");
+  }
+
+  const tipoDocumento = getTipoDocumentoByAge(age);
 
   const userCredential = await createUserWithEmailAndPassword(
     auth,

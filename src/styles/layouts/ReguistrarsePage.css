@@ -1,0 +1,105 @@
+/* ===========================
+    FORMULARIO DE REGISTRO EN GRID
+    =========================== */
+.formulario {
+  width: 80vw;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  padding: 2rem 2.5rem 1.5rem 2.5rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem 1.5rem;
+  position: relative;
+}
+
+.formulario__titulo,
+.formulario--grid-error,
+.NavAuth__botones-toggle,
+.formulario__boton {
+  grid-column: 1 / -1;
+}
+
+.formulario__grupo {
+  display: flex;
+  flex-direction: column;
+}
+
+.formulario__label {
+  font-size: 0.98rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  color: #1976d2;
+  letter-spacing: 0.2px;
+}
+
+.formulario__input {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid #b2f2dd;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.formulario__input:focus {
+  border-color: #1976d2;
+}
+
+.formulario__boton {
+  width: 100%;
+  padding: 0.7rem 0;
+  background: linear-gradient(90deg, #b2f2dd 0%, #e0ffe8 100%);
+  color: #1b5e20;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.formulario__boton:hover {
+  background: #1976d2;
+  color: #fff;
+}
+
+.formulario__error {
+  color: #d32f2f;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.formulario__titulo {
+  text-align: center;
+  margin-bottom: 1.2rem;
+  color: #1976d2;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* ===========================
+    RESPONSIVE
+    =========================== */
+@media (max-width: 900px) {
+  .formulario {
+    grid-template-columns: 1fr;
+    width: 98vw;
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
+    max-height: 98vh;
+  }
+}

@@ -13,7 +13,7 @@
 }
 
 /* Header ocupa la parte superior */
-header {
+.layout-header {
   grid-area: header;
   width: 100%;
   z-index: 10;

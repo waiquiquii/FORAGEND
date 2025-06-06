@@ -1,0 +1,93 @@
+/* Card con efecto glassmorphism */
+.auth-login__formulario {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 370px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.auth-login__titulo {
+  text-align: center;
+  font-size: 2rem;
+  color: #222;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.auth-login__input {
+  padding: 0.9rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+  outline: none;
+  transition: box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.auth-login__input:focus {
+  box-shadow: 0 0 0 2px #a1c4fd;
+}
+
+.auth-login__boton {
+  padding: 0.9rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(90deg, #a1c4fd 0%, #70a1ff 100%);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+}
+
+.auth-login__boton:hover {
+  background: linear-gradient(90deg, #70a1ff 0%, #a1c4fd 100%);
+}
+
+.auth-login__error {
+  color: #e74c3c;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.auth-login__recuperar {
+  text-align: right;
+  margin-top: 0.5rem;
+}
+
+.auth-login__link {
+  color: #2980b9;
+  text-decoration: none;
+  font-size: 0.98rem;
+  transition: color 0.2s;
+}
+
+.auth-login__link--recuperar:hover {
+  color: #6dd5fa;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .auth-login__formulario {
+    padding: 1.5rem 0.8rem;
+    max-width: 95vw;
+  }
+  .auth-login__titulo {
+    font-size: 1.4rem;
+  }
+}

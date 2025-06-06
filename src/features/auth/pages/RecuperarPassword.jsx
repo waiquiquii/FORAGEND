@@ -4,6 +4,9 @@ import { auth } from "../firebase";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
+import "../../../styles/layouts/auth.css";
+import "../../../styles/layouts/RecuperarPassword.css";
+
 export default function RecuperarPassword() {
   const {
     register,
@@ -31,18 +34,20 @@ export default function RecuperarPassword() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-xl">
-      <h2 className="text-xl font-semibold mb-4">Recuperar contraseña</h2>
+    <div className="auth__contenedor">
+      <form
+        className="password-recovery__form"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <h2 className="password-recovery__title">Recuperar contraseña</h2>
 
-      {mensaje && <p className="text-green-600 mb-4">{mensaje}</p>}
-      {error && <p className="text-red-600 mb-4">{error}</p>}
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
+        {mensaje && <p className="password-recovery__success">{mensaje}</p>}
+        {error && <p className="password-recovery__error">{error}</p>}
+        <div className="password-recovery__field">
           <input
+            className="password-recovery__input"
             type="email"
             placeholder="Correo electrónico"
-            className="w-full p-2 border rounded"
             {...register("email", {
               required: "El correo es obligatorio",
               pattern: {
@@ -52,24 +57,22 @@ export default function RecuperarPassword() {
             })}
           />
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            <p className="password-recovery__error">{errors.email.message}</p>
           )}
         </div>
 
         <button
+          className="password-recovery__button"
           type="submit"
           disabled={enviando}
-          className="bg-blue-600 text-white w-full p-2 rounded hover:bg-blue-700"
         >
           {enviando ? "Enviando..." : "Enviar enlace de recuperación"}
         </button>
-      </form>
 
-      <p className="mt-4 text-center">
-        <Link to="/login" className="text-blue-600 hover:underline">
-          Volver al inicio de sesión
-        </Link>
-      </p>
+        <p className="password-recovery__link">
+          <Link to="/login">Volver al inicio de sesión</Link>
+        </p>
+      </form>
     </div>
   );
 }

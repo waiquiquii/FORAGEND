@@ -1,10 +1,12 @@
-// src/features/auth/pages/LoginPage.jsx
-
 import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase"; // el mismo módulo de firebase.js
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+
+import "../../../styles/layouts/auth.css";
+import "../../../styles/layouts/LoginPage.css";
+import { NavigateAuthButtons } from "../componets/ui/NavigateAuthButtons";
 
 export default function LoginPage() {
   const { user } = useAuth();
@@ -36,20 +38,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleLogin}
-        className="bg-white p-6 rounded shadow-md w-80"
-      >
-        <h2 className="text-2xl font-bold mb-4">Iniciar Sesión</h2>
-        {error && <p className="text-red-500 mb-2">{error}</p>}
+    <div className="auth__contenedor">
+      <form onSubmit={handleLogin} className="auth-login__formulario">
+        <h2 className="auth-login__titulo">Iniciar Sesión</h2>
+        <NavigateAuthButtons />
+        {error && <p className="auth-login__error">{error}</p>}
 
         <input
           type="email"
           placeholder="Correo electrónico"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border rounded mb-4"
+          className="auth-login__input"
           required
         />
 
@@ -58,26 +58,17 @@ export default function LoginPage() {
           placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border rounded mb-4"
+          className="auth-login__input"
           required
         />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-        >
+        <button type="submit" className="auth-login__boton">
           Ingresar
         </button>
-
-        <p className="mt-4 text-center">
-          <Link to="/registro" className="text-blue-600 hover:underline">
-            No tengo una cuenta
-          </Link>
-        </p>
-        <p className="mt-2 text-center">
+        <p className="auth-login__recuperar">
           <Link
             to="/recuperar"
-            className="text-sm text-blue-500 hover:underline"
+            className="auth-login__link auth-login__link--recuperar"
           >
             ¿Olvidaste tu contraseña?
           </Link>
