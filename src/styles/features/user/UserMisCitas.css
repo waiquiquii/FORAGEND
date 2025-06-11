@@ -1,0 +1,162 @@
+.misCitas__container {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-rows: 100px 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "titulo"
+    "contenido";
+  background: #f5f6fa;
+}
+
+/* TÍTULO */
+.misCitas__title {
+  grid-area: titulo;
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: bold;
+  padding: 2rem 0 1rem 0;
+  align-self: end;
+}
+
+.misCitas__contenido {
+  grid-area: contenido;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  display: grid;
+  grid-template-areas: "cards calendario";
+  grid-template-columns: auto 400px;
+  grid-template-rows: 1fr;
+}
+
+/* CALENDARIO */
+.misCitas__calendario {
+  grid-area: calendario;
+  padding: 2rem 1rem;
+  border-radius: 18px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* ÁREA DE CARDS */
+.misCitas__cardsArea {
+  grid-area: cards;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+/* Carrusel base */
+.misCitas__slider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.misCitas__slider-inner {
+  width: 700px;
+  max-width: 600px;
+  height: 400px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  overflow: hidden;
+}
+
+/* === TARJETAS 3D === */
+.slider-card {
+  width: 50%;
+  max-width: 430px;
+  transform-style: preserve-3d;
+  transition: all 0.5s ease;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  transform: scale(0.8) translateX(0) rotateY(20deg);
+  z-index: 1;
+}
+
+.slider-card.active {
+  transform: scale(1) translateX(0) rotateY(0);
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 3;
+}
+
+.slider-card.prev {
+  transform: scale(0.8) translateX(-120%) rotateY(25deg);
+  opacity: 0.5;
+  z-index: 2;
+}
+
+.slider-card.next {
+  transform: scale(0.8) translateX(120%) rotateY(-25deg);
+  opacity: 0.5;
+  z-index: 2;
+}
+
+/* Una sola tarjeta */
+.slider-card.unica {
+  position: static;
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* BOTONES DEL CARRUSEL */
+.misCitas__navBtn {
+  background-color: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #444;
+  transition: transform 0.2s;
+}
+
+.misCitas__navBtn:hover {
+  transform: scale(1.2);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .misCitas__container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "titulo"
+      "calendario"
+      "cards";
+  }
+
+  .misCitas__calendario,
+  .misCitas__cardsArea {
+    padding: 1rem;
+  }
+
+  .misCitas__slider-inner {
+    max-width: 90%;
+    max-height: 350px;
+  }
+}
+
+@media (max-width: 600px) {
+  .misCitas__slider-inner {
+    max-height: 250px;
+  }
+}

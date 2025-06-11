@@ -1,0 +1,414 @@
+/* PerfilPersonal.css */
+
+/* Contenedor principal */
+.perfil-contenedor {
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+  box-sizing: border-box;
+}
+
+/* Tarjeta principal del perfil */
+.perfil-tarjeta {
+  width: 100%;
+  max-width: 900px;
+  min-height: 600px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.2);
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.perfil-tarjeta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+}
+
+/* Cabecera con avatar y info principal */
+.perfil-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #f0f2f7;
+}
+
+.perfil-avatar-contenedor {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.perfil-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #fff;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.perfil-avatar:hover {
+  transform: scale(1.05);
+}
+
+.perfil-avatar-overlay {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  z-index: -1;
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.perfil-info-principal {
+  flex: 1;
+}
+
+.perfil-nombre {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.perfil-email {
+  font-size: 1.1rem;
+  color: #718096;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Sección de detalles */
+.perfil-detalles {
+  flex: 1;
+}
+
+.perfil-seccion-titulo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.perfil-seccion-titulo::before {
+  content: "";
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 2px;
+}
+
+/* Grid de campos */
+.perfil-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.perfil-campo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.perfil-campo::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.perfil-campo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+}
+
+.perfil-campo:hover::before {
+  transform: scaleX(1);
+}
+
+.perfil-campo-icono {
+  font-size: 1.5rem;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 12px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.perfil-campo-contenido {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.perfil-etiqueta {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.perfil-valor {
+  font-size: 1.1rem;
+  color: #2d3748;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.perfil-email-completo {
+  font-size: 1rem;
+}
+
+/* Sección de estadísticas */
+.perfil-estadisticas {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Contenedor del corazón */
+.perfil-corazon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 182, 193, 0.1),
+    rgba(255, 192, 203, 0.1)
+  );
+  border-radius: 16px;
+  border: 2px dashed rgba(255, 105, 180, 0.3);
+  transition: all 0.3s ease;
+}
+
+.perfil-corazon-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 105, 180, 0.2);
+  border-color: rgba(255, 105, 180, 0.5);
+}
+
+.perfil-corazon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(255, 105, 180, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.perfil-corazon:hover {
+  transform: scale(1.1);
+}
+
+.perfil-mensaje {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4a5568;
+  text-align: center;
+  margin: 0;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.perfil-progreso {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.perfil-progreso-barra {
+  flex: 1;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.perfil-progreso-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.perfil-progreso-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.perfil-progreso-texto {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a5568;
+  white-space: nowrap;
+}
+
+/* Estados de carga y error */
+.perfil-cargando,
+.perfil-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.perfil-cargando {
+  color: #667eea;
+}
+
+.perfil-error {
+  color: #e53e3e;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .perfil-contenedor {
+    padding: 1rem;
+  }
+
+  .perfil-tarjeta {
+    padding: 2rem;
+    min-height: auto;
+  }
+
+  .perfil-cabecera {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .perfil-nombre {
+    font-size: 2rem;
+  }
+
+  .perfil-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .perfil-campo {
+    padding: 1rem;
+  }
+
+  .perfil-progreso {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .perfil-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .perfil-nombre {
+    font-size: 1.5rem;
+  }
+
+  .perfil-campo-icono {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .perfil-corazon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .perfil-mensaje {
+    font-size: 1rem;
+  }
+
+  .perfil-corazon-container {
+    padding: 1rem;
+  }
+}

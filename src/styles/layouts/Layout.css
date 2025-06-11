@@ -10,6 +10,8 @@
     "nav main"
     "footer footer";
   overflow: hidden;
+  min-width: 0; /* Permite que los hijos se ajusten */
+  min-height: 0;
 }
 
 /* Header ocupa la parte superior */
@@ -79,11 +81,12 @@
 /* Contenido principal con scroll */
 .layout__main {
   grid-area: main;
-  padding: 2rem;
+  /* padding: 2rem; */
   background: #fff;
-  overflow-y: auto;
+  overflow: auto;
   box-sizing: border-box;
   min-height: 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }

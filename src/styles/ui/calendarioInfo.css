@@ -1,0 +1,225 @@
+/* Contenedor principal del calendario */
+.calendarioInfo {
+  width: 320px;
+  max-width: 420px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Header del calendario */
+.calendarioInfo__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
+.calendarioInfo__header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.calendarioInfo__header-button {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.calendarioInfo__header-button--mesAnterior {
+  rotate: 90deg;
+}
+
+.calendarioInfo__header-button--mesSiguiente {
+  rotate: -90deg;
+}
+
+.calendarioInfo__header-button:hover {
+  background: #1253a2;
+}
+
+/* Grid de días */
+.calendarioInfo__dias {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.3rem;
+}
+
+/* Nombres de los días */
+.calendarioInfo__dia-nombre {
+  text-align: center;
+  font-weight: 600;
+  color: #1976d2;
+  padding: 0.3rem 0;
+  background: #f0f6ff;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+/* Días del mes */
+.calendarioInfo__dia {
+  text-align: center;
+  padding: 0.4rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: #f8f9fa;
+  border: 1px solid transparent;
+  transition: background 0.2s, color 0.2s, border 0.2s, transform 0.2s;
+  min-height: 2.2rem;
+  min-width: 2.2rem;
+  aspect-ratio: 1/1;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  gap: 0.1rem;
+}
+
+/* Número del día */
+.calendarioInfo__dia-numero {
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* Indicador de cantidad de citas */
+.calendarioInfo__dia-indicador {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #1976d2;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Día actual */
+.calendarioInfo__dia--hoy {
+  border: 2px solid #1976d2;
+  background: #e3f0ff;
+  color: #1976d2;
+  font-weight: bold;
+}
+
+.calendarioInfo__dia--hoy .calendarioInfo__dia-numero {
+  font-weight: bold;
+}
+
+/* Día con cita agendada */
+.calendarioInfo__dia--con-cita {
+  background: #e8f5e9;
+  color: #388e3c;
+  cursor: pointer;
+}
+
+.calendarioInfo__dia--con-cita:hover {
+  background: #c8e6c9;
+  color: #1b5e20;
+  transform: scale(1.05);
+}
+
+.calendarioInfo__dia--con-cita .calendarioInfo__dia-numero {
+  font-weight: 600;
+}
+
+/* Día sin cita agendada */
+.calendarioInfo__dia--sin-cita {
+  background: #f8f9fa;
+  color: #666;
+}
+
+.calendarioInfo__dia--sin-cita:hover {
+  background: #e9ecef;
+}
+
+/* Combinación: día actual con cita */
+.calendarioInfo__dia--hoy.calendarioInfo__dia--con-cita {
+  background: linear-gradient(135deg, #e3f0ff 0%, #e8f5e9 100%);
+  border: 2px solid #1976d2;
+}
+
+.calendarioInfo__dia--hoy.calendarioInfo__dia--con-cita
+  .calendarioInfo__dia-indicador {
+  background: #388e3c;
+}
+
+/* Para que el primer día del mes empiece en el lugar correcto */
+.calendarioInfo__dia[data-grid-start] {
+  grid-column-start: var(--grid-start);
+}
+
+/* Efectos adicionales para mejor UX */
+.calendarioInfo__dia--con-cita::before {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: #388e3c;
+  border-radius: 50%;
+}
+
+.calendarioInfo__dia--hoy.calendarioInfo__dia--con-cita::before {
+  background: #1976d2;
+}
+
+/* Animación sutil para días con citas */
+@keyframes pulseGreen {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(56, 142, 60, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(56, 142, 60, 0.1);
+  }
+}
+
+.calendarioInfo__dia--con-cita {
+  animation: pulseGreen 2s infinite;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .calendarioInfo {
+    width: 100%;
+    max-width: 100%;
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .calendarioInfo__header h2 {
+    font-size: 1.1rem;
+  }
+
+  .calendarioInfo__dia {
+    min-height: 2rem;
+    min-width: 2rem;
+    font-size: 0.9rem;
+  }
+
+  .calendarioInfo__dia-indicador {
+    width: 14px;
+    height: 14px;
+    font-size: 0.6rem;
+  }
+}

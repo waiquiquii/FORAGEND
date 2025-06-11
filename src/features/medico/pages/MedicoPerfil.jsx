@@ -1,5 +1,10 @@
 import React from "react";
+import PerfilPersonal from "../../../components/ui/PerfilPersonal.jsx";
 
 export default function MedicoPerfil() {
-  return <h2>Bienvenido al Perfil Médico</h2>;
+  return (
+    <div>
+      <PerfilPersonal />
+    </div>
+  );
 }

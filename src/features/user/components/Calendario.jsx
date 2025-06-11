@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useAgendarCitas } from "../context/AgendarCitasProvider";
+import {
+  esDiaHabil,
+  getDiasHabilesPermitidos,
+  verificaRestricciones,
+} from "../hooks/Calendario";
 import "../../../styles/components/calendario.css";
 
 const meses = {
@@ -28,12 +34,16 @@ const diasSemana = [
 
 const diasDeLaSemanaNombres = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
 
+// --- Componente principal ---
+
 const Calendario = () => {
   const [mesActualMostrado, setMesActualMostrado] = useState({
     mes: new Date().getMonth(),
     año: new Date().getFullYear(),
   });
   const [config, setConfig] = useState(null);
+
+  const { actualizarSeleccion } = useAgendarCitas();
 
   useEffect(() => {
     fetch(
@@ -61,8 +71,26 @@ const Calendario = () => {
       new Date(mesActualMostrado.año, mesActualMostrado.mes, 1).getDay() || 7,
   };
 
+  const maxDiasHabiles = config?.configuracion.dias_habiles_maximos ?? 15;
+  const minDiasAnticipacion =
+    config?.configuracion.dias_anticipacion_minima ?? 2;
+
+  // Calcular los próximos N días hábiles (sin contar días de descanso)
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+  const diasHabilesPermitidos = config
+    ? getDiasHabilesPermitidos({ hoy, config, maxDiasHabiles })
+    : [];
+
   const clickEnDia = (dia) => {
-    console.log(`Día seleccionado: ${dia}`);
+    const fechaSeleccionada = new Date(
+      mesActualMostrado.año,
+      mesActualMostrado.mes,
+      dia
+    );
+    const fechaISO = fechaSeleccionada.toISOString().slice(0, 10);
+    actualizarSeleccion({ fecha: fechaISO });
+    console.log(`Día seleccionado: ${fechaISO}`);
   };
 
   const cambiarMes = (incremento) => {
@@ -76,27 +104,24 @@ const Calendario = () => {
     });
   };
 
-  // Determina si el día es hábil o no según la config
-  const esDiaHabil = (dia, mes, año) => {
-    if (!config) return false;
-    const fecha = new Date(año, mes, dia);
-    const nombreDia = diasSemana[fecha.getDay()];
-    return !config.configuracion.dias_descanso.includes(nombreDia);
-  };
-
-  // Parámetros dinámicos desde la config
-  const maxDiasHabiles = config?.configuracion.dias_habiles_maximos ?? 15;
-  const minDiasAnticipacion =
-    config?.configuracion.dias_anticipacion_minima ?? 2;
-
   return (
     <div className="calendario">
       <div className="calendario__header">
-        <button onClick={() => cambiarMes(-1)}>Anterior</button>
+        <button
+          onClick={() => cambiarMes(-1)}
+          className="calendario__header-button calendario__header-button--mesAnterior"
+        >
+          ▾
+        </button>
         <h2>
           {meses[datosMesActualMostrado.nombre]} {mesActualMostrado.año}
         </h2>
-        <button onClick={() => cambiarMes(1)}>Siguiente</button>
+        <button
+          onClick={() => cambiarMes(1)}
+          className="calendario__header-button calendario__header-button--mesSiguiente"
+        >
+          ▾
+        </button>
       </div>
       <div className="calendario__dias">
         {diasDeLaSemanaNombres.map((dia, index) => (
@@ -106,59 +131,22 @@ const Calendario = () => {
         ))}
         {Array.from({ length: datosMesActualMostrado.dias }, (_, index) => {
           const dia = index + 1;
-          const fechaSeleccionada = new Date(
-            mesActualMostrado.año,
-            mesActualMostrado.mes,
-            dia,
-            23,
-            59,
-            59
-          );
-          const hoy = new Date();
-          hoy.setHours(0, 0, 0, 0);
-
-          // Día hábil según config
-          const habil = esDiaHabil(
-            dia,
-            mesActualMostrado.mes,
-            mesActualMostrado.año
-          );
-
           const isFirstDay = dia === 1;
           const gridStart =
             isFirstDay && datosMesActualMostrado.primerDiaSemanaIndex !== 0
               ? datosMesActualMostrado.primerDiaSemanaIndex
               : undefined;
 
-          // No seleccionar días anteriores a hoy
-          const esAnteriorAHoy = fechaSeleccionada < hoy;
-
-          // Solo se puede seleccionar con mínimo de anticipación
-          const diffMs = fechaSeleccionada - hoy;
-          const diffDias = diffMs / (1000 * 60 * 60 * 24);
-          const menosDeAnticipacion = diffDias < minDiasAnticipacion;
-
-          // Calcular los próximos N días hábiles (sin contar días de descanso)
-          let diasHabilesContados = 0;
-          let fechaIter = new Date(hoy);
-          const diasHabilesPermitidos = [];
-          while (diasHabilesContados < maxDiasHabiles) {
-            const nombreDia = diasSemana[fechaIter.getDay()];
-            if (!config?.configuracion.dias_descanso.includes(nombreDia)) {
-              diasHabilesPermitidos.push(fechaIter.toISOString().slice(0, 10));
-              diasHabilesContados++;
-            }
-            fechaIter.setDate(fechaIter.getDate() + 1);
-          }
-          const fechaStr = fechaSeleccionada.toISOString().slice(0, 10);
-          const fueraDeRangoHabiles = !diasHabilesPermitidos.includes(fechaStr);
-
-          // Deshabilitar si es anterior a hoy, no hábil, menos de anticipación, o fuera de los N hábiles
-          const deshabilitado =
-            esAnteriorAHoy ||
-            !habil ||
-            menosDeAnticipacion ||
-            fueraDeRangoHabiles;
+          // Lógica de verificación separada
+          const { deshabilitado, habil } = verificaRestricciones({
+            dia,
+            mes: mesActualMostrado.mes,
+            año: mesActualMostrado.año,
+            config,
+            fechaDeHoy,
+            minDiasAnticipacion,
+            diasHabilesPermitidos,
+          });
 
           return (
             <div

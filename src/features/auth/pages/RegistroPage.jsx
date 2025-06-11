@@ -17,6 +17,7 @@ export default function RegistroPage() {
     fechaNacimiento: "",
     cel: "",
     email: "",
+    confirmEmail: "",
     password: "",
     confirmPassword: "",
   });
@@ -31,14 +32,25 @@ export default function RegistroPage() {
     e.preventDefault();
     setError(null);
 
+    // Validar todos los campos requeridos
     if (
       !form.primerNombre ||
       !form.primerApellido ||
+      !form.fechaNacimiento ||
+      !form.tipoDocumento ||
+      !form.numeroDocumento ||
+      !form.cel ||
       !form.email ||
+      !form.confirmEmail ||
       !form.password ||
       !form.confirmPassword
     ) {
       setError("Por favor completa todos los campos obligatorios.");
+      return;
+    }
+
+    if (form.email !== form.confirmEmail) {
+      setError("Los correos electrónicos no coinciden.");
       return;
     }
 
@@ -144,7 +156,7 @@ export default function RegistroPage() {
 
         <div className="formulario__grupo">
           <label className="formulario__label" htmlFor="fechaNacimiento">
-            Fecha de nacimiento
+            Fecha de nacimiento *
           </label>
           <input
             type="date"
@@ -159,7 +171,7 @@ export default function RegistroPage() {
 
         <div className="formulario__grupo">
           <label className="formulario__label" htmlFor="tipoDocumento">
-            Tipo de documento
+            Tipo de documento *
           </label>
           <input
             id="tipoDocumento"
@@ -175,7 +187,7 @@ export default function RegistroPage() {
 
         <div className="formulario__grupo">
           <label className="formulario__label" htmlFor="numeroDocumento">
-            Número de documento
+            Número de documento *
           </label>
           <input
             id="numeroDocumento"
@@ -189,7 +201,7 @@ export default function RegistroPage() {
 
         <div className="formulario__grupo">
           <label className="formulario__label" htmlFor="cel">
-            Celular
+            Celular *
           </label>
           <input
             id="cel"
@@ -226,7 +238,7 @@ export default function RegistroPage() {
             name="confirmEmail"
             placeholder="usuario@email.com"
             onChange={handleChange}
-            value={form.confirmEmail || ""}
+            value={form.confirmEmail}
             className="formulario__input"
           />
         </div>

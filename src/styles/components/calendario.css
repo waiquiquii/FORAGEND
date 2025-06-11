@@ -1,6 +1,6 @@
 /* Contenedor principal del calendario */
 .calendario {
-  width: 100%;
+  width: 400px;
   max-width: 420px;
   margin: 2rem auto;
   background: #fff;
@@ -25,17 +25,26 @@
   letter-spacing: 1px;
 }
 
-.calendario__header button {
+.calendario__header-button {
   background: #1976d2;
   color: #fff;
   border: none;
   border-radius: 4px;
-  padding: 0.4rem 1rem;
-  font-size: 1rem;
+  padding: 0.1rem 0.4rem;
+  font-size: 1.5rem;
   cursor: pointer;
   transition: background 0.2s;
 }
-.calendario__header button:hover {
+
+.calendario__header-button--mesAnterior {
+  rotate: 90deg;
+}
+
+.calendario__header-button--mesSiguiente {
+  rotate: -90deg;
+}
+
+.calendario__header-button:hover {
   background: #1253a2;
 }
 

@@ -17,6 +17,7 @@ function calculateAge(fechaNacimiento) {
 // Helper to determine tipoDocumento by age
 function getTipoDocumentoByAge(age) {
   if (age < 18) return "TI"; // Tarjeta de Identidad
+  if (age < 12) return "ERROR"; // Error, no se puede registrar
   return "CC"; // Cédula de Ciudadanía
 }
 
@@ -32,6 +33,20 @@ export async function registerUser(formData) {
     email,
     password,
   } = formData;
+
+  // Validar que todos los campos requeridos estén llenos
+  if (
+    !primerNombre ||
+    !primerApellido ||
+    !segundoApellido ||
+    !numeroDocumento ||
+    !fechaNacimiento ||
+    !cel ||
+    !email ||
+    !password
+  ) {
+    throw new Error("Todos los campos obligatorios deben estar llenos.");
+  }
 
   const age = calculateAge(fechaNacimiento);
 
@@ -53,7 +68,7 @@ export async function registerUser(formData) {
   await setDoc(doc(db, "users", uid), {
     email,
     nombre,
-    role: "userClient",
+    role: "medico",
     createdAt: serverTimestamp(),
     profile: {
       primerNombre,
