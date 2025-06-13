@@ -28,14 +28,6 @@ const MedicoLayout = () => {
                 Mi Perfil
               </Link>
             </li>
-            <li className="layout-nav__item">
-              <Link
-                to="/logout"
-                className="layout-nav__link layout-nav__link--logout"
-              >
-                Cerrar sesión
-              </Link>
-            </li>
           </ul>
         </nav>
 

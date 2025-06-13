@@ -12,6 +12,7 @@ function CardInfoCita({ cita, isActive, otrasClasesParaCard, onClick }) {
     tipo_cita,
     cita_fecha,
     cita_hora,
+    cita_pasiente,
     cita_doctor,
     cita_consultorio,
   } = cita;
@@ -36,6 +37,10 @@ function CardInfoCita({ cita, isActive, otrasClasesParaCard, onClick }) {
         </p>
         <p className="card-info-cita__detail">
           <span className="card-info-cita__label">Hora:</span> {cita_hora}
+        </p>
+        <p className="card-info-cita__detail">
+          <span className="card-info-cita__label">Paciente:</span>{" "}
+          {cita_pasiente}
         </p>
         <p className="card-info-cita__detail">
           <span className="card-info-cita__label">Doctor/a:</span> {cita_doctor}
