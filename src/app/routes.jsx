@@ -26,6 +26,7 @@ import MedicoPerfil from "../features/medico/pages/MedicoPerfil";
 import UserAgendar from "../features/user/pages/UserAgendar";
 import UserMisCitas from "../features/user/pages/UserMisCitas";
 import UserPerfil from "../features/user/pages/UserPerfil";
+import { AgendarCitasProvider } from "../features/user/context/AgendarCitasProvider";
 
 const AppRoutes = () => {
   return (
@@ -60,7 +61,14 @@ const AppRoutes = () => {
 
       {/* Rutas Usuario protegidas */}
       <Route element={<PrivateRoute allowedRoles={["userClient"]} />}>
-        <Route path="/user" element={<UserLayout />}>
+        <Route
+          path="/user"
+          element={
+            <AgendarCitasProvider>
+              <UserLayout />
+            </AgendarCitasProvider>
+          }
+        >
           <Route index element={<UserMisCitas />} />
           <Route path="agendar" element={<UserAgendar />} />
           <Route path="mis-citas" element={<UserMisCitas />} />

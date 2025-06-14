@@ -1,34 +1,12 @@
+import express from "express";
+import cors from "cors";
 import "dotenv/config";
 import mongoose from "mongoose";
 
-const uri = process.env.MONGO_URI;
+// Modelos
+import SolicitudCita from "./models/SolicitudCita.js";
+import FinCita from "./models/FinCita.js";
 
-mongoose
-  .connect(uri)
-  .then(() => console.log("Conectado a MongoDB Atlas"))
-  .catch((err) => console.error("Error al conectar a MongoDB Atlas:", err));
-
-// Definir un esquema y modelo simple
-const usuarioSchema = new mongoose.Schema({
-  nombre: String,
-  email: String,
-});
-
-const Usuario = mongoose.model("Usuario", usuarioSchema);
-
-// Crear y guardar un usuario de prueba
-const usuarioPrueba = new Usuario({
-  nombre: "Elmer",
-  email: "elmer@correo.com",
-});
-
-usuarioPrueba
-  .save()
-  .then(() => {
-    console.log("Usuario guardado correctamente");
-    mongoose.disconnect(); // Cierra la conexión después de guardar
-  })
-  .catch((err) => {
-    console.error("Error al guardar el usuario:", err);
-    mongoose.disconnect();
-  });
+const app = express();
+app.use(cors()); // <--- ¡Esto ya habilita CORS!
+app.use(express.json());

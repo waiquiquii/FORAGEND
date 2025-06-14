@@ -68,7 +68,7 @@ export async function registerUser(formData) {
   await setDoc(doc(db, "users", uid), {
     email,
     nombre,
-    role: "medico",
+    role: "userClient",
     createdAt: serverTimestamp(),
     profile: {
       primerNombre,

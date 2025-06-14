@@ -27,7 +27,7 @@ export const AgendarCitasProvider = ({ children }) => {
     setSeleccion({
       fecha: null,
       hora: null,
-      servicio: null,
+      servicio: {},
       profesional: null,
       datosUsuario: {},
     });
