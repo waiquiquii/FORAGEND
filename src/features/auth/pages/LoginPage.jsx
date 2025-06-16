@@ -21,7 +21,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (user?.role === "admin") navigate("/admin");
     else if (user?.role === "medico") navigate("/medico");
-    else if (user?.role === "userClient") navigate("/user");
+    else if (user?.role === "cliente") navigate("/user");
   }, [user]);
 
   const handleLogin = async (e) => {
