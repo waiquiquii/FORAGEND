@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAgendarCitas } from "../context/AgendarCitasProvider";
 import {
-  esDiaHabil,
   getDiasHabilesPermitidos,
   verificaRestricciones,
 } from "../hooks/Calendario";
@@ -42,6 +41,7 @@ const Calendario = () => {
     año: new Date().getFullYear(),
   });
   const [config, setConfig] = useState(null);
+  const [diaSeleccionado, setDiaSeleccionado] = useState(null);
 
   const { actualizarSeleccion } = useAgendarCitas();
 
@@ -89,6 +89,7 @@ const Calendario = () => {
       dia
     );
     const fechaISO = fechaSeleccionada.toISOString().slice(0, 10);
+    setDiaSeleccionado(fechaISO); // <-- Nuevo
     actualizarSeleccion({ fecha: fechaISO });
     console.log(`Día seleccionado: ${fechaISO}`);
   };
@@ -148,6 +149,14 @@ const Calendario = () => {
             diasHabilesPermitidos,
           });
 
+          const fechaActual = new Date(
+            mesActualMostrado.año,
+            mesActualMostrado.mes,
+            dia
+          )
+            .toISOString()
+            .slice(0, 10);
+
           return (
             <div
               key={dia}
@@ -163,6 +172,11 @@ const Calendario = () => {
                   habil ? "calendario__dia--habil" : "calendario__dia--no-habil"
                 }
                 ${deshabilitado ? "calendario__dia--deshabilitado" : ""}
+                ${
+                  diaSeleccionado === fechaActual
+                    ? "calendario__dia--seleccionado"
+                    : ""
+                }
               `}
               style={
                 isFirstDay && gridStart ? { "--grid-start": gridStart } : {}
