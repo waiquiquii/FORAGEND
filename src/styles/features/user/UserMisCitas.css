@@ -4,7 +4,7 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-rows: 100px 1fr;
+  grid-template-rows: 70px 1fr;
   grid-template-columns: 1fr;
   grid-template-areas:
     "titulo"
@@ -14,17 +14,18 @@
 
 /* TÍTULO */
 .misCitas__title {
+  /* padding: 2rem 0 1rem 0; */
+  margin: auto 0;
   grid-area: titulo;
   text-align: center;
   font-size: 2.2rem;
   font-weight: bold;
-  padding: 2rem 0 1rem 0;
   align-self: end;
 }
 
 .misCitas__contenido {
   grid-area: contenido;
-  padding: 1rem;
+  /* padding: 1rem; */
   background: #fff;
   border-radius: 18px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
@@ -37,7 +38,7 @@
 /* CALENDARIO */
 .misCitas__calendario {
   grid-area: calendario;
-  padding: 2rem 1rem;
+  /* padding: 2rem 1rem; */
   border-radius: 18px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   width: 100%;
@@ -49,10 +50,10 @@
 /* ÁREA DE CARDS */
 .misCitas__cardsArea {
   grid-area: cards;
+  /* padding: 2rem 1rem; */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1rem;
 }
 
 /* Carrusel base */

@@ -32,6 +32,16 @@ function DropdownMenu() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Obtiene la ruta actual"
+  const currentPath = window.location.pathname;
+
+  // Determina el rol desde la ruta actual
+  const pathParts = currentPath.split("/").filter(Boolean);
+  const role = pathParts[0] || "user"; // fallback a "user" si no hay rol
+
+  // Construye la ruta de perfil según el rol
+  const perfilPath = `/${role}/perfil`;
+
   return (
     <div
       className={`layout-header__dropdown${
@@ -55,7 +65,7 @@ function DropdownMenu() {
         <li>
           <Link
             className="layout-header__dropdown-item"
-            to="/Perfilusuario"
+            to={perfilPath}
             onClick={() => setOpen(false)}
           >
             Perfil
