@@ -11,9 +11,12 @@ export const AgendarCitasProvider = ({ children }) => {
   const [seleccion, setSeleccion] = useState({
     fecha: null,
     hora: null,
-    servicio: null,
-    profesional: null,
-    datosUsuario: {},
+    servicio: {
+      tipo: null,
+      especialidad: null,
+    },
+    profesional: { nombre: null, consultorio: null },
+    paciente: { nombre: null, parentesco: null },
   });
 
   const actualizarSeleccion = (nuevaSeleccion) => {
@@ -27,9 +30,12 @@ export const AgendarCitasProvider = ({ children }) => {
     setSeleccion({
       fecha: null,
       hora: null,
-      servicio: null,
-      profesional: null,
-      datosUsuario: {},
+      servicio: {
+        tipo: null,
+        especialidad: null,
+      },
+      profesional: { nombre: null, consultorio: null },
+      paciente: { nombre: null, parentesco: null },
     });
   };
 
