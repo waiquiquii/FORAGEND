@@ -1,22 +1,8 @@
-/* PerfilPersonal.css */
-
-/* Contenedor principal */
-.perfil-contenedor {
-  width: 100%;
-  padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif;
-  box-sizing: border-box;
-}
-
 /* Tarjeta principal del perfil */
 .perfil-tarjeta {
   width: 100%;
   max-width: 900px;
-  min-height: 600px;
+  margin: auto;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 24px;
@@ -25,18 +11,6 @@
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.perfil-tarjeta::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
 }
 
 /* Cabecera con avatar y info principal */
@@ -49,7 +23,6 @@
 }
 
 .perfil-avatar-contenedor {
-  position: relative;
   flex-shrink: 0;
 }
 
@@ -61,31 +34,12 @@
   border: 4px solid #fff;
   box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
   transition: transform 0.3s ease;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  padding: 4px;
 }
 
 .perfil-avatar:hover {
   transform: scale(1.05);
-}
-
-.perfil-avatar-overlay {
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  border-radius: 50%;
-  background: linear-gradient(45deg, #667eea, #764ba2);
-  z-index: -1;
-  animation: rotate 3s linear infinite;
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .perfil-info-principal {
@@ -149,29 +103,11 @@
   border-radius: 16px;
   border: 1px solid #e2e8f0;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.perfil-campo::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, #667eea, #764ba2);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
 }
 
 .perfil-campo:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
-}
-
-.perfil-campo:hover::before {
-  transform: scaleX(1);
 }
 
 .perfil-campo-icono {
@@ -282,8 +218,6 @@
   height: 8px;
   background: #e2e8f0;
   border-radius: 4px;
-  overflow: hidden;
-  position: relative;
 }
 
 .perfil-progreso-fill {
@@ -291,32 +225,6 @@
   background: linear-gradient(90deg, #667eea, #764ba2);
   border-radius: 4px;
   transition: width 0.5s ease;
-  position: relative;
-}
-
-.perfil-progreso-fill::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
-  animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
 }
 
 .perfil-progreso-texto {
@@ -347,10 +255,6 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
-  .perfil-contenedor {
-    padding: 1rem;
-  }
-
   .perfil-tarjeta {
     padding: 2rem;
     min-height: auto;

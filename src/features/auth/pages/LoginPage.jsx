@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase"; // el mismo módulo de firebase.js
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { validateEmail, validatePassword } from "../hooks/userLogin";
 
 import "../../../styles/layouts/auth.css";
 import "../../../styles/layouts/LoginPage.css";
@@ -27,6 +28,16 @@ export default function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+
+    // Validaciones preliminares en el cliente
+    if (!validateEmail(email)) {
+      setError("Por favor ingresa un correo electrónico válido.");
+      return;
+    }
+    if (!validatePassword(password)) {
+      setError("La contraseña debe tener al menos 6 caracteres.");
+      return;
+    }
 
     try {
       // signInWithEmailAndPassword dispara onAuthStateChanged

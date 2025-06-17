@@ -1,16 +1,44 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { PASOS_AGENDAR } from "../services/funcionesAgendar";
 import Calendario from "../components/Calendario";
-// import "../../../styles/features/user/UserAgendar.css";
 import CardInfoCita from "../../../components/ui/CardInfoCita";
 import {
   AgendarCitasProvider,
   useAgendarCitas,
-} from "../context/AgendarCitasProvider"; // <-- Importa el hook
+} from "../context/AgendarCitasProvider";
+// Importa Firebase
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 function UserAgendarContent() {
-  const { seleccion } = useAgendarCitas(); // <-- Usa el hook aquí
+  const [pasoActual, setPasoActual] = useState(
+    PASOS_AGENDAR.SELECCIONAR_PACIENTE
+  );
+  const { seleccion, actualizarSeleccion } = useAgendarCitas();
   const { fecha, hora, servicio, profesional, paciente } = seleccion;
+  const [pacienteSeleccionado, setPacienteSeleccionado] = useState("");
+  const [usuario, setUsuario] = useState({ nombre: "", apellido: "" });
+
+  // Traer usuario de Firebase
+  useEffect(() => {
+    const auth = getAuth();
+    const db = getFirestore();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Suponiendo que tienes una colección "usuarios" con el uid
+        const docRef = doc(db, "usuarios", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setUsuario({
+            nombre: data.nombre || "",
+            apellido: data.apellido || "",
+          });
+        }
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const titulos = {
     seleccionPasiente: "Seleccionar Paciente",
@@ -22,24 +50,67 @@ function UserAgendarContent() {
     confirmacion: "Confirmar Cita",
   };
 
-  // otros pasos
+  // Funciones para manejar los pasos
 
-  const pasosOpcionales = {
-    ingresarDatospasiente:
-      "Ingresar Datos del Paciente (dependiente legal) (opcional)",
+  const handleNextFromPaciente = () => {
+    let pacienteData = {};
+    if (pacienteSeleccionado === "1") {
+      pacienteData = {
+        nombre: `${usuario.nombre} ${usuario.apellido}`,
+        tipo: "titular",
+      };
+    } else if (pacienteSeleccionado === "2") {
+      pacienteData = {
+        nombre: "",
+        tipo: "dependiente",
+      };
+    }
+    actualizarSeleccion({ paciente: pacienteData });
+    setPasoActual(PASOS_AGENDAR.SELECCION_FECHA);
   };
 
-  // manejo de click en el boton siguiente
-  const handleSiguiente = () => {
-    console.log("Botón Siguiente clickeado");
+  const handlePrevFromFecha = () => {
+    setPasoActual(PASOS_AGENDAR.SELECCIONAR_PACIENTE);
+  };
+
+  const handleNextFromFecha = () => {
+    setPasoActual(PASOS_AGENDAR.SELECCION_TIPO_CITA);
+  };
+
+  const handlePrevFromTipoCita = () => {
+    setPasoActual(PASOS_AGENDAR.SELECCION_FECHA);
+  };
+
+  const handleNextFromTipoCita = () => {
+    setPasoActual(PASOS_AGENDAR.SELECCION_ESPECIALIDAD);
+  };
+
+  const handlePrevFromEspecialidad = () => {
+    setPasoActual(PASOS_AGENDAR.SELECCION_TIPO_CITA);
+  };
+
+  const handleNextFromEspecialidad = () => {
+    setPasoActual(PASOS_AGENDAR.SELECCION_MEDICO);
+  };
+
+  const handlePrevFromMedico = () => {
+    setPasoActual(PASOS_AGENDAR.SELECCION_ESPECIALIDAD);
+  };
+
+  const handleNextFromMedico = () => {
+    setPasoActual(PASOS_AGENDAR.SELECCION_HORA);
+  };
+
+  const handlePrevFromHora = () => {
+    setPasoActual(PASOS_AGENDAR.SELECCION_MEDICO);
   };
 
   const opciones = {
-    pacientes: allOpciones.pacientes, // Opciones de pacientes
-    tiposCita: allOpciones.tiposCita, // Opciones de tipos de cita
-    especialidades: allOpciones.especialidades, // Opciones de especialidades
-    doctores: allOpciones.doctores, // Opciones de doctores
-    horarios: allOpciones.horarios, // Opciones de horarios
+    pacientes: allOpciones.pacientes,
+    tiposCita: allOpciones.tiposCita,
+    especialidades: allOpciones.especialidades,
+    doctores: allOpciones.doctores,
+    horarios: allOpciones.horarios,
   };
 
   return (
@@ -47,120 +118,145 @@ function UserAgendarContent() {
       <h2 className="user-agendar__titulo titulo">Agendar una Nueva Cita</h2>
       <div className="user-agendar__contenido">
         <div className="user-agendar__formulario">
-          <div className="user-agendar__selector">
-            <h3 className="user-agendar__selector-titulo">
-              {titulos.seleccionPasiente}
-            </h3>
-            <select className="user-agendar__select">
-              <option value="">Seleccione una opción</option>
-              {Object.entries(opciones.pacientes).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value}
-                </option>
-              ))}
-            </select>
-            <Botones
-              siguiente={() => {
-                console.log("Siguiente clickeado");
-              }}
-            />
-          </div>
+          {pasoActual === PASOS_AGENDAR.SELECCIONAR_PACIENTE && (
+            <div className="user-agendar__selector">
+              <h3 className="user-agendar__selector-titulo">
+                {titulos.seleccionPasiente}
+              </h3>
+              <select
+                className="user-agendar__select"
+                value={pacienteSeleccionado}
+                onChange={(e) => setPacienteSeleccionado(e.target.value)}
+              >
+                <option value="">Seleccione una opción</option>
+                {Object.entries(opciones.pacientes).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value}
+                  </option>
+                ))}
+              </select>
+              <Botones
+                siguiente={() => {
+                  handleNextFromPaciente();
+                  console.log("Siguiente clickeado");
+                }}
+              />
+            </div>
+          )}
           {/* <Calendario /> */}
-          <div className="user-agendar__calendario">
-            <Calendario />
-            <Botones
-              anterior={() => {
-                console.log("Anterior clickeado");
-              }}
-              siguiente={() => {
-                console.log("Siguiente clickeado");
-              }}
-            />
-          </div>
-          <div className="user-agendar__selector">
-            <h3 className="user-agendar__selector-titulo">
-              {titulos.seleccionTipoCita}
-            </h3>
-            <select className="user-agendar__select">
-              <option value="">Seleccione una opción</option>
-              {Object.entries(opciones.tiposCita).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value}
-                </option>
-              ))}
-            </select>
-            <Botones
-              anterior={() => {
-                console.log("Anterior clickeado");
-              }}
-              siguiente={() => {
-                console.log("Siguiente clickeado");
-              }}
-            />
-          </div>
-          <div className="user-agendar__selector">
-            <h3 className="user-agendar__selector-titulo">
-              {titulos.seleccionEspecialidad}
-            </h3>
-            <select className="user-agendar__select">
-              <option value="">Seleccione una opción</option>
-              {Object.entries(opciones.especialidades).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value}
-                </option>
-              ))}
-            </select>
-            <Botones
-              anterior={() => {
-                console.log("Anterior clickeado");
-              }}
-              siguiente={() => {
-                console.log("Siguiente clickeado");
-              }}
-            />
-          </div>
-          <div className="user-agendar__selector">
-            <h3 className="user-agendar__selector-titulo">
-              {titulos.seleccionDoctor}
-            </h3>
-            <select className="user-agendar__select">
-              <option value="">Seleccione una opción</option>
-              {Object.entries(opciones.doctores).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value}
-                </option>
-              ))}
-            </select>
-            <Botones
-              anterior={() => {
-                console.log("Anterior clickeado");
-              }}
-              siguiente={() => {
-                console.log("Siguiente clickeado");
-              }}
-            />
-          </div>
-          <div className="user-agendar__selector">
-            <h3 className="user-agendar__selector-titulo">
-              {titulos.seleccionHorario}
-            </h3>
-            <select className="user-agendar__select">
-              <option value="">Seleccione una opción</option>
-              {Object.entries(opciones.horarios).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value}
-                </option>
-              ))}
-            </select>
-            <Botones
-              anterior={() => {
-                console.log("Anterior clickeado");
-              }}
-              solicitar={() => {
-                console.log("Solicitar clickeado");
-              }}
-            />
-          </div>
+          {pasoActual === PASOS_AGENDAR.SELECCION_FECHA && (
+            <div className="user-agendar__calendario">
+              <Calendario />
+              <Botones
+                anterior={() => {
+                  handlePrevFromFecha();
+                  console.log("Anterior clickeado");
+                }}
+                siguiente={() => {
+                  handleNextFromFecha();
+                  console.log("Siguiente clickeado");
+                }}
+              />
+            </div>
+          )}
+          {pasoActual === PASOS_AGENDAR.SELECCION_TIPO_CITA && (
+            <div className="user-agendar__selector">
+              <h3 className="user-agendar__selector-titulo">
+                {titulos.seleccionTipoCita}
+              </h3>
+              <select className="user-agendar__select">
+                <option value="">Seleccione una opción</option>
+                {Object.entries(opciones.tiposCita).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value}
+                  </option>
+                ))}
+              </select>
+              <Botones
+                anterior={() => {
+                  handlePrevFromTipoCita();
+                  console.log("Anterior clickeado");
+                }}
+                siguiente={() => {
+                  handleNextFromTipoCita();
+                  console.log("Siguiente clickeado");
+                }}
+              />
+            </div>
+          )}
+          {pasoActual === PASOS_AGENDAR.SELECCION_ESPECIALIDAD && (
+            <div className="user-agendar__selector">
+              <h3 className="user-agendar__selector-titulo">
+                {titulos.seleccionEspecialidad}
+              </h3>
+              <select className="user-agendar__select">
+                <option value="">Seleccione una opción</option>
+                {Object.entries(opciones.especialidades).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value}
+                  </option>
+                ))}
+              </select>
+              <Botones
+                anterior={() => {
+                  handlePrevFromEspecialidad();
+                  console.log("Anterior clickeado");
+                }}
+                siguiente={() => {
+                  handleNextFromEspecialidad();
+                  console.log("Siguiente clickeado");
+                }}
+              />
+            </div>
+          )}
+          {pasoActual === PASOS_AGENDAR.SELECCION_MEDICO && (
+            <div className="user-agendar__selector">
+              <h3 className="user-agendar__selector-titulo">
+                {titulos.seleccionDoctor}
+              </h3>
+              <select className="user-agendar__select">
+                <option value="">Seleccione una opción</option>
+                {Object.entries(opciones.doctores).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value}
+                  </option>
+                ))}
+              </select>
+              <Botones
+                anterior={() => {
+                  handlePrevFromMedico();
+                  console.log("Anterior clickeado");
+                }}
+                siguiente={() => {
+                  handleNextFromMedico();
+                  console.log("Siguiente clickeado");
+                }}
+              />
+            </div>
+          )}
+          {pasoActual === PASOS_AGENDAR.SELECCION_HORA && (
+            <div className="user-agendar__selector">
+              <h3 className="user-agendar__selector-titulo">
+                {titulos.seleccionHorario}
+              </h3>
+              <select className="user-agendar__select">
+                <option value="">Seleccione una opción</option>
+                {Object.entries(opciones.horarios).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value}
+                  </option>
+                ))}
+              </select>
+              <Botones
+                anterior={() => {
+                  console.log("Anterior clickeado");
+                }}
+                solicitar={() => {
+                  console.log("Solicitar clickeado");
+                }}
+              />
+            </div>
+          )}
         </div>
         <div className="user-agendar__seleccion">
           <div className="user-agendar__card">

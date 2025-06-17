@@ -1,5 +1,5 @@
 // src/app/provider.jsx
-import { AuthProvider } from "@/features/auth/context/AuthContext";
+import { AuthProvider } from "../features/auth/context/AuthContext";
 
 const Providers = ({ children }) => {
   return <AuthProvider>{children}</AuthProvider>;

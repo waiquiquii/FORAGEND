@@ -1,6 +1,6 @@
 .misCitas__container {
   width: 100%;
-  height: auto;
+  height: 100%;
   margin: 0;
   padding: 0;
   display: grid;
@@ -9,6 +9,7 @@
   grid-template-areas:
     "titulo"
     "contenido";
+  align-items: center;
   background: #f5f6fa;
 }
 

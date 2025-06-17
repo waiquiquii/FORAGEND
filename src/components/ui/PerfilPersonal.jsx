@@ -61,95 +61,104 @@ const PerfilPersonal = () => {
     : "";
 
   return (
-    <div className="perfil-contenedor">
-      <div className="perfil-tarjeta">
-        {/* Sección superior con avatar y nombre */}
-        <div className="perfil-cabecera">
-          <div className="perfil-avatar-contenedor">
-            <img
-              src="https://i.pinimg.com/736x/f7/8b/0f/f78b0f2f367d706681d5c657ed167f78.jpg"
-              alt="Avatar del usuario"
-              className="perfil-avatar"
-            />
-            <div className="perfil-avatar-overlay"></div>
-          </div>
-          <div className="perfil-info-principal">
-            <h1 className="perfil-nombre">{nombreCompleto || "Usuario"}</h1>
-            <p className="perfil-email">{email}</p>
-          </div>
+    <div className="perfil-tarjeta">
+      {/* Sección superior con avatar y nombre */}
+      <div className="perfil-cabecera">
+        <div className="perfil-avatar-contenedor">
+          <img
+            src="https://i.pinimg.com/736x/f7/8b/0f/f78b0f2f367d706681d5c657ed167f78.jpg"
+            alt="Avatar del usuario"
+            className="perfil-avatar"
+          />
         </div>
+        <div className="perfil-info-principal">
+          <h1 className="perfil-nombre">{nombreCompleto || "Usuario"}</h1>
+          <p className="perfil-email">{email}</p>
+        </div>
+      </div>
 
-        {/* Sección de información detallada */}
-        <div className="perfil-detalles">
-          <h2 className="perfil-seccion-titulo">Información Personal</h2>
+      {/* Sección de información detallada */}
+      <div className="perfil-detalles">
+        <h2 className="perfil-seccion-titulo">Información Personal</h2>
 
-          <div className="perfil-grid">
-            <div className="perfil-campo">
-              <div className="perfil-campo-icono">📱</div>
-              <div className="perfil-campo-contenido">
-                <span className="perfil-etiqueta">Teléfono</span>
-                <span className="perfil-valor">
-                  {telefono || "No disponible"}
-                </span>
-              </div>
+        <div className="perfil-grid">
+          <div className="perfil-campo">
+            <div className="perfil-campo-icono">📱</div>
+            <div className="perfil-campo-contenido">
+              <span className="perfil-etiqueta">Teléfono</span>
+              <span className="perfil-valor">
+                {telefono || "No disponible"}
+              </span>
             </div>
+          </div>
 
-            <div className="perfil-campo">
-              <div className="perfil-campo-icono">🆔</div>
-              <div className="perfil-campo-contenido">
-                <span className="perfil-etiqueta">Documento</span>
-                <span className="perfil-valor">
-                  {numeroDocumento || "No disponible"}
-                </span>
-              </div>
+          <div className="perfil-campo">
+            <div className="perfil-campo-icono">🆔</div>
+            <div className="perfil-campo-contenido">
+              <span className="perfil-etiqueta">Documento</span>
+              <span className="perfil-valor">
+                {numeroDocumento || "No disponible"}
+              </span>
             </div>
+          </div>
 
-            <div className="perfil-campo">
-              <div className="perfil-campo-icono">🎂</div>
-              <div className="perfil-campo-contenido">
-                <span className="perfil-etiqueta">Edad</span>
-                <span className="perfil-valor">
-                  {edad ? `${edad} años` : "No disponible"}
-                </span>
-              </div>
+          <div className="perfil-campo">
+            <div className="perfil-campo-icono">🎂</div>
+            <div className="perfil-campo-contenido">
+              <span className="perfil-etiqueta">Edad</span>
+              <span className="perfil-valor">
+                {edad ? `${edad} años` : "No disponible"}
+              </span>
             </div>
+          </div>
 
-            <div className="perfil-campo">
-              <div className="perfil-campo-icono">✉️</div>
-              <div className="perfil-campo-contenido">
-                <span className="perfil-etiqueta">Correo electrónico</span>
-                <span className="perfil-valor perfil-email-completo">
-                  {email}
-                </span>
-              </div>
+          <div className="perfil-campo">
+            <div className="perfil-campo-icono">✉️</div>
+            <div className="perfil-campo-contenido">
+              <span className="perfil-etiqueta">Correo electrónico</span>
+              <span className="perfil-valor perfil-email-completo">
+                {email}
+              </span>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Sección adicional para llenar espacio */}
-        <div className="perfil-estadisticas">
-          <h2 className="perfil-seccion-titulo">Estado del Perfil</h2>
-          <div className="perfil-progreso">
-            <div className="perfil-progreso-barra">
-              <div
-                className="perfil-progreso-fill"
-                style={{ width: "100%" }}
-              ></div>
-            </div>
-            <span className="perfil-progreso-texto">
-              Perfil completo al 100%
-            </span>
+      {/* Sección adicional para llenar espacio */}
+      <div className="perfil-estadisticas">
+        <h2 className="perfil-seccion-titulo">Estado del Perfil</h2>
+        <div className="perfil-progreso">
+          <div
+            className="perfil-progreso-barra"
+            style={{
+              background: "#e2e8f0",
+              borderRadius: "4px",
+              height: "8px",
+              width: "100%",
+            }}
+          >
+            <div
+              className="perfil-progreso-fill"
+              style={{
+                width: "100%",
+                background: "linear-gradient(90deg, #667eea, #764ba2)",
+                borderRadius: "4px",
+                height: "100%",
+                transition: "width 0.5s ease",
+              }}
+            ></div>
           </div>
+          <span className="perfil-progreso-texto">Perfil completo al 100%</span>
+        </div>
 
-          {/* Corazón animado decorativo */}
-          <div className="perfil-corazon-container">
-            <img
-              src="https://i.pinimg.com/originals/6d/e1/7f/6de17f9493638040838c12f4c947365b.gif"
-              alt="Corazón animado"
-              className="perfil-corazon"
-            />
-            <p className="perfil-mensaje">¡Tu perfil está completo!</p>
-          </div>
+        {/* Corazón animado decorativo */}
+        <div className="perfil-corazon-container">
+          <img
+            src="https://i.pinimg.com/originals/6d/e1/7f/6de17f9493638040838c12f4c947365b.gif"
+            alt="Corazón animado"
+            className="perfil-corazon"
+          />
+          <p className="perfil-mensaje">¡Tu perfil está completo!</p>
         </div>
       </div>
     </div>
