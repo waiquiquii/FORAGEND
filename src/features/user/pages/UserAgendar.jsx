@@ -6,43 +6,20 @@ import {
   AgendarCitasProvider,
   useAgendarCitas,
 } from "../context/AgendarCitasProvider";
-// Importa Firebase
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+
+import "../../../styles/features/user/UserAgendar.css";
 
 function UserAgendarContent() {
+  const { seleccion, actualizarSeleccion } = useAgendarCitas();
+
+  const { fecha, hora, servicio, profesional, paciente } = seleccion;
   const [pasoActual, setPasoActual] = useState(
     PASOS_AGENDAR.SELECCIONAR_PACIENTE
   );
-  const { seleccion, actualizarSeleccion } = useAgendarCitas();
-  const { fecha, hora, servicio, profesional, paciente } = seleccion;
-  const [pacienteSeleccionado, setPacienteSeleccionado] = useState("");
-  const [usuario, setUsuario] = useState({ nombre: "", apellido: "" });
-
-  // Traer usuario de Firebase
-  useEffect(() => {
-    const auth = getAuth();
-    const db = getFirestore();
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        // Suponiendo que tienes una colección "usuarios" con el uid
-        const docRef = doc(db, "usuarios", user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setUsuario({
-            nombre: data.nombre || "",
-            apellido: data.apellido || "",
-          });
-        }
-      }
-    });
-    return () => unsubscribe();
-  }, []);
 
   const titulos = {
     seleccionPasiente: "Seleccionar Paciente",
-    selecionFecha: "Seleccionar Fecha",
+    selecionFecha: "Selecccione una Fecha",
     seleccionTipoCita: "Seleccionar Tipo de Cita",
     seleccionEspecialidad: "Seleccionar Especialidad",
     seleccionDoctor: "Seleccionar Doctor",
@@ -53,19 +30,6 @@ function UserAgendarContent() {
   // Funciones para manejar los pasos
 
   const handleNextFromPaciente = () => {
-    let pacienteData = {};
-    if (pacienteSeleccionado === "1") {
-      pacienteData = {
-        nombre: `${usuario.nombre} ${usuario.apellido}`,
-        tipo: "titular",
-      };
-    } else if (pacienteSeleccionado === "2") {
-      pacienteData = {
-        nombre: "",
-        tipo: "dependiente",
-      };
-    }
-    actualizarSeleccion({ paciente: pacienteData });
     setPasoActual(PASOS_AGENDAR.SELECCION_FECHA);
   };
 
@@ -105,12 +69,71 @@ function UserAgendarContent() {
     setPasoActual(PASOS_AGENDAR.SELECCION_MEDICO);
   };
 
+  const handleNextFromHora = () => {
+    // Aquí podrías manejar la lógica de confirmación de la cita
+    setPasoActual(PASOS_AGENDAR.CONFIRMACION);
+  };
+
   const opciones = {
     pacientes: allOpciones.pacientes,
     tiposCita: allOpciones.tiposCita,
     especialidades: allOpciones.especialidades,
     doctores: allOpciones.doctores,
     horarios: allOpciones.horarios,
+  };
+
+  // Handlers para los cambios en los selects
+  const handleChangePaciente = (e) => {
+    actualizarSeleccion({
+      paciente: {
+        ...paciente,
+        nombre: "Elmer Mosquera",
+        parentesco:
+          e.target.value === "PARA_OTRO"
+            ? "Dependiente Legal"
+            : e.target.value === "PARA_MI"
+            ? null
+            : null,
+      },
+    });
+    console.log("Paciente seleccionado:", e.target.value);
+  };
+
+  const handleChangeTipoCita = (e) => {
+    actualizarSeleccion({
+      servicio: {
+        ...servicio,
+        tipo: opciones.tiposCita[e.target.value] || e.target.value,
+      },
+    });
+    console.log("Tipo de cita seleccionado:", e.target.value);
+  };
+
+  const handleChangeEspecialidad = (e) => {
+    actualizarSeleccion({
+      servicio: {
+        ...servicio,
+        especialidad: e.target.value,
+      },
+    });
+    console.log("Especialidad seleccionada:", e.target.value);
+  };
+
+  const handleChangeDoctor = (e) => {
+    actualizarSeleccion({
+      profesional: {
+        nombre: opciones.doctores[e.target.value] || e.target.value,
+        consultorio: `consultorio ${e.target.value}`,
+      },
+    });
+    console.log("Doctor seleccionado:", e.target.value);
+  };
+
+  const handleChangeHorario = (e) => {
+    actualizarSeleccion({
+      hora: opciones.horarios[e.target.value] || e.target.value,
+    });
+    console.log("Horario seleccionado:", e.target.value);
   };
 
   return (
@@ -125,8 +148,7 @@ function UserAgendarContent() {
               </h3>
               <select
                 className="user-agendar__select"
-                value={pacienteSeleccionado}
-                onChange={(e) => setPacienteSeleccionado(e.target.value)}
+                onChange={handleChangePaciente}
               >
                 <option value="">Seleccione una opción</option>
                 {Object.entries(opciones.pacientes).map(([key, value]) => (
@@ -143,9 +165,11 @@ function UserAgendarContent() {
               />
             </div>
           )}
-          {/* <Calendario /> */}
           {pasoActual === PASOS_AGENDAR.SELECCION_FECHA && (
-            <div className="user-agendar__calendario">
+            <div className="user-agendar__selector">
+              <h3 className="user-agendar__selector-titulo">
+                {titulos.selecionFecha}
+              </h3>
               <Calendario />
               <Botones
                 anterior={() => {
@@ -164,7 +188,11 @@ function UserAgendarContent() {
               <h3 className="user-agendar__selector-titulo">
                 {titulos.seleccionTipoCita}
               </h3>
-              <select className="user-agendar__select">
+              <select
+                className="user-agendar__select"
+                value={servicio.tipo || ""}
+                onChange={handleChangeTipoCita}
+              >
                 <option value="">Seleccione una opción</option>
                 {Object.entries(opciones.tiposCita).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -189,7 +217,10 @@ function UserAgendarContent() {
               <h3 className="user-agendar__selector-titulo">
                 {titulos.seleccionEspecialidad}
               </h3>
-              <select className="user-agendar__select">
+              <select
+                className="user-agendar__select"
+                onChange={handleChangeEspecialidad}
+              >
                 <option value="">Seleccione una opción</option>
                 {Object.entries(opciones.especialidades).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -214,7 +245,10 @@ function UserAgendarContent() {
               <h3 className="user-agendar__selector-titulo">
                 {titulos.seleccionDoctor}
               </h3>
-              <select className="user-agendar__select">
+              <select
+                className="user-agendar__select"
+                onChange={handleChangeDoctor}
+              >
                 <option value="">Seleccione una opción</option>
                 {Object.entries(opciones.doctores).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -239,7 +273,10 @@ function UserAgendarContent() {
               <h3 className="user-agendar__selector-titulo">
                 {titulos.seleccionHorario}
               </h3>
-              <select className="user-agendar__select">
+              <select
+                className="user-agendar__select"
+                onChange={handleChangeHorario}
+              >
                 <option value="">Seleccione una opción</option>
                 {Object.entries(opciones.horarios).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -250,9 +287,11 @@ function UserAgendarContent() {
               <Botones
                 anterior={() => {
                   console.log("Anterior clickeado");
+                  handlePrevFromHora();
                 }}
                 solicitar={() => {
                   console.log("Solicitar clickeado");
+                  handleNextFromHora();
                 }}
               />
             </div>
@@ -264,9 +303,10 @@ function UserAgendarContent() {
               cita={{
                 cita_id: 123456,
                 tipo_cita: servicio.tipo || "No seleccionado",
-                paciente: paciente.nombre || "No seleccionado",
+                cita_paciente: paciente.nombre || "No seleccionado",
+                cita_parentesco: paciente.parentesco || null,
                 cita_fecha: fecha || "No seleccionado",
-                cita_hora: "08:00 AM",
+                cita_hora: hora || "No seleccionado",
                 cita_doctor: profesional.nombre || "No seleccionado",
                 cita_consultorio: profesional.consultorio || "No asignado",
               }}
@@ -349,7 +389,7 @@ const allOpciones = {
     turno3: "09:00 - 09:30 AM",
   },
   pacientes: {
-    1: "Para Mi",
-    2: "Para otro (*dependiente legal)",
+    PARA_MI: "Para Mi",
+    PARA_OTRO: "Para otro (*dependiente legal)",
   },
 };

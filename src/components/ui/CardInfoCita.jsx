@@ -12,8 +12,8 @@ function CardInfoCita({ cita, isActive, otrasClasesParaCard, onClick }) {
     tipo_cita,
     cita_fecha,
     cita_hora,
-    cita_pasiente,
-    parentesco, // Nuevo campo
+    cita_paciente,
+    cita_parentesco,
     cita_doctor,
     cita_consultorio,
   } = cita;
@@ -39,13 +39,15 @@ function CardInfoCita({ cita, isActive, otrasClasesParaCard, onClick }) {
           <span className="card-info-cita__label">Hora:</span> {cita_hora}
         </p>
         <p className="card-info-cita__detail">
-          <span className="card-info-cita__label">Paciente:</span>{" "}
-          {cita_pasiente}
+          <span className="card-info-cita__label">Paciente:</span>
+          {cita_paciente}
         </p>
-        <p className="card-info-cita__detail">
-          <span className="card-info-cita__label">Parentesco:</span>{" "}
-          {parentesco}
-        </p>
+        {cita_parentesco && (
+          <p className="card-info-cita__detail">
+            <span className="card-info-cita__label">Parentesco:</span>
+            {cita_parentesco}
+          </p>
+        )}
         <p className="card-info-cita__detail">
           <span className="card-info-cita__label">Doctor/a:</span> {cita_doctor}
         </p>
