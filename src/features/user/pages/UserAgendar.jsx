@@ -19,7 +19,7 @@ function UserAgendarContent() {
 
   const titulos = {
     seleccionPasiente: "Seleccionar Paciente",
-    selecionFecha: "Selecccione una Fecha",
+    seleccionFecha: "Seleccionar una Fecha",
     seleccionTipoCita: "Seleccionar Tipo de Cita",
     seleccionEspecialidad: "Seleccionar Especialidad",
     seleccionDoctor: "Seleccionar Doctor",
@@ -146,17 +146,10 @@ function UserAgendarContent() {
               <h3 className="user-agendar__selector-titulo">
                 {titulos.seleccionPasiente}
               </h3>
-              <select
-                className="user-agendar__select"
+              <Select
+                opciones={opciones.pacientes}
                 onChange={handleChangePaciente}
-              >
-                <option value="">Seleccione una opción</option>
-                {Object.entries(opciones.pacientes).map(([key, value]) => (
-                  <option key={key} value={key}>
-                    {value}
-                  </option>
-                ))}
-              </select>
+              />
               <Botones
                 siguiente={() => {
                   handleNextFromPaciente();
@@ -188,18 +181,10 @@ function UserAgendarContent() {
               <h3 className="user-agendar__selector-titulo">
                 {titulos.seleccionTipoCita}
               </h3>
-              <select
-                className="user-agendar__select"
-                value={servicio.tipo || ""}
+              <Select
+                opciones={opciones.tiposCita}
                 onChange={handleChangeTipoCita}
-              >
-                <option value="">Seleccione una opción</option>
-                {Object.entries(opciones.tiposCita).map(([key, value]) => (
-                  <option key={key} value={key}>
-                    {value}
-                  </option>
-                ))}
-              </select>
+              />
               <Botones
                 anterior={() => {
                   handlePrevFromTipoCita();
@@ -217,17 +202,10 @@ function UserAgendarContent() {
               <h3 className="user-agendar__selector-titulo">
                 {titulos.seleccionEspecialidad}
               </h3>
-              <select
-                className="user-agendar__select"
+              <Select
+                opciones={opciones.especialidades}
                 onChange={handleChangeEspecialidad}
-              >
-                <option value="">Seleccione una opción</option>
-                {Object.entries(opciones.especialidades).map(([key, value]) => (
-                  <option key={key} value={key}>
-                    {value}
-                  </option>
-                ))}
-              </select>
+              />
               <Botones
                 anterior={() => {
                   handlePrevFromEspecialidad();
@@ -245,17 +223,10 @@ function UserAgendarContent() {
               <h3 className="user-agendar__selector-titulo">
                 {titulos.seleccionDoctor}
               </h3>
-              <select
-                className="user-agendar__select"
+              <Select
+                opciones={opciones.doctores}
                 onChange={handleChangeDoctor}
-              >
-                <option value="">Seleccione una opción</option>
-                {Object.entries(opciones.doctores).map(([key, value]) => (
-                  <option key={key} value={key}>
-                    {value}
-                  </option>
-                ))}
-              </select>
+              />
               <Botones
                 anterior={() => {
                   handlePrevFromMedico();
@@ -273,17 +244,10 @@ function UserAgendarContent() {
               <h3 className="user-agendar__selector-titulo">
                 {titulos.seleccionHorario}
               </h3>
-              <select
-                className="user-agendar__select"
+              <Select
+                opciones={opciones.horarios}
                 onChange={handleChangeHorario}
-              >
-                <option value="">Seleccione una opción</option>
-                {Object.entries(opciones.horarios).map(([key, value]) => (
-                  <option key={key} value={key}>
-                    {value}
-                  </option>
-                ))}
-              </select>
+              />
               <Botones
                 anterior={() => {
                   console.log("Anterior clickeado");
@@ -354,6 +318,25 @@ function Botones({ anterior, siguiente, solicitar }) {
         </div>
       )}
     </div>
+  );
+}
+
+function Select({ opciones, onChange }) {
+  return (
+    <select
+      className="user-agendar__select"
+      onChange={onChange}
+      defaultValue=""
+    >
+      <option disabled value="">
+        Seleccione una opción
+      </option>
+      {Object.entries(opciones).map(([key, value]) => (
+        <option key={key} value={key} className="user-agendar__select-option">
+          {value}
+        </option>
+      ))}
+    </select>
   );
 }
 
