@@ -2,6 +2,7 @@
 .perfil-tarjeta {
   width: 100%;
   max-width: 900px;
+  height: 100%;
   margin: auto;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);

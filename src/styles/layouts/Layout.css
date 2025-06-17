@@ -90,7 +90,7 @@
 .layout__main {
   height: auto;
   grid-area: mainContent;
-  /* padding: 2rem; */
+  padding: 2rem;
   background: #fff;
   overflow-y: auto;
   box-sizing: border-box;
