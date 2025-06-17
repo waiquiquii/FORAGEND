@@ -265,7 +265,7 @@ function UserAgendarContent() {
           <div className="user-agendar__card">
             <CardInfoCita
               cita={{
-                cita_id: 123456,
+                cita_id: null,
                 tipo_cita: servicio.tipo || "No seleccionado",
                 cita_paciente: paciente.nombre || "No seleccionado",
                 cita_parentesco: paciente.parentesco || null,

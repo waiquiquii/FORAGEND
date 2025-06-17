@@ -25,9 +25,11 @@ function CardInfoCita({ cita, isActive, otrasClasesParaCard, onClick }) {
       } ${otrasClasesParaCard}`}
       onClick={onClick}
     >
-      <div className={`card-info-cita__id-container`}>
-        <p className="card-info-cita__id">{cita_id}</p>
-      </div>
+      {cita_id && (
+        <div className={`card-info-cita__id-container`}>
+          <p className="card-info-cita__id">{cita_id}</p>
+        </div>
+      )}
       <div className="card-info-cita__title-container">
         <h2 className="card-info-cita__title">{tipo_cita}</h2>
       </div>
