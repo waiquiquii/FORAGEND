@@ -18,7 +18,7 @@ const meses = {
 
 const diasDeLaSemanaNombres = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
 
-const CalendarioInfo = ({ citasAgendadas = [] }) => {
+const CalendarioInfo = ({ citasAgendadas = [] }, otherClassContainer) => {
   const [mesActualMostrado, setMesActualMostrado] = useState({
     mes: new Date().getMonth(),
     año: new Date().getFullYear(),
@@ -83,7 +83,7 @@ const CalendarioInfo = ({ citasAgendadas = [] }) => {
   };
 
   return (
-    <div className="calendarioInfo">
+    <div className={`calendarioInfo ${otherClassContainer}`}>
       <div className="calendarioInfo__header">
         <button
           onClick={() => cambiarMes(-1)}

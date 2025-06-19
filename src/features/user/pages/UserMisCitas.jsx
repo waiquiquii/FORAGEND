@@ -1,5 +1,5 @@
 // UserMisCitas.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import CardInfoCita from "../../../components/ui/CardInfoCita";
 import CalendarioInfo from "../../../components/ui/CalendarioInfo";
 
@@ -31,9 +31,50 @@ export default function UserMisCitas() {
       cita_doctor: "Dr. Carlos López",
       cita_consultorio: "Consultorio 3",
     },
+    {
+      cita_id: "44556",
+      tipo_cita: "Consulta Especializada",
+      cita_fecha: "2023-12-15",
+      cita_hora: "3:00 PM",
+      cita_doctor: "Dra. María Rodríguez",
+      cita_consultorio: "Consultorio 4",
+    },
+    {
+      cita_id: "78901",
+      tipo_cita: "Consulta de Seguimiento",
+      cita_fecha: "2023-12-20",
+      cita_hora: "4:00 PM",
+      cita_doctor: "Dr. Luis Martínez",
+      cita_consultorio: "Consultorio 5",
+    },
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1200);
+  const sliderRef = useRef();
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 1200);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Detecta la tarjeta más centrada al hacer scroll en móvil
+  const handleScroll = () => {
+    if (!sliderRef.current) return;
+    const cards = sliderRef.current.querySelectorAll(".slider-card.mobile");
+    let minDiff = Infinity;
+    let activeIdx = 0;
+    cards.forEach((card, idx) => {
+      const rect = card.getBoundingClientRect();
+      const diff = Math.abs(rect.left + rect.width / 2 - window.innerWidth / 2);
+      if (diff < minDiff) {
+        minDiff = diff;
+        activeIdx = idx;
+      }
+    });
+    setActiveIndex(activeIdx);
+  };
 
   const prevSlide = () => {
     setActiveIndex((prevIndex) =>
@@ -51,10 +92,31 @@ export default function UserMisCitas() {
 
   return (
     <div className="misCitas__container">
-      <h2 className="misCitas__title">Mis Citas</h2>
+      <div className="misCitas__title-container">
+        <h2 className="misCitas__title">Mis Citas</h2>
+      </div>
       <div className="misCitas__contenido">
         <div className="misCitas__cardsArea">
-          {isUnaCita ? (
+          {isMobile ? (
+            <div
+              className="misCitas__slider-inner mobile-scroll"
+              ref={sliderRef}
+              onScroll={handleScroll}
+            >
+              {CitasAMostrar.map((cita, index) => (
+                <CardInfoCita
+                  key={cita.cita_id}
+                  cita={cita}
+                  isActive={index === activeIndex}
+                  otrasClasesParaCard={
+                    "slider-card mobile" +
+                    (index === activeIndex ? " active" : "")
+                  }
+                  onClick={() => setActiveIndex(index)}
+                />
+              ))}
+            </div>
+          ) : isUnaCita ? (
             <div className="misCitas__slider-inner unica">
               <CardInfoCita
                 cita={CitasAMostrar[0]}
@@ -80,7 +142,6 @@ export default function UserMisCitas() {
                     className += " prev";
                   else if (index === (activeIndex + 1) % CitasAMostrar.length)
                     className += " next";
-
                   return (
                     <CardInfoCita
                       key={cita.cita_id}

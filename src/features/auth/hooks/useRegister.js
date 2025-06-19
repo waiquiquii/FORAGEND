@@ -1,6 +1,7 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase";
+import { generateIdWithPrefix } from "../../../services/generacionId";
 
 // Helper to calculate age from birthdate (expects 'YYYY-MM-DD')
 function calculateAge(fechaNacimiento) {
@@ -65,7 +66,10 @@ export async function registerUser(formData) {
 
   const nombre = `${primerNombre} ${primerApellido}`;
 
+  const idPublico = generateIdWithPrefix({ prefix: "user" });
+
   await setDoc(doc(db, "users", uid), {
+    idPublico,
     email,
     nombre,
     role: "cliente",
@@ -81,6 +85,20 @@ export async function registerUser(formData) {
       cel,
     },
   });
+
+  // await setDoc(doc(db, "usersDependientes", uid), {
+  //   idPublico: generateIdWithPrefix("dep"),
+  //   profile: {
+  //     primerNombre,
+  //     segundoNombre,
+  //     primerApellido,
+  //     segundoApellido,
+  //     tipoDocumento,
+  //     parentesco,
+  //     numeroDocumento,
+  //     fechaNacimiento,
+  //   },
+  // });
 
   return uid;
 }

@@ -1,48 +1,57 @@
+/* Layout.css - Mobile First Approach */
+
+/* ======================================
+   BASE STYLES - MÓVILES (320px+)
+   Diseño base para móviles pequeños
+   ====================================== */
+
 /* Contenedor principal del layout usando grid */
 .layout {
   height: 100vh;
   width: 100vw;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 80px 1fr 40px;
+  grid-template-rows: 60px 1fr 30px;
   grid-template-areas:
     "header"
     "main"
     "footer";
-  min-width: 0; /* Permite que los hijos se ajusten */
+  min-width: 0;
 }
 
-/* Header ocupa la parte superior */
+/* Header - Optimizado para móviles */
 .layout-header {
   grid-area: header;
   width: 100%;
-  height: 100px;
+  height: 60px;
 }
 
-/* Cuerpo del layout: nav lateral + contenido principal */
+/* Cuerpo del layout - Solo contenido principal en móviles */
 .layout__body {
   grid-area: main;
   width: 100%;
   min-height: 0;
   display: grid;
-  grid-template-columns: 150px 1fr;
+  grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-  grid-template-areas: "nav mainContent";
+  grid-template-areas: "mainContent";
   overflow: hidden;
 }
 
-/* Navegación lateral */
+/* Navegación lateral - OCULTA por defecto en móviles */
 .layout-nav__lateral {
+  display: none;
   grid-area: nav;
   width: 100%;
   height: 100%;
   background: #f5f5f5;
   border-right: 1px solid #e0e0e0;
-  display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  justify-content: flex-start;
+  padding-top: 1rem;
+  gap: 0.5rem;
+  transition: transform 0.3s ease-in-out;
 }
 
 /* Lista de navegación */
@@ -50,22 +59,31 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  width: 100%;
 }
 
 /* Elemento de la lista de navegación */
 .layout-nav__item {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.25rem;
+  width: 100%;
 }
 
-/* Enlaces de navegación */
+/* Enlaces de navegación - Optimizados para táctil */
 .layout-nav__link {
   display: block;
   color: #333;
   text-decoration: none;
   font-weight: 500;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 0.5rem;
   border-radius: 4px;
   transition: background 0.2s, color 0.2s;
+  width: 100%;
+  text-align: center;
+  font-size: 0.875rem;
+  min-height: 44px; /* Mínimo recomendado para táctil */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .layout-nav__link:hover,
@@ -86,22 +104,280 @@
   color: #b71c1c;
 }
 
-/* Contenido principal con scroll */
+/* Contenido principal - Optimizado para móviles */
 .layout__main {
   height: auto;
   grid-area: mainContent;
-  padding: 2rem;
+  padding: 0.75rem;
   background: #fff;
   overflow-y: auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  width: 100%;
 }
 
-/* Footer fijo abajo */
+/* Footer - Compacto para móviles */
 .layout-footer {
   grid-area: footer;
   text-align: center;
-  height: 40px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ======================================
+   MÓVILES MEDIANOS (480px+)
+   ====================================== */
+@media screen and (min-width: 480px) {
+  .layout {
+    grid-template-rows: 70px 1fr 35px;
+  }
+
+  .layout-header {
+    height: 70px;
+  }
+
+  .layout__main {
+    padding: 1rem;
+  }
+
+  .layout-footer {
+    height: 35px;
+  }
+
+  .layout-nav__link {
+    font-size: 0.9rem;
+    padding: 0.875rem 0.75rem;
+  }
+}
+
+/* ======================================
+   MÓVILES GRANDES / TABLETS PEQUEÑAS (600px+)
+   ====================================== */
+@media screen and (min-width: 600px) {
+  .layout {
+    grid-template-rows: 80px 1fr 40px;
+  }
+
+  .layout-header {
+    height: 80px;
+  }
+
+  .layout__main {
+    padding: 1.25rem;
+  }
+
+  .layout-footer {
+    height: 40px;
+  }
+}
+
+/* ======================================
+   TABLETS (768px+)
+   Aquí empezamos a mostrar el menú lateral
+   ====================================== */
+@media screen and (min-width: 768px) {
+  .layout {
+    grid-template-rows: 90px 1fr 40px;
+  }
+
+  .layout-header {
+    height: 90px;
+  }
+
+  /* Cambiamos a layout con navegación lateral */
+  .layout__body {
+    grid-template-columns: 100px 1fr;
+    grid-template-areas: "nav mainContent";
+  }
+
+  /* Mostramos la navegación lateral */
+  .layout-nav__lateral {
+    display: flex;
+    padding-top: 1.5rem;
+    gap: 0.75rem;
+  }
+
+  .layout__main {
+    padding: 1.5rem;
+  }
+
+  .layout-nav__link {
+    font-size: 0.8rem;
+    padding: 0.625rem 0.5rem;
+  }
+
+  .layout-nav__item {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* ======================================
+   TABLETS GRANDES (1024px+)
+   ====================================== */
+@media screen and (min-width: 1024px) {
+  .layout {
+    grid-template-rows: 100px 1fr 40px;
+  }
+
+  .layout-header {
+    height: 100px;
+  }
+
+  .layout__body {
+    grid-template-columns: 150px 1fr;
+  }
+
+  .layout-nav__lateral {
+    padding-top: 2rem;
+    gap: 1rem;
+  }
+
+  .layout__main {
+    padding: 2rem;
+  }
+
+  .layout-nav__link {
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .layout-nav__item {
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* ======================================
+   DESKTOP (1200px+)
+   ====================================== */
+@media screen and (min-width: 1200px) {
+  .layout__body {
+    grid-template-columns: 180px 1fr;
+  }
+
+  .layout-nav__lateral {
+    padding-top: 2.5rem;
+    gap: 1.25rem;
+  }
+
+  .layout__main {
+    padding: 2.5rem;
+  }
+
+  .layout-nav__link {
+    font-size: 1rem;
+    padding: 0.875rem 1.25rem;
+  }
+
+  .layout-nav__item {
+    margin-bottom: 1rem;
+  }
+}
+
+/* ======================================
+   DESKTOP GRANDE (1440px+)
+   ====================================== */
+@media screen and (min-width: 1440px) {
+  .layout__body {
+    grid-template-columns: 200px 1fr;
+  }
+
+  .layout__main {
+    padding: 3rem;
+  }
+
+  .layout-nav__link {
+    padding: 1rem 1.5rem;
+  }
+
+  .layout-nav__item {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* ======================================
+   ORIENTACIÓN LANDSCAPE EN MÓVILES
+   ====================================== */
+@media screen and (max-width: 767px) and (orientation: landscape) {
+  .layout {
+    grid-template-rows: 50px 1fr 25px;
+  }
+
+  .layout-header {
+    height: 50px;
+  }
+
+  .layout__main {
+    padding: 0.5rem;
+  }
+
+  .layout-footer {
+    height: 25px;
+  }
+}
+
+/* ======================================
+   ESTADOS DE INTERACCIÓN Y ACCESIBILIDAD
+   ====================================== */
+
+/* Mejor contraste en modo enfoque */
+.layout-nav__link:focus-visible {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
+
+/* Área táctil mínima para móviles */
+@media screen and (max-width: 767px) {
+  .layout-nav__link {
+    min-height: 48px; /* Recomendación WCAG para área táctil */
+  }
+}
+
+/* Animaciones suaves solo si el usuario las permite */
+@media (prefers-reduced-motion: no-preference) {
+  .layout-nav__lateral,
+  .layout-nav__link {
+    transition: all 0.2s ease-in-out;
+  }
+}
+
+/* Respeta las preferencias de contraste alto */
+@media (prefers-contrast: high) {
+  .layout-nav__lateral {
+    border-right: 2px solid #000;
+  }
+
+  .layout-nav__link {
+    border: 1px solid transparent;
+  }
+
+  .layout-nav__link:hover,
+  .layout-nav__link:focus {
+    border-color: #1976d2;
+    background: #fff;
+  }
+}
+
+/* ======================================
+   MEJORAS PARA RENDIMIENTO
+   ====================================== */
+
+/* Optimización para scroll en móviles */
+@media screen and (max-width: 767px) {
+  .layout__main {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Previene el zoom en inputs en iOS */
+@media screen and (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
 }

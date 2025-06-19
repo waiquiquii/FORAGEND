@@ -40,10 +40,12 @@ function CardInfoCita({ cita, isActive, otrasClasesParaCard, onClick }) {
         <p className="card-info-cita__detail">
           <span className="card-info-cita__label">Hora:</span> {cita_hora}
         </p>
-        <p className="card-info-cita__detail">
-          <span className="card-info-cita__label">Paciente:</span>
-          {cita_paciente}
-        </p>
+        {cita_paciente && (
+          <p className="card-info-cita__detail">
+            <span className="card-info-cita__label">Paciente:</span>
+            {cita_paciente}
+          </p>
+        )}
         {cita_parentesco && (
           <p className="card-info-cita__detail">
             <span className="card-info-cita__label">Parentesco:</span>

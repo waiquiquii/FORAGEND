@@ -67,21 +67,21 @@ const doctores = {
 
 pasientes = {
   448193: {
-    idPrivado: 254421,
+    idPublico: 254421,
     nombre: "Juan Pérez",
     edad: 30,
     telefono: "123-456-7890",
     email: "juan.perez@example.com",
   },
   448194: {
-    idPrivado: 254422,
+    idPublico: 254422,
     nombre: "Ana García",
     edad: 28,
     telefono: "987-654-3210",
     email: "ana.garcia@example.com",
   },
   448195: {
-    idPrivado: 254423,
+    idPublico: 254423,
     nombre: "Luis Martínez",
     edad: 35,
     telefono: "456-789-0123",

@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
               email: firebaseUser.email,
               role: userData.role,
               nombre: userData.nombre || "",
+              id_publico: userData.idPublico || "",
             });
           } else {
             // Si no existe el documento, muestra advertencia y limpia el usuario

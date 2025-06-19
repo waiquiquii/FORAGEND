@@ -1,5 +1,6 @@
 export const PASOS_AGENDAR = {
   SELECCIONAR_PACIENTE: "seleccionarPaciente",
+  SELECCIONAR_DEPENDIENTE: "seleccionarDependiente",
   SELECCION_TIPO_CITA: "seleccionTipoCita",
   SELECCION_ESPECIALIDAD: "seleccionEspecialidad",
   SELECCION_MEDICO: "seleccionMedico",

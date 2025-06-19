@@ -26,6 +26,7 @@ import MedicoPerfil from "../features/medico/pages/MedicoPerfil";
 import UserAgendar from "../features/user/pages/UserAgendar";
 import UserMisCitas from "../features/user/pages/UserMisCitas";
 import UserPerfil from "../features/user/pages/UserPerfil";
+import ConsultaPruebaMedico from "../features/user/pages/ConsultaPruebaMedico";
 
 const AppRoutes = () => {
   return (
@@ -65,6 +66,7 @@ const AppRoutes = () => {
           <Route path="agendar" element={<UserAgendar />} />
           <Route path="mis-citas" element={<UserMisCitas />} />
           <Route path="perfil" element={<UserPerfil />} />
+          <Route path="consulta-medicos" element={<ConsultaPruebaMedico />} />
         </Route>
       </Route>
 

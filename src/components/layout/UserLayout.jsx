@@ -28,6 +28,11 @@ const UserLayout = () => {
                 Mi Perfil
               </Link>
             </li>
+            <li className="layout-nav__item">
+              <Link to="/user/consulta-medicos" className="layout-nav__link">
+                Consulta Medicos
+              </Link>
+            </li>
           </ul>
         </nav>
         <main className="layout__main">

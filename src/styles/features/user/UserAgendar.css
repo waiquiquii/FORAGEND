@@ -12,6 +12,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-areas: "form card";
+  align-items: center;
 }
 
 .user-agendar__formulario {
@@ -28,12 +29,12 @@
 }
 
 .user-agendar__selector {
-  /* Contenedor principal. Usamos flexbox para centrar y manejar el ancho. */
+  max-width: 500px;
+  /* height: 300px; */
+  max-height: 600px;
   display: flex;
   flex-direction: column; /* Apila elementos verticalmente */
   align-items: center; /* Centra horizontalmente los elementos hijos */
-  width: 100%; /* Ocupa todo el ancho disponible de su contenedor padre */
-  max-width: 500px; /* Ancho máximo para evitar que se estire demasiado en pantallas grandes */
   margin: 20px auto; /* Centra el bloque en la página y añade espacio */
   padding: 15px;
   border: 1px solid #ddd;
@@ -44,15 +45,15 @@
 
 /* Elemento: etiqueta (el título) */
 .user-agendar__selector-titulo {
+  width: 100%;
   font-size: 1.2em;
   font-weight: bold;
   color: #333;
   margin-bottom: 15px;
   text-align: center;
-  width: 100%;
 }
 
-/* Elemento: selector (el dropdown) */
+/* Elemento: selector */
 .user-agendar__select {
   width: 100%; /* ¡Importante! Esto hace que el select ocupe el 100% del ancho de su padre (.paso-seleccion) */
   padding: 10px 15px;
@@ -61,11 +62,6 @@
   font-size: 1em;
   color: #555;
   background-color: #fff;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http://www.w3.org/2000/svg%22%20width%3D%22292%22%20height%3D%22292%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287 69L146 208 5 69z%22/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 12px;
   cursor: pointer;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }

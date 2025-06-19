@@ -1,11 +1,12 @@
+/* MOBILE FIRST: estilos para móvil (por defecto) */
+
 .misCitas__container {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-rows: 70px 1fr;
-  grid-template-columns: 1fr;
+  grid-template-rows: 50px 1fr;
   grid-template-areas:
     "titulo"
     "contenido";
@@ -13,152 +14,271 @@
   background: #f5f6fa;
 }
 
-/* TÍTULO */
-.misCitas__title {
-  /* padding: 2rem 0 1rem 0; */
-  margin: auto 0;
+.misCitas__title-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   grid-area: titulo;
+}
+.misCitas__title {
+  font-size: 1.8rem;
+  padding: 1rem;
   text-align: center;
-  font-size: 2.2rem;
   font-weight: bold;
-  align-self: end;
+  /* align-self: end; */
 }
 
 .misCitas__contenido {
+  height: 850px;
   grid-area: contenido;
-  /* padding: 1rem; */
   background: #fff;
   border-radius: 18px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   display: grid;
-  grid-template-areas: "cards calendario";
-  grid-template-columns: auto 400px;
-  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "calendario"
+    "cards";
 }
 
-/* CALENDARIO */
 .misCitas__calendario {
   grid-area: calendario;
-  /* padding: 2rem 1rem; */
+  width: 80%;
+  margin: auto;
   border-radius: 18px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-  width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
 }
 
-/* ÁREA DE CARDS */
 .misCitas__cardsArea {
   grid-area: cards;
-  /* padding: 2rem 1rem; */
+  width: 90%;
+  margin: auto;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Carrusel base */
-.misCitas__slider {
+.misCitas__slider-inner,
+.misCitas__slider-inner.mobile-scroll {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
   gap: 1rem;
+  width: 100%;
+  max-width: 100vw;
+  padding-bottom: 1rem;
+  position: static;
+  perspective: none;
+  overflow-y: visible;
 }
 
-.misCitas__slider-inner {
-  width: 700px;
-  max-width: 600px;
-  height: 400px;
+.slider-card,
+.slider-card.mobile {
+  min-width: 260px;
+  width: 300px;
+  max-width: 340px;
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  position: static;
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
   margin: 0 auto;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  perspective: 1000px;
-  overflow: hidden;
-}
-
-/* === TARJETAS 3D === */
-.slider-card {
-  width: 50%;
-  max-width: 430px;
-  transform-style: preserve-3d;
-  transition: all 0.5s ease;
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  transform: scale(0.8) translateX(0) rotateY(20deg);
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
   z-index: 1;
 }
 
+.slider-card.mobile.active,
 .slider-card.active {
-  transform: scale(1) translateX(0) rotateY(0);
-  opacity: 1;
-  pointer-events: auto;
-  z-index: 3;
-}
-
-.slider-card.prev {
-  transform: scale(0.8) translateX(-120%) rotateY(25deg);
-  opacity: 0.5;
+  transform: scale(1.05);
+  box-shadow: 0 4px 24px rgba(102, 126, 234, 0.18);
   z-index: 2;
 }
 
-.slider-card.next {
-  transform: scale(0.8) translateX(120%) rotateY(-25deg);
-  opacity: 0.5;
-  z-index: 2;
-}
-
-/* Una sola tarjeta */
-.slider-card.unica {
-  position: static;
-  transform: none;
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* BOTONES DEL CARRUSEL */
+/* Carrusel y botones: ocultos en móvil */
+.misCitas__slider,
 .misCitas__navBtn {
-  background-color: transparent;
-  border: none;
-  font-size: 2rem;
-  cursor: pointer;
-  color: #444;
-  transition: transform 0.2s;
+  display: none;
 }
 
-.misCitas__navBtn:hover {
-  transform: scale(1.2);
+/* TABLET: estilos para tablet */
+@media screen and (min-width: 769px) and (max-width: 1199px) {
+  .misCitas__contenido {
+    max-width: calc(100vw - 150px);
+    height: 100%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "cards calendario";
+  }
+  .misCitas__cardsArea {
+    width: 350px;
+  }
+
+  .misCitas__slider-inner {
+    width: 100%;
+    max-width: 350px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    perspective: none;
+    scroll-snap-type: x mandatory;
+    gap: 1rem;
+  }
 }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
+/* ESCRITORIO: estilos para carrusel 3D */
+@media screen and (min-width: 1200px) {
   .misCitas__container {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
+    height: calc(100vh - 140px);
+
+    grid-template-rows: 50px 1fr;
     grid-template-areas:
       "titulo"
-      "calendario"
-      "cards";
+      "contenido";
   }
 
-  .misCitas__calendario,
+  .misCitas__title-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .misCitas__title {
+    font-size: 2.2rem;
+    padding: 0;
+  }
+
+  .misCitas__contenido {
+    height: 80%;
+    align-items: center;
+    grid-template-areas: "cards calendario";
+    grid-template-columns: auto 400px;
+    grid-template-rows: 1fr;
+  }
+
+  .misCitas__calendario {
+    width: 100%;
+    margin: 0;
+  }
+
   .misCitas__cardsArea {
-    padding: 1rem;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .misCitas__slider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .misCitas__slider-inner {
-    max-width: 90%;
-    max-height: 350px;
+    width: 700px;
+    max-width: 600px;
+    height: 400px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+    overflow: hidden;
+  }
+
+  .slider-card {
+    width: 50%;
+    max-width: 430px;
+    transform-style: preserve-3d;
+    transition: all 0.5s ease;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    transform: scale(0.8) translateX(0) rotateY(20deg);
+    z-index: 1;
+  }
+
+  .slider-card.active {
+    transform: scale(1) translateX(0) rotateY(0);
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 3;
+  }
+
+  .slider-card.prev {
+    transform: scale(0.8) translateX(-120%) rotateY(25deg);
+    opacity: 0.5;
+    z-index: 2;
+  }
+
+  .slider-card.next {
+    transform: scale(0.8) translateX(120%) rotateY(-25deg);
+    opacity: 0.5;
+    z-index: 2;
+  }
+
+  .slider-card.unica {
+    position: static;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .misCitas__slider,
+  .misCitas__navBtn {
+    display: flex;
+  }
+
+  .misCitas__navBtn {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 25px;
   }
 }
 
-@media (max-width: 600px) {
-  .misCitas__slider-inner {
-    max-height: 250px;
-  }
+/* Oculta scroll horizontal si quieres */
+.misCitas__slider-inner.mobile-scroll {
+  scrollbar-width: none;
 }
+.misCitas__slider-inner.mobile-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hidden {
+  display: none;
+}
+
+/* @media screen and (max-width: 480px) {
+  .misCitas__title {
+    font-size: 1.5rem;
+    padding: 0.5rem;
+  }
+
+  .misCitas__calendario {
+    padding: 0.5rem;
+  }
+
+  .misCitas__slider-inner {
+    width: 280px;
+    max-width: none;
+    overflow-x: auto;
+    display: flex;
+    perspective: none;
+    scroll-snap-type: x mandatory;
+    gap: 1rem;
+  }
+} */

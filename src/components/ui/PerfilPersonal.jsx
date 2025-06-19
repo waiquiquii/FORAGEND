@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { useAuth } from "../../features/auth/context/AuthContext";
 import "../../styles/ui/PerfilPersonal.css";
 
 // Función para calcular la edad a partir de la fecha de nacimiento
@@ -16,16 +16,14 @@ function calcularEdad(fechaNacimiento) {
   return edad;
 }
 
-// Componente de perfil tipo "CVC" solo con datos básicos
 const PerfilPersonal = () => {
+  const { user } = useAuth();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (user) {
+      if (user && user.uid) {
         const db = getFirestore();
         const userRef = doc(db, "users", user.uid);
         const userSnap = await getDoc(userRef);
@@ -36,7 +34,7 @@ const PerfilPersonal = () => {
       setLoading(false);
     };
     fetchUserData();
-  }, []);
+  }, [user]);
 
   if (loading) return <div className="perfil-cargando">Cargando perfil...</div>;
 
@@ -80,7 +78,6 @@ const PerfilPersonal = () => {
       {/* Sección de información detallada */}
       <div className="perfil-detalles">
         <h2 className="perfil-seccion-titulo">Información Personal</h2>
-
         <div className="perfil-grid">
           <div className="perfil-campo">
             <div className="perfil-campo-icono">📱</div>
@@ -91,7 +88,6 @@ const PerfilPersonal = () => {
               </span>
             </div>
           </div>
-
           <div className="perfil-campo">
             <div className="perfil-campo-icono">🆔</div>
             <div className="perfil-campo-contenido">
@@ -101,7 +97,6 @@ const PerfilPersonal = () => {
               </span>
             </div>
           </div>
-
           <div className="perfil-campo">
             <div className="perfil-campo-icono">🎂</div>
             <div className="perfil-campo-contenido">
@@ -111,7 +106,6 @@ const PerfilPersonal = () => {
               </span>
             </div>
           </div>
-
           <div className="perfil-campo">
             <div className="perfil-campo-icono">✉️</div>
             <div className="perfil-campo-contenido">
@@ -128,29 +122,11 @@ const PerfilPersonal = () => {
       <div className="perfil-estadisticas">
         <h2 className="perfil-seccion-titulo">Estado del Perfil</h2>
         <div className="perfil-progreso">
-          <div
-            className="perfil-progreso-barra"
-            style={{
-              background: "#e2e8f0",
-              borderRadius: "4px",
-              height: "8px",
-              width: "100%",
-            }}
-          >
-            <div
-              className="perfil-progreso-fill"
-              style={{
-                width: "100%",
-                background: "linear-gradient(90deg, #667eea, #764ba2)",
-                borderRadius: "4px",
-                height: "100%",
-                transition: "width 0.5s ease",
-              }}
-            ></div>
+          <div className="perfil-progreso-barra">
+            <div className="perfil-progreso-fill"></div>
           </div>
           <span className="perfil-progreso-texto">Perfil completo al 100%</span>
         </div>
-
         {/* Corazón animado decorativo */}
         <div className="perfil-corazon-container">
           <img
