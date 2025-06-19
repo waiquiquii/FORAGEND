@@ -1,284 +1,118 @@
-/* MOBILE FIRST: estilos para móvil (por defecto) */
-
-.misCitas__container {
-  width: 100%;
-  min-height: 100%;
+.misCitas {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-rows: 50px 1fr;
-  grid-template-areas:
-    "titulo"
-    "contenido";
-  align-items: center;
-  background: #f5f6fa;
+  /* overflow: hidden; */
 }
 
-.misCitas__title-container {
+.misCitas__title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+  height: 20px;
+}
+
+.misCitas__content {
   width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  grid-area: titulo;
-}
-.misCitas__title {
-  font-size: 1.8rem;
-  padding: 1rem;
-  text-align: center;
-  font-weight: bold;
-  /* align-self: end; */
+  justify-content: space-around;
+  /* align-items: center; */
 }
 
-.misCitas__contenido {
-  height: 850px;
-  grid-area: contenido;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-areas:
-    "calendario"
-    "cards";
+.misCitas__cards {
+  width: 350px;
+  height: 400px;
 }
 
-.misCitas__calendario {
-  grid-area: calendario;
-  width: 80%;
-  margin: auto;
-  border-radius: 18px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+.misCitas__scroll-container {
+  width: 400px;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.misCitas__cardsArea {
-  grid-area: cards;
-  width: 90%;
-  margin: auto;
-  padding: 0;
-  display: flex;
+  padding: 10px;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-}
-
-.misCitas__slider-inner,
-.misCitas__slider-inner.mobile-scroll {
-  display: flex;
-  flex-direction: row;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
   gap: 1rem;
   width: 100%;
-  max-width: 100vw;
-  padding-bottom: 1rem;
-  position: static;
-  perspective: none;
-  overflow-y: visible;
+  overflow: hidden;
 }
 
-.slider-card,
-.slider-card.mobile {
-  min-width: 260px;
-  width: 300px;
-  max-width: 340px;
-  flex: 0 0 auto;
-  scroll-snap-align: center;
-  position: static;
-  opacity: 1;
-  pointer-events: auto;
-  transform: none;
-  margin: 0 auto;
-  transition: transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
-  z-index: 1;
+/* ======================================
+   NAVEGACIÓN - OCULTA EN MÓVIL
+   ====================================== */
+
+.misCitas__navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
 }
 
-.slider-card.mobile.active,
-.slider-card.active {
-  transform: scale(1.05);
-  box-shadow: 0 4px 24px rgba(102, 126, 234, 0.18);
-  z-index: 2;
+.misCitas__nav-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-gradient);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  flex-shrink: 0;
 }
 
-/* Carrusel y botones: ocultos en móvil */
-.misCitas__slider,
-.misCitas__navBtn {
-  display: none;
+.misCitas__nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
 }
 
-/* TABLET: estilos para tablet */
-@media screen and (min-width: 769px) and (max-width: 1199px) {
-  .misCitas__contenido {
-    max-width: calc(100vw - 150px);
-    height: 100%;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: "cards calendario";
+.misCitas__nav-btn:active {
+  transform: translateY(0);
+}
+
+/* Indicadores */
+.misCitas__indicators {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+.misCitas__indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.misCitas__indicator:hover {
+  background: var(--primary-color);
+  transform: scale(1.2);
+}
+
+.misCitas__indicator--active {
+  background: var(--primary-color);
+  transform: scale(1.3);
+  box-shadow: 0 0 8px rgba(102, 126, 234, 0.4);
+}
+
+@media screen and (max-width: 768px) {
+  .misCitas__content {
+    grid-template-columns: 1fr;
   }
-  .misCitas__cardsArea {
-    width: 350px;
-  }
-
-  .misCitas__slider-inner {
-    width: 100%;
-    max-width: 350px;
+  .misCitas__scroll-container {
     overflow-x: auto;
-    overflow-y: hidden;
-    display: flex;
-    perspective: none;
-    scroll-snap-type: x mandatory;
-    gap: 1rem;
   }
 }
-
-/* ESCRITORIO: estilos para carrusel 3D */
-@media screen and (min-width: 1200px) {
-  .misCitas__container {
-    height: calc(100vh - 140px);
-
-    grid-template-rows: 50px 1fr;
-    grid-template-areas:
-      "titulo"
-      "contenido";
-  }
-
-  .misCitas__title-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .misCitas__title {
-    font-size: 2.2rem;
-    padding: 0;
-  }
-
-  .misCitas__contenido {
-    height: 80%;
-    align-items: center;
-    grid-template-areas: "cards calendario";
-    grid-template-columns: auto 400px;
-    grid-template-rows: 1fr;
-  }
-
-  .misCitas__calendario {
-    width: 100%;
-    margin: 0;
-  }
-
-  .misCitas__cardsArea {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .misCitas__slider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .misCitas__slider-inner {
-    width: 700px;
-    max-width: 600px;
-    height: 400px;
-    margin: 0 auto;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    perspective: 1000px;
-    overflow: hidden;
-  }
-
-  .slider-card {
-    width: 50%;
-    max-width: 430px;
-    transform-style: preserve-3d;
-    transition: all 0.5s ease;
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    transform: scale(0.8) translateX(0) rotateY(20deg);
-    z-index: 1;
-  }
-
-  .slider-card.active {
-    transform: scale(1) translateX(0) rotateY(0);
-    opacity: 1;
-    pointer-events: auto;
-    z-index: 3;
-  }
-
-  .slider-card.prev {
-    transform: scale(0.8) translateX(-120%) rotateY(25deg);
-    opacity: 0.5;
-    z-index: 2;
-  }
-
-  .slider-card.next {
-    transform: scale(0.8) translateX(120%) rotateY(-25deg);
-    opacity: 0.5;
-    z-index: 2;
-  }
-
-  .slider-card.unica {
-    position: static;
-    transform: none;
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .misCitas__slider,
-  .misCitas__navBtn {
-    display: flex;
-  }
-
-  .misCitas__navBtn {
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    font-size: 25px;
-  }
-}
-
-/* Oculta scroll horizontal si quieres */
-.misCitas__slider-inner.mobile-scroll {
-  scrollbar-width: none;
-}
-.misCitas__slider-inner.mobile-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.hidden {
-  display: none;
-}
-
-/* @media screen and (max-width: 480px) {
-  .misCitas__title {
-    font-size: 1.5rem;
-    padding: 0.5rem;
-  }
-
-  .misCitas__calendario {
-    padding: 0.5rem;
-  }
-
-  .misCitas__slider-inner {
-    width: 280px;
-    max-width: none;
-    overflow-x: auto;
-    display: flex;
-    perspective: none;
-    scroll-snap-type: x mandatory;
-    gap: 1rem;
-  }
-} */
