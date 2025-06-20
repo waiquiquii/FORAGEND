@@ -70,8 +70,14 @@ function UserAgendarContent() {
   const [pasoActual, setPasoActual] = useState(
     PASOS_AGENDAR.SELECCIONAR_PACIENTE
   );
-  // Nuevo estado para saber si el dependiente fue guardado
   const [dependienteGuardado, setDependienteGuardado] = useState(false);
+
+  // Mostrar card solo en desktop/tablet y NO en confirmación
+  const mostrarCard = () => {
+    if (pasoActual === PASOS_AGENDAR.CONFIRMACION) return false; // Nunca en confirmación
+    if (window.innerWidth <= 768) return false; // Nunca en móvil
+    return true; // Solo desktop/tablet en pasos normales
+  };
 
   // Handlers para los cambios en los selects
   const handleChangePaciente = (e) => {
@@ -83,16 +89,9 @@ function UserAgendarContent() {
       paciente: {
         ...paciente,
         nombre,
-        parentesco:
-          e.target.value === "PARA_OTRO"
-            ? "Dependiente Legal"
-            : e.target.value === "PARA_MI"
-            ? null
-            : null,
+        parentesco: e.target.value === "PARA_OTRO" ? "Dependiente Legal" : null,
       },
     });
-    console.log("Paciente seleccionado:", e.target.value);
-    console.log("Usuario autenticado:", user);
   };
 
   const handleChangeTipoCita = (e) => {
@@ -102,7 +101,6 @@ function UserAgendarContent() {
         tipo: allOpciones.tiposCita[e.target.value] || e.target.value,
       },
     });
-    console.log("Tipo de cita seleccionado:", e.target.value);
   };
 
   const handleChangeEspecialidad = (e) => {
@@ -113,7 +111,6 @@ function UserAgendarContent() {
           allOpciones.especialidades[e.target.value] || e.target.value,
       },
     });
-    console.log("Especialidad seleccionada:", e.target.value);
   };
 
   const handleChangeDoctor = (e) => {
@@ -123,35 +120,36 @@ function UserAgendarContent() {
         consultorio: `consultorio ${e.target.value}`,
       },
     });
-    console.log("Doctor seleccionado:", e.target.value);
   };
 
   const handleChangeHorario = (e) => {
     actualizarSeleccion({
       hora: allOpciones.horarios[e.target.value] || e.target.value,
     });
-    console.log("Horario seleccionado:", e.target.value);
   };
 
-  // Funciones para manejar los pasos
-  const setPaso = (nuevoPaso) => () => setPasoActual(nuevoPaso);
+  // Función para confirmar la cita
+  const confirmarCita = () => {
+    console.log("Cita confirmada:", seleccion);
+    alert("¡Cita agendada exitosamente!");
+    setPasoActual(PASOS_AGENDAR.SELECCIONAR_PACIENTE);
+  };
 
   return (
-    <div className="user-agendar">
-      <h2 className="user-agendar__titulo titulo">Agendar una Nueva Cita</h2>
-      <div className="user-agendar__contenido">
-        <div className="user-agendar__formulario">
+    <div className="agendar">
+      <h2 className="agendar__title">Agendar una Nueva Cita</h2>
+
+      <div className="agendar__content">
+        {/* Formulario */}
+        <div className="agendar__form">
           {pasoActual === PASOS_AGENDAR.SELECCIONAR_PACIENTE && (
-            <SelectorPaso
+            <Paso
               titulo={titulos.seleccionPasiente}
               opciones={allOpciones.pacientes}
               onChange={handleChangePaciente}
               onSiguiente={() => {
-                setDependienteGuardado(false); // Reinicia al cambiar de paciente
-                if (
-                  seleccion.paciente &&
-                  seleccion.paciente.parentesco === "Dependiente Legal"
-                ) {
+                setDependienteGuardado(false);
+                if (seleccion.paciente?.parentesco === "Dependiente Legal") {
                   setPasoActual(PASOS_AGENDAR.AGREGAR_DEPENDIENTE);
                 } else {
                   setPasoActual(PASOS_AGENDAR.SELECCION_FECHA);
@@ -159,80 +157,116 @@ function UserAgendarContent() {
               }}
             />
           )}
+
           {pasoActual === PASOS_AGENDAR.AGREGAR_DEPENDIENTE && (
-            <SelectorPaso
-              titulo="Agregar Dependiente"
-              opciones={null} // No hay opciones, solo un formulario
+            <Paso
               componente={
                 <FormDependiente
                   onSuccess={() => setDependienteGuardado(true)}
-                  // Puedes pasar más props si lo necesitas
                 />
               }
-              onAnterior={setPaso(PASOS_AGENDAR.SELECCIONAR_PACIENTE)}
-              onSiguiente={setPaso(PASOS_AGENDAR.SELECCION_FECHA)}
-              // Deshabilita "Siguiente" hasta que el dependiente esté guardado
-              siguienteDeshabilitado={!dependienteGuardado}
+              onAnterior={() =>
+                setPasoActual(PASOS_AGENDAR.SELECCIONAR_PACIENTE)
+              }
+              onSiguiente={() => setPasoActual(PASOS_AGENDAR.SELECCION_FECHA)}
+              deshabilitado={!dependienteGuardado}
             />
           )}
+
           {pasoActual === PASOS_AGENDAR.SELECCION_FECHA && (
-            <SelectorPaso
-              titulo={titulos.seleccionFecha}
+            <Paso
               componente={<Calendario />}
               onAnterior={() => {
-                if (
-                  seleccion.paciente &&
-                  seleccion.paciente.parentesco === "Dependiente Legal"
-                ) {
+                if (seleccion.paciente?.parentesco === "Dependiente Legal") {
                   setPasoActual(PASOS_AGENDAR.AGREGAR_DEPENDIENTE);
                 } else {
                   setPasoActual(PASOS_AGENDAR.SELECCIONAR_PACIENTE);
                 }
               }}
-              onSiguiente={setPaso(PASOS_AGENDAR.SELECCION_TIPO_CITA)}
-              siguienteDeshabilitado={!fecha}
+              onSiguiente={() =>
+                setPasoActual(PASOS_AGENDAR.SELECCION_TIPO_CITA)
+              }
+              deshabilitado={!fecha}
             />
           )}
+
           {pasoActual === PASOS_AGENDAR.SELECCION_TIPO_CITA && (
-            <SelectorPaso
+            <Paso
               titulo={titulos.seleccionTipoCita}
               opciones={allOpciones.tiposCita}
               onChange={handleChangeTipoCita}
-              onAnterior={setPaso(PASOS_AGENDAR.SELECCION_FECHA)}
-              onSiguiente={setPaso(PASOS_AGENDAR.SELECCION_ESPECIALIDAD)}
+              onAnterior={() => setPasoActual(PASOS_AGENDAR.SELECCION_FECHA)}
+              onSiguiente={() =>
+                setPasoActual(PASOS_AGENDAR.SELECCION_ESPECIALIDAD)
+              }
             />
           )}
+
           {pasoActual === PASOS_AGENDAR.SELECCION_ESPECIALIDAD && (
-            <SelectorPaso
+            <Paso
               titulo={titulos.seleccionEspecialidad}
               opciones={allOpciones.especialidades}
               onChange={handleChangeEspecialidad}
-              onAnterior={setPaso(PASOS_AGENDAR.SELECCION_TIPO_CITA)}
-              onSiguiente={setPaso(PASOS_AGENDAR.SELECCION_MEDICO)}
+              onAnterior={() =>
+                setPasoActual(PASOS_AGENDAR.SELECCION_TIPO_CITA)
+              }
+              onSiguiente={() => setPasoActual(PASOS_AGENDAR.SELECCION_MEDICO)}
             />
           )}
+
           {pasoActual === PASOS_AGENDAR.SELECCION_MEDICO && (
-            <SelectorPaso
+            <Paso
               titulo={titulos.seleccionDoctor}
               opciones={allOpciones.doctores}
               onChange={handleChangeDoctor}
-              onAnterior={setPaso(PASOS_AGENDAR.SELECCION_ESPECIALIDAD)}
-              onSiguiente={setPaso(PASOS_AGENDAR.SELECCION_HORA)}
+              onAnterior={() =>
+                setPasoActual(PASOS_AGENDAR.SELECCION_ESPECIALIDAD)
+              }
+              onSiguiente={() => setPasoActual(PASOS_AGENDAR.SELECCION_HORA)}
             />
           )}
+
           {pasoActual === PASOS_AGENDAR.SELECCION_HORA && (
-            <SelectorPaso
+            <Paso
               titulo={titulos.seleccionHorario}
               opciones={allOpciones.horarios}
               onChange={handleChangeHorario}
-              onAnterior={setPaso(PASOS_AGENDAR.SELECCION_MEDICO)}
-              onSolicitar={setPaso(PASOS_AGENDAR.CONFIRMACION)}
-              textoSolicitar="Solicitar"
+              onAnterior={() => setPasoActual(PASOS_AGENDAR.SELECCION_MEDICO)}
+              onSiguiente={() => setPasoActual(PASOS_AGENDAR.CONFIRMACION)}
+            />
+          )}
+
+          {pasoActual === PASOS_AGENDAR.CONFIRMACION && (
+            <Paso
+              titulo={titulos.confirmacion}
+              componente={
+                <div className="agendar__resumen">
+                  <p>
+                    <strong>Paciente:</strong> {paciente.nombre}
+                  </p>
+                  <p>
+                    <strong>Fecha:</strong> {fecha}
+                  </p>
+                  <p>
+                    <strong>Hora:</strong> {hora}
+                  </p>
+                  <p>
+                    <strong>Tipo:</strong> {servicio.tipo}
+                  </p>
+                  <p>
+                    <strong>Doctor:</strong> {profesional.nombre}
+                  </p>
+                </div>
+              }
+              onAnterior={() => setPasoActual(PASOS_AGENDAR.SELECCION_HORA)}
+              onConfirmar={confirmarCita}
             />
           )}
         </div>
-        <div className="user-agendar__seleccion">
-          <div className="user-agendar__card">
+
+        {/* Card - Solo desktop/tablet y NO en confirmación */}
+        {mostrarCard() && (
+          <div className="agendar__card">
             <CardInfoCita
               cita={{
                 cita_id: null,
@@ -245,28 +279,25 @@ function UserAgendarContent() {
                 cita_consultorio: profesional.consultorio || "No asignado",
               }}
               isActive={true}
-              otrasClasesParaCard="user-agendar__card-info"
             />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 }
 
-// Componente reutilizable para cada paso
-function SelectorPaso({
+// Componente simplificado para cada paso
+function Paso({
   titulo,
   opciones,
   onChange,
   componente,
   onAnterior,
   onSiguiente,
-  onSolicitar,
-  textoSolicitar = "Siguiente",
-  siguienteDeshabilitado, // <-- acepta la prop
+  onConfirmar,
+  deshabilitado,
 }) {
-  // Detecta si hay selección (solo si hay opciones)
   const [seleccion, setSeleccion] = useState("");
 
   const handleChange = (e) => {
@@ -274,89 +305,63 @@ function SelectorPaso({
     if (onChange) onChange(e);
   };
 
-  // El botón siguiente está deshabilitado si no hay selección y hay opciones,
-  // o si se pasa la prop siguienteDeshabilitado como true
   const disabled =
-    typeof siguienteDeshabilitado === "boolean"
-      ? siguienteDeshabilitado
-      : opciones && !seleccion;
+    typeof deshabilitado === "boolean" ? deshabilitado : opciones && !seleccion;
 
   return (
-    <div className="user-agendar__selector">
-      <h3 className="user-agendar__selector-titulo">{titulo}</h3>
-      {componente ||
-        (opciones && (
-          <Select
-            opciones={opciones}
-            onChange={handleChange}
-            value={seleccion}
-          />
-        ))}
-      <Botones
-        anterior={onAnterior}
-        siguiente={onSiguiente}
-        solicitar={onSolicitar}
-        textoSolicitar={textoSolicitar}
-        siguienteDeshabilitado={disabled}
-      />
+    <div className="agendar__step">
+      <h3 className="agendar__step-title">{titulo}</h3>
+
+      <div className="agendar__step-content">
+        {componente ||
+          (opciones && (
+            <select
+              className="agendar__select"
+              onChange={handleChange}
+              value={seleccion}
+            >
+              <option disabled value="">
+                Seleccione una opción
+              </option>
+              {Object.entries(opciones).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          ))}
+      </div>
+
+      <div className="agendar__buttons">
+        {onAnterior && (
+          <button
+            className="agendar__btn agendar__btn--prev"
+            onClick={onAnterior}
+          >
+            Anterior
+          </button>
+        )}
+        {onSiguiente && (
+          <button
+            className={`agendar__btn agendar__btn--next ${
+              disabled ? "agendar__btn--disabled" : ""
+            }`}
+            onClick={onSiguiente}
+            disabled={disabled}
+          >
+            Siguiente
+          </button>
+        )}
+        {onConfirmar && (
+          <button
+            className="agendar__btn agendar__btn--confirm"
+            onClick={onConfirmar}
+          >
+            Confirmar Cita
+          </button>
+        )}
+      </div>
     </div>
-  );
-}
-
-// Botones de navegación
-function Botones({
-  anterior,
-  siguiente,
-  solicitar,
-  textoSolicitar,
-  siguienteDeshabilitado,
-}) {
-  return (
-    <div className="user-agendar__botones">
-      {anterior && (
-        <button
-          className="user-agendar__boton user-agendar__boton--anterior"
-          onClick={anterior}
-        >
-          Anterior
-        </button>
-      )}
-      {siguiente && (
-        <button
-          className={`user-agendar__boton user-agendar__boton--siguiente${
-            siguienteDeshabilitado ? " user-agendar__boton--disabled" : ""
-          }`}
-          onClick={siguiente}
-          disabled={siguienteDeshabilitado}
-        >
-          Siguiente
-        </button>
-      )}
-      {solicitar && (
-        <button
-          className="user-agendar__boton user-agendar__boton--solicitar"
-          onClick={solicitar}
-        >
-          {textoSolicitar}
-        </button>
-      )}
-    </div>
-  );
-}
-
-// Select reutilizable
-function Select({ opciones, onChange, value }) {
-  return (
-    <select className="user-agendar__select" onChange={onChange} value={value}>
-      <option disabled value="">
-        Seleccione una opción
-      </option>
-      {Object.entries(opciones).map(([key, value]) => (
-        <option key={key} value={key} className="user-agendar__select-option">
-          {value}
-        </option>
-      ))}
-    </select>
   );
 }
 

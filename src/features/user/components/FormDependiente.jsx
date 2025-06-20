@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import useForm from "../../../hooks/useForm";
 import dependienteValidations from "../formConfigs/dependienteValidations";
 import "../../../styles/features/user/FormDependiente.css";
+import { registerDependiente } from "../services/useDependiente";
+import { useAuth } from "../../../features/auth/context/AuthContext";
 
 const opcionesParentesco = [
   { value: "hijo", label: "Hijo/a" },
@@ -14,11 +16,6 @@ const opcionesTipoId = [
   { value: "CC", label: "Cédula de ciudadanía" },
   { value: "PPT", label: "Permiso por protección temporal" },
 ];
-const opcionesGenero = [
-  { value: "masculino", label: "Masculino" },
-  { value: "femenino", label: "Femenino" },
-  { value: "otro", label: "Otro / Prefiero no decir" },
-];
 
 function FormDependiente({
   data = {},
@@ -28,6 +25,7 @@ function FormDependiente({
 }) {
   const [guardado, setGuardado] = useState(false);
   const [errorApi, setErrorApi] = useState(null);
+  const { user } = useAuth(); // Asegúrate de tener el uid del usuario
 
   const initialFormState = {
     nombres: data.nombres || "",
@@ -37,7 +35,6 @@ function FormDependiente({
     tipoIdentificacion: data.tipoIdentificacion || "",
     numeroIdentificacion: data.numeroIdentificacion || "",
     fechaNacimiento: data.fechaNacimiento || "",
-    genero: data.genero || "",
   };
 
   const {
@@ -58,13 +55,13 @@ function FormDependiente({
     setErrorApi(null);
     setGuardado(false);
     try {
-      // Aquí deberías llamar a tu API para guardar el dependiente
-      // await api.guardarDependiente(formData);
-      await new Promise((res) => setTimeout(res, 700));
+      await registerDependiente(formData, user?.uid);
       setGuardado(true);
-      onSuccess(formData); // Notifica al padre que se guardó correctamente
+      onSuccess(formData);
     } catch (err) {
-      setErrorApi("No se pudo guardar el dependiente. Intenta de nuevo.");
+      setErrorApi(
+        err.message || "No se pudo guardar el dependiente. Intenta de nuevo."
+      );
     }
   }
 
@@ -189,6 +186,34 @@ function FormDependiente({
 
       <div className="formulario-dependiente__campo">
         <label
+          htmlFor="fechaNacimiento"
+          className="formulario-dependiente__etiqueta"
+        >
+          Fecha de nacimiento:
+        </label>
+        <input
+          id="fechaNacimiento"
+          type="date"
+          name="fechaNacimiento"
+          value={formData.fechaNacimiento}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          disabled={disabled || guardado}
+          className={`formulario-dependiente__entrada ${
+            errors.fechaNacimiento
+              ? "formulario-dependiente__entrada--error"
+              : ""
+          }`}
+        />
+        {errors.fechaNacimiento && (
+          <p className="formulario-dependiente__mensaje-error">
+            {errors.fechaNacimiento}
+          </p>
+        )}
+      </div>
+
+      <div className="formulario-dependiente__campo">
+        <label
           htmlFor="tipoIdentificacion"
           className="formulario-dependiente__etiqueta"
         >
@@ -251,72 +276,15 @@ function FormDependiente({
         )}
       </div>
 
-      <div className="formulario-dependiente__campo">
-        <label
-          htmlFor="fechaNacimiento"
-          className="formulario-dependiente__etiqueta"
+      <div className="formulario-dependiente__boton-wrapper">
+        <button
+          type="submit"
+          disabled={disabled || !isFormValid || guardado}
+          className="formulario-dependiente__boton-enviar"
         >
-          Fecha de nacimiento:
-        </label>
-        <input
-          id="fechaNacimiento"
-          type="date"
-          name="fechaNacimiento"
-          value={formData.fechaNacimiento}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          disabled={disabled || guardado}
-          className={`formulario-dependiente__entrada ${
-            errors.fechaNacimiento
-              ? "formulario-dependiente__entrada--error"
-              : ""
-          }`}
-        />
-        {errors.fechaNacimiento && (
-          <p className="formulario-dependiente__mensaje-error">
-            {errors.fechaNacimiento}
-          </p>
-        )}
+          Guardar Dependiente
+        </button>
       </div>
-
-      <div className="formulario-dependiente__campo">
-        <label htmlFor="genero" className="formulario-dependiente__etiqueta">
-          Género:
-        </label>
-        <select
-          id="genero"
-          name="genero"
-          value={formData.genero}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          disabled={disabled || guardado}
-          className={`formulario-dependiente__selector ${
-            errors.genero ? "formulario-dependiente__selector--error" : ""
-          }`}
-        >
-          <option value="" disabled>
-            Seleccione género
-          </option>
-          {opcionesGenero.map(({ value, label }) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-        {errors.genero && (
-          <p className="formulario-dependiente__mensaje-error">
-            {errors.genero}
-          </p>
-        )}
-      </div>
-
-      <button
-        type="submit"
-        disabled={disabled || !isFormValid || guardado}
-        className="formulario-dependiente__boton-enviar"
-      >
-        Guardar Dependiente
-      </button>
 
       {guardado && (
         <p className="formulario-dependiente__mensaje-exito">

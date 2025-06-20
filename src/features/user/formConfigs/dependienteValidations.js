@@ -32,7 +32,6 @@ const dependienteValidations = {
       return null;
     },
   },
-  genero: { required: true },
 };
 
 export default dependienteValidations;
