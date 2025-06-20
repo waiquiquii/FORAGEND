@@ -1,5 +1,10 @@
 @import "./base/_variables.css";
 
+html {
+  width: 100vw;
+  height: 100vh;
+}
+
 /* Normalización básica y estilos base para toda la app */
 html,
 body {
@@ -13,6 +18,14 @@ body {
   color: #222;
 }
 
+body {
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
 /* Asegura que todos los elementos usen border-box */
 *,
 *::before,

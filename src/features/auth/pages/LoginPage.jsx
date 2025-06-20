@@ -4,6 +4,8 @@ import { auth } from "../firebase"; // el mismo módulo de firebase.js
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { validateEmail, validatePassword } from "../hooks/userLogin";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { signOut } from "firebase/auth";
 
 import "../../../styles/layouts/auth.css";
 import "../../../styles/layouts/LoginPage.css";
@@ -40,10 +42,32 @@ export default function LoginPage() {
     }
 
     try {
-      // signInWithEmailAndPassword dispara onAuthStateChanged
-      await signInWithEmailAndPassword(auth, email, password);
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      console.log("Usuario autenticado:", cred.user);
+
+      const dominio = email.split("@")[1]?.split(".")[0]?.toLowerCase();
+      const esMedico = email.endsWith("@cesde.net") || dominio === "cesde";
+      console.log("¿Es médico?:", esMedico);
+
+      if (esMedico) {
+        const db = getFirestore();
+        const medicoRef = doc(db, "medicos", cred.user.uid);
+        const medicoSnap = await getDoc(medicoRef);
+
+        console.log("esMedico:", esMedico);
+        console.log("uid:", cred.user.uid);
+        console.log("medicoSnap.exists():", medicoSnap.exists());
+        console.log("medicoSnap.data():", medicoSnap.data());
+
+        if (!medicoSnap.exists() || !medicoSnap.data()?.activo) {
+          await signOut(auth);
+          alert("Registro de medico en revisión\nPronto tendrás acceso");
+          return;
+        }
+      }
       // La redirección se hará automáticamente en el useEffect cuando cambie `user`
-    } catch {
+    } catch (err) {
+      console.error("Error en login:", err);
       setError("Credenciales inválidas");
     }
   };

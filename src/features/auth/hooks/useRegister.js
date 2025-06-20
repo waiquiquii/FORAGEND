@@ -15,12 +15,14 @@ function calculateAge(fechaNacimiento) {
   return age;
 }
 
-// Helper to determine tipoDocumento by age
-function getTipoDocumentoByAge(age) {
-  if (age < 18) return "TI"; // Tarjeta de Identidad
-  if (age < 12) return "ERROR"; // Error, no se puede registrar
-  return "CC"; // Cédula de Ciudadanía
-}
+const dominiosDeCorreo = [
+  "gmail",
+  "hotmail",
+  "outlook",
+  "yahoo",
+  "icloud",
+  "cesde",
+];
 
 export async function registerUser(formData) {
   const {
@@ -28,6 +30,7 @@ export async function registerUser(formData) {
     segundoNombre,
     primerApellido,
     segundoApellido,
+    tipoDocumento,
     numeroDocumento,
     fechaNacimiento,
     cel,
@@ -40,6 +43,7 @@ export async function registerUser(formData) {
     !primerNombre ||
     !primerApellido ||
     !segundoApellido ||
+    !tipoDocumento ||
     !numeroDocumento ||
     !fechaNacimiento ||
     !cel ||
@@ -49,13 +53,32 @@ export async function registerUser(formData) {
     throw new Error("Todos los campos obligatorios deben estar llenos.");
   }
 
-  const age = calculateAge(fechaNacimiento);
-
-  if (age < 15) {
-    throw new Error("Debes tener al menos 15 años para registrarte.");
+  // Validar dominio de correo
+  const dominio = email.split("@")[1]?.split(".")[0]?.toLowerCase();
+  if (!dominiosDeCorreo.includes(dominio)) {
+    throw new Error(
+      "Solo se permiten correos de los siguientes dominios: " +
+        dominiosDeCorreo.join(", ")
+    );
   }
 
-  const tipoDocumento = getTipoDocumentoByAge(age);
+  const age = calculateAge(fechaNacimiento);
+
+  if (age < 12) {
+    throw new Error("Debes tener al menos 12 años para registrarte.");
+  }
+
+  // Validación de tipo de documento según edad
+  if (age < 18 && ["CC", "CE"].includes(tipoDocumento)) {
+    throw new Error(
+      "Un menor de edad no puede tener Cédula de Ciudadanía ni de Extranjería."
+    );
+  }
+  if (age >= 18 && ["TI", "RC"].includes(tipoDocumento)) {
+    throw new Error(
+      "Un mayor de edad no puede tener Tarjeta de Identidad ni Registro Civil."
+    );
+  }
 
   const userCredential = await createUserWithEmailAndPassword(
     auth,
@@ -65,14 +88,17 @@ export async function registerUser(formData) {
   const { uid } = userCredential.user;
 
   const nombre = `${primerNombre} ${primerApellido}`;
-
   const idPublico = generateIdWithPrefix({ prefix: "user" });
+
+  // Asignar rol según dominio
+  const role =
+    email.endsWith("@cesde.net") || dominio === "cesde" ? "medico" : "cliente";
 
   await setDoc(doc(db, "users", uid), {
     idPublico,
     email,
     nombre,
-    role: "cliente",
+    role,
     createdAt: serverTimestamp(),
     profile: {
       primerNombre,
@@ -85,20 +111,6 @@ export async function registerUser(formData) {
       cel,
     },
   });
-
-  // await setDoc(doc(db, "usersDependientes", uid), {
-  //   idPublico: generateIdWithPrefix("dep"),
-  //   profile: {
-  //     primerNombre,
-  //     segundoNombre,
-  //     primerApellido,
-  //     segundoApellido,
-  //     tipoDocumento,
-  //     parentesco,
-  //     numeroDocumento,
-  //     fechaNacimiento,
-  //   },
-  // });
 
   return uid;
 }

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import { useAgendarCitas } from "../context/AgendarCitasProvider";
+import { useAuth } from "../../../features/auth/context/AuthContext";
 import useForm from "../../../hooks/useForm";
 import dependienteValidations from "../formConfigs/dependienteValidations";
-import "../../../styles/features/user/FormDependiente.css";
 import { registerDependiente } from "../services/useDependiente";
-import { useAuth } from "../../../features/auth/context/AuthContext";
+import "../../../styles/features/user/FormDependiente.css";
 
 const opcionesParentesco = [
   { value: "hijo", label: "Hijo/a" },
@@ -11,11 +12,37 @@ const opcionesParentesco = [
   { value: "sobrino", label: "Sobrino/a" },
   { value: "otro", label: "Otro" },
 ];
-const opcionesTipoId = [
-  { value: "TI", label: "Tarjeta de identidad" },
-  { value: "CC", label: "Cédula de ciudadanía" },
-  { value: "PPT", label: "Permiso por protección temporal" },
-];
+const opcionesTipoId = {
+  MAYOR_DE_EDAD: [
+    { value: "CC", label: "Cédula de ciudadanía" },
+    { value: "CE", label: "Cédula de extranjería" },
+    { value: "PPT", label: "Permiso por protección temporal" },
+  ],
+  MENOR_DE_EDAD: [
+    { value: "RC", label: "Registro civil" },
+    { value: "TI", label: "Tarjeta de identidad" },
+    { value: "PPT", label: "Permiso por protección temporal" },
+  ],
+  MAYOR_DE_EDAD_Y_MENOR_DE_EDAD: [
+    { value: "CC", label: "Cédula de ciudadanía" },
+    { value: "CE", label: "Cédula de extranjería" },
+    { value: "PPT", label: "Permiso por protección temporal" },
+    { value: "RC", label: "Registro civil" },
+    { value: "TI", label: "Tarjeta de identidad" },
+  ],
+};
+
+function calcularEdad(fechaNacimiento) {
+  if (!fechaNacimiento) return null;
+  const hoy = new Date();
+  const nacimiento = new Date(fechaNacimiento);
+  let edad = hoy.getFullYear() - nacimiento.getFullYear();
+  const m = hoy.getMonth() - nacimiento.getMonth();
+  if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+    edad--;
+  }
+  return edad;
+}
 
 function FormDependiente({
   data = {},
@@ -23,6 +50,8 @@ function FormDependiente({
   onSuccess = () => {},
   disabled = false,
 }) {
+  const { seleccion, actualizarSeleccion } = useAgendarCitas();
+  const { paciente } = seleccion;
   const [guardado, setGuardado] = useState(false);
   const [errorApi, setErrorApi] = useState(null);
   const { user } = useAuth(); // Asegúrate de tener el uid del usuario
@@ -58,11 +87,35 @@ function FormDependiente({
       await registerDependiente(formData, user?.uid);
       setGuardado(true);
       onSuccess(formData);
+      actualizarSeleccion({
+        paciente: {
+          ...paciente,
+          parentesco: formData.parentesco,
+          nombre: `${formData.nombres} ${formData.primerApellido}`,
+        },
+      });
     } catch (err) {
       setErrorApi(
         err.message || "No se pudo guardar el dependiente. Intenta de nuevo."
       );
     }
+  }
+
+  // Determina la edad del dependiente
+  const edad = useMemo(
+    () => calcularEdad(formData.fechaNacimiento),
+    [formData.fechaNacimiento]
+  );
+
+  // Determina las opciones de tipo de identificación según la edad
+  let opcionesTipoIdFiltradas = [];
+  if (!formData.fechaNacimiento) {
+    // Si no hay fecha, muestra todas
+    opcionesTipoIdFiltradas = opcionesTipoId.MAYOR_DE_EDAD_Y_MENOR_DE_EDAD;
+  } else if (edad >= 18) {
+    opcionesTipoIdFiltradas = opcionesTipoId.MAYOR_DE_EDAD;
+  } else if (edad >= 0 && edad < 18) {
+    opcionesTipoIdFiltradas = opcionesTipoId.MENOR_DE_EDAD;
   }
 
   return (
@@ -235,7 +288,7 @@ function FormDependiente({
           <option value="" disabled>
             Seleccione tipo de documento
           </option>
-          {opcionesTipoId.map(({ value, label }) => (
+          {opcionesTipoIdFiltradas.map(({ value, label }) => (
             <option key={value} value={value}>
               {label}
             </option>

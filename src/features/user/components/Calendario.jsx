@@ -43,7 +43,7 @@ const Calendario = () => {
   const [config, setConfig] = useState(null);
   const [diaSeleccionado, setDiaSeleccionado] = useState(null);
 
-  const { actualizarSeleccion } = useAgendarCitas();
+  const { seleccion, actualizarSeleccion } = useAgendarCitas();
 
   useEffect(() => {
     fetch(
@@ -53,6 +53,19 @@ const Calendario = () => {
       .then((data) => setConfig(data))
       .catch(() => setConfig(null));
   }, []);
+
+  // Sincroniza el día seleccionado con el contexto al montar o cuando cambia la selección
+  useEffect(() => {
+    if (seleccion?.fecha) {
+      setDiaSeleccionado(seleccion.fecha);
+      // Opcional: mostrar el mes correspondiente al día seleccionado
+      const fecha = new Date(seleccion.fecha);
+      setMesActualMostrado({
+        mes: fecha.getMonth(),
+        año: fecha.getFullYear(),
+      });
+    }
+  }, [seleccion?.fecha]);
 
   const fechaDeHoy = {
     numeroDia: new Date().getDate(),

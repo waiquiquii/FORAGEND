@@ -8,6 +8,7 @@ function CardInfoCita({ cita, isActive, otrasClasesParaCard, onClick }) {
   }
 
   const {
+    cita_estado,
     cita_id,
     tipo_cita,
     cita_fecha,
@@ -18,6 +19,8 @@ function CardInfoCita({ cita, isActive, otrasClasesParaCard, onClick }) {
     cita_consultorio,
   } = cita;
 
+  const estado_or_id = cita.cita_estado || cita.cita_id;
+
   return (
     <div
       className={`card-info-cita ${
@@ -25,9 +28,18 @@ function CardInfoCita({ cita, isActive, otrasClasesParaCard, onClick }) {
       } ${otrasClasesParaCard}`}
       onClick={onClick}
     >
-      {cita_id && (
-        <div className={`card-info-cita__id-container`}>
-          <p className="card-info-cita__id">{cita_id}</p>
+      {estado_or_id && (
+        <div className={`card-info-cita__status_id-container`}>
+          {cita_estado && (
+            <div className={`card-info-cita__id-container`}>
+              <p className="card-info-cita__id">{cita_estado}</p>
+            </div>
+          )}
+          {cita_id && (
+            <div className={`card-info-cita__id-container`}>
+              <p className="card-info-cita__id">{cita_id}</p>
+            </div>
+          )}
         </div>
       )}
       <div className="card-info-cita__title-container">

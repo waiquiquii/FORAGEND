@@ -1,64 +1,22 @@
 // UserMisCitas.jsx - Scroll Horizontal en Todos los Dispositivos
-import React, { useState, useRef, useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../../features/auth/firebase";
+import { useAuth } from "../../../features/auth/context/AuthContext";
 import CardInfoCita from "../../../components/ui/CardInfoCita";
 import CalendarioInfo from "../../../components/ui/CalendarioInfo";
-
 import "../../../styles/features/user/UserMisCitas.css";
 
-export default function UserMisCitas() {
-  const CitasAMostrar = [
-    {
-      cita_id: "12345",
-      tipo_cita: "Consulta General",
-      cita_fecha: "2023-10-15",
-      cita_hora: "10:00 AM",
-      cita_doctor: "Dr. Juan Pérez",
-      cita_consultorio: "Consultorio 1",
-    },
-    {
-      cita_id: "67890",
-      tipo_cita: "Chequeo Anual",
-      cita_fecha: "2023-11-20",
-      cita_hora: "2:00 PM",
-      cita_doctor: "Dra. Ana Gómez",
-      cita_consultorio: "Consultorio 2",
-    },
-    {
-      cita_id: "11223",
-      tipo_cita: "Seguimiento",
-      cita_fecha: "2023-12-05",
-      cita_hora: "11:30 AM",
-      cita_doctor: "Dr. Carlos López",
-      cita_consultorio: "Consultorio 3",
-    },
-    {
-      cita_id: "44556",
-      tipo_cita: "Consulta Especializada",
-      cita_fecha: "2023-12-15",
-      cita_hora: "3:00 PM",
-      cita_doctor: "Dra. María Rodríguez",
-      cita_consultorio: "Consultorio 4",
-    },
-    {
-      cita_id: "78901",
-      tipo_cita: "Consulta de Seguimiento",
-      cita_fecha: "2023-12-20",
-      cita_hora: "4:00 PM",
-      cita_doctor: "Dr. Luis Martínez",
-      cita_consultorio: "Consultorio 5",
-    },
-  ];
-
+// Componente hijo: solo renderiza la UI cuando las citas ya están cargadas
+function MisCitasContent({ citas }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const scrollContainerRef = useRef(null);
 
-  // Detectar cambios de tamaño de pantalla
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -67,11 +25,9 @@ export default function UserMisCitas() {
   const scrollToCard = (index) => {
     const container = scrollContainerRef.current;
     if (!container) return;
-
     const cardWidth = container.children[0]?.offsetWidth || 0;
     const gap = 16; // var(--spacing-md) en px
     const scrollPosition = index * (cardWidth + gap);
-
     container.scrollTo({
       left: scrollPosition,
       behavior: "smooth",
@@ -80,16 +36,14 @@ export default function UserMisCitas() {
 
   // Navegación anterior
   const prevSlide = () => {
-    const newIndex =
-      activeIndex === 0 ? CitasAMostrar.length - 1 : activeIndex - 1;
+    const newIndex = activeIndex === 0 ? citas.length - 1 : activeIndex - 1;
     setActiveIndex(newIndex);
     scrollToCard(newIndex);
   };
 
   // Navegación siguiente
   const nextSlide = () => {
-    const newIndex =
-      activeIndex === CitasAMostrar.length - 1 ? 0 : activeIndex + 1;
+    const newIndex = activeIndex === citas.length - 1 ? 0 : activeIndex + 1;
     setActiveIndex(newIndex);
     scrollToCard(newIndex);
   };
@@ -104,16 +58,14 @@ export default function UserMisCitas() {
   const handleScroll = () => {
     const container = scrollContainerRef.current;
     if (!container) return;
-
     const cardWidth = container.children[0]?.offsetWidth || 0;
     const gap = 16;
     const scrollLeft = container.scrollLeft;
     const currentIndex = Math.round(scrollLeft / (cardWidth + gap));
-
     if (
       currentIndex !== activeIndex &&
       currentIndex >= 0 &&
-      currentIndex < CitasAMostrar.length
+      currentIndex < citas.length
     ) {
       setActiveIndex(currentIndex);
     }
@@ -124,10 +76,10 @@ export default function UserMisCitas() {
     if (scrollContainerRef.current) {
       scrollToCard(activeIndex);
     }
+    // eslint-disable-next-line
   }, []);
 
-  // Si no hay citas
-  if (CitasAMostrar.length === 0) {
+  if (citas.length === 0) {
     return (
       <div className="misCitas">
         <h2 className="misCitas__title">Mis Citas</h2>
@@ -153,17 +105,15 @@ export default function UserMisCitas() {
   return (
     <div className="misCitas">
       <h2 className="misCitas__title">Mis Citas</h2>
-
       <div className="misCitas__content">
         {/* Área de Cards con Scroll Horizontal */}
         <div className="misCitas__cards">
-          {/* Contenedor de scroll horizontal */}
           <div
             className="misCitas__scroll-container"
             ref={scrollContainerRef}
             onScroll={handleScroll}
           >
-            {CitasAMostrar.map((cita, index) => (
+            {citas.map((cita, index) => (
               <div
                 key={cita.cita_id}
                 className={`misCitas__card-item ${
@@ -179,9 +129,8 @@ export default function UserMisCitas() {
               </div>
             ))}
           </div>
-
           {/* Navegación - Solo visible en desktop/tablet */}
-          {!isMobile && CitasAMostrar.length > 1 && (
+          {!isMobile && citas.length > 1 && (
             <div className="misCitas__navigation">
               <button
                 className="misCitas__nav-btn misCitas__nav-btn--prev"
@@ -190,9 +139,8 @@ export default function UserMisCitas() {
               >
                 ‹
               </button>
-
               <div className="misCitas__indicators">
-                {CitasAMostrar.map((_, index) => (
+                {citas.map((_, index) => (
                   <button
                     key={index}
                     className={`misCitas__indicator ${
@@ -203,7 +151,6 @@ export default function UserMisCitas() {
                   />
                 ))}
               </div>
-
               <button
                 className="misCitas__nav-btn misCitas__nav-btn--next"
                 onClick={nextSlide}
@@ -214,7 +161,6 @@ export default function UserMisCitas() {
             </div>
           )}
         </div>
-
         {/* Calendario - Solo visible en desktop/tablet */}
         {!isMobile && (
           <div className="misCitas__calendar">
@@ -224,4 +170,46 @@ export default function UserMisCitas() {
       </div>
     </div>
   );
+}
+
+export default function UserMisCitas() {
+  const { user } = useAuth();
+  const [citas, setCitas] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      setCitas([]);
+      setLoading(false);
+      return;
+    }
+
+    const fetchCitas = async () => {
+      setLoading(true);
+      try {
+        const q = query(
+          collection(db, "citas"),
+          where("userUid", "==", user.uid)
+        );
+        const querySnapshot = await getDocs(q);
+        const citasData = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          cita_id: doc.id,
+        }));
+        setCitas(citasData);
+      } catch (error) {
+        setCitas([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCitas();
+  }, [user]);
+
+  if (loading) {
+    return <div className="misCitas__loading">Cargando citas...</div>;
+  }
+
+  return <MisCitasContent citas={citas} />;
 }

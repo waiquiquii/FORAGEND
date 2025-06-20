@@ -1,9 +1,39 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { registerUser } from "../hooks/useRegister";
 import { useNavigate } from "react-router-dom";
 import { NavigateAuthButtons } from "../componets/ui/NavigateAuthButtons";
 import "../../../styles/layouts/auth.css";
 import "../../../styles/layouts/ReguistrarsePage.css";
+
+const opcionesTipoId = {
+  MAYOR_DE_EDAD: [
+    { value: "CC", label: "Cédula de ciudadanía" },
+    { value: "CE", label: "Cédula de extranjería" },
+    { value: "PPT", label: "Permiso por protección temporal" },
+  ],
+  MENOR_DE_EDAD: [
+    { value: "TI", label: "Tarjeta de identidad" },
+    { value: "PPT", label: "Permiso por protección temporal" },
+  ],
+  MAYOR_DE_EDAD_Y_MENOR_DE_EDAD: [
+    { value: "CC", label: "Cédula de ciudadanía" },
+    { value: "CE", label: "Cédula de extranjería" },
+    { value: "PPT", label: "Permiso por protección temporal" },
+    { value: "TI", label: "Tarjeta de identidad" },
+  ],
+};
+
+function calcularEdad(fechaNacimiento) {
+  if (!fechaNacimiento) return null;
+  const hoy = new Date();
+  const nacimiento = new Date(fechaNacimiento);
+  let edad = hoy.getFullYear() - nacimiento.getFullYear();
+  const m = hoy.getMonth() - nacimiento.getMonth();
+  if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+    edad--;
+  }
+  return edad;
+}
 
 export default function RegistroPage() {
   const navigate = useNavigate();
@@ -28,11 +58,22 @@ export default function RegistroPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const edad = calcularEdad(form.fechaNacimiento);
+
+  let opcionesTipoIdFiltradas = [];
+  if (!form.fechaNacimiento) {
+    opcionesTipoIdFiltradas = opcionesTipoId.MAYOR_DE_EDAD_Y_MENOR_DE_EDAD;
+  } else if (edad >= 18) {
+    opcionesTipoIdFiltradas = opcionesTipoId.MAYOR_DE_EDAD;
+  } else if (edad >= 12 && edad < 18) {
+    opcionesTipoIdFiltradas = opcionesTipoId.MENOR_DE_EDAD;
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
-    // Validar todos los campos requeridos
+    // Solo validaciones de campos vacíos y coincidencia de email/contraseña
     if (
       !form.primerNombre ||
       !form.primerApellido ||
@@ -61,35 +102,23 @@ export default function RegistroPage() {
 
     try {
       setLoading(true);
-      await registerUser(form);
-      navigate("/");
+      const uid = await registerUser(form);
+
+      // Verifica el rol según el correo
+      const dominio = form.email.split("@")[1]?.split(".")[0]?.toLowerCase();
+      const esMedico = form.email.endsWith("@cesde.net") || dominio === "cesde";
+
+      if (esMedico) {
+        alert("Registro de medico en revisión\nPronto tendrás acceso");
+      }
+
+      navigate("/Logout");
     } catch (err) {
-      setError("Error al registrar: " + err.message);
+      setError(err.message || "Error al registrar.");
     } finally {
       setLoading(false);
     }
   };
-
-  // Función para calcular tipo de documento según la edad
-  function getTipoDocumentoByAge(fechaNacimiento) {
-    if (!fechaNacimiento) return "";
-    const today = new Date();
-    const birthDate = new Date(fechaNacimiento);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age < 18 ? (age < 15 ? (age < 12 ? "ERROR" : "TI") : "TI") : "CC";
-  }
-
-  // Actualiza tipoDocumento automáticamente cuando cambia la fecha de nacimiento
-  useEffect(() => {
-    setForm((prev) => ({
-      ...prev,
-      tipoDocumento: getTipoDocumentoByAge(prev.fechaNacimiento),
-    }));
-  }, [form.fechaNacimiento]);
 
   return (
     <div className="auth__contenedor">
@@ -173,16 +202,28 @@ export default function RegistroPage() {
           <label className="formulario__label" htmlFor="tipoDocumento">
             Tipo de documento *
           </label>
-          <input
+          <select
             id="tipoDocumento"
             name="tipoDocumento"
             value={form.tipoDocumento}
+            onChange={handleChange}
             className="formulario__input"
-            readOnly
-            tabIndex={-1}
-            style={{ background: "#f3f3f3", color: "#888" }}
-            placeholder="Se asigna automáticamente"
-          />
+            required
+            disabled={!form.fechaNacimiento || (edad !== null && edad < 12)}
+          >
+            <option value="" disabled>
+              {form.fechaNacimiento
+                ? edad !== null && edad < 12
+                  ? "No disponible para menores de 12"
+                  : "Seleccione tipo de documento"
+                : "Seleccione primero la fecha de nacimiento"}
+            </option>
+            {opcionesTipoIdFiltradas.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="formulario__grupo">
