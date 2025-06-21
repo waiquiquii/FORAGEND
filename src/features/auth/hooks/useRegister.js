@@ -36,13 +36,14 @@ export async function registerUser(formData) {
     cel,
     email,
     password,
+    especialidad,
+    fechaReTHUS,
   } = formData;
 
   // Validar que todos los campos requeridos estén llenos
   if (
     !primerNombre ||
     !primerApellido ||
-    !segundoApellido ||
     !tipoDocumento ||
     !numeroDocumento ||
     !fechaNacimiento ||
@@ -80,6 +81,17 @@ export async function registerUser(formData) {
     );
   }
 
+  // Asignar rol según dominio
+  const role =
+    email.endsWith("@cesde.net") || dominio === "cesde" ? "medico" : "cliente";
+
+  // Validar campos obligatorios para médicos
+  if (role === "medico" && (!especialidad || !fechaReTHUS)) {
+    throw new Error(
+      "Especialidad y fecha de inscripción en ReTHUS son obligatorias para médicos."
+    );
+  }
+
   const userCredential = await createUserWithEmailAndPassword(
     auth,
     email,
@@ -88,11 +100,10 @@ export async function registerUser(formData) {
   const { uid } = userCredential.user;
 
   const nombre = `${primerNombre} ${primerApellido}`;
-  const idPublico = generateIdWithPrefix({ prefix: "user" });
-
-  // Asignar rol según dominio
-  const role =
-    email.endsWith("@cesde.net") || dominio === "cesde" ? "medico" : "cliente";
+  const idPublico = generateIdWithPrefix({ prefix: role });
+  if (!idPublico) {
+    throw new Error("Error al generar el ID público.");
+  }
 
   await setDoc(doc(db, "users", uid), {
     idPublico,
@@ -109,6 +120,7 @@ export async function registerUser(formData) {
       numeroDocumento,
       fechaNacimiento,
       cel,
+      ...(role === "medico" ? { especialidad, fechaReTHUS } : {}),
     },
   });
 

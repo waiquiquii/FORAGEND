@@ -50,6 +50,8 @@ export default function RegistroPage() {
     confirmEmail: "",
     password: "",
     confirmPassword: "",
+    especialidad: "",
+    fechaReTHUS: "",
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -69,11 +71,14 @@ export default function RegistroPage() {
     opcionesTipoIdFiltradas = opcionesTipoId.MENOR_DE_EDAD;
   }
 
+  const dominio = form.email.split("@")[1]?.split(".")[0]?.toLowerCase();
+  const esMedico = form.email.endsWith("@cesde.net") || dominio === "cesde";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
-    // Solo validaciones de campos vacíos y coincidencia de email/contraseña
+    // Validación de campos obligatorios generales
     if (
       !form.primerNombre ||
       !form.primerApellido ||
@@ -90,6 +95,14 @@ export default function RegistroPage() {
       return;
     }
 
+    // Validación de campos obligatorios para médicos
+    if (esMedico && (!form.especialidad || !form.fechaReTHUS)) {
+      setError(
+        "Especialidad y fecha de inscripción en ReTHUS son obligatorias para médicos."
+      );
+      return;
+    }
+
     if (form.email !== form.confirmEmail) {
       setError("Los correos electrónicos no coinciden.");
       return;
@@ -103,10 +116,6 @@ export default function RegistroPage() {
     try {
       setLoading(true);
       const uid = await registerUser(form);
-
-      // Verifica el rol según el correo
-      const dominio = form.email.split("@")[1]?.split(".")[0]?.toLowerCase();
-      const esMedico = form.email.endsWith("@cesde.net") || dominio === "cesde";
 
       if (esMedico) {
         alert("Registro de medico en revisión\nPronto tendrás acceso");
@@ -283,6 +292,39 @@ export default function RegistroPage() {
             className="formulario__input"
           />
         </div>
+
+        {esMedico && (
+          <>
+            <div className="formulario__grupo">
+              <label className="formulario__label" htmlFor="especialidad">
+                Especialidad *
+              </label>
+              <input
+                id="especialidad"
+                name="especialidad"
+                placeholder="Ej: Medicina General"
+                onChange={handleChange}
+                value={form.especialidad || ""}
+                className="formulario__input"
+                required
+              />
+            </div>
+            <div className="formulario__grupo">
+              <label className="formulario__label" htmlFor="fechaReTHUS">
+                Fecha de inscripción en ReTHUS *
+              </label>
+              <input
+                type="date"
+                id="fechaReTHUS"
+                name="fechaReTHUS"
+                onChange={handleChange}
+                value={form.fechaReTHUS || ""}
+                className="formulario__input"
+                required
+              />
+            </div>
+          </>
+        )}
 
         <div className="formulario__grupo">
           <label className="formulario__label" htmlFor="password">

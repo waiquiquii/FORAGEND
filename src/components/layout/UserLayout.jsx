@@ -11,7 +11,6 @@ const userNavItems = [
   { to: "/user/mis-citas", label: "Mis Citas" },
   { to: "/user/agendar", label: "Agendar Cita" },
   { to: "/user/perfil", label: "Mi Perfil" },
-  { to: "/user/consulta-medicos", label: "Consulta Medicos" },
 ];
 
 export default function UserLayout() {
