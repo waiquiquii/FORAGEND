@@ -1,41 +1,27 @@
 // src/components/layout/AdminLayout.jsx
 import React from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Footer from "../ui/Footer";
 import Header from "../ui/Header";
-import "../../styles/layouts/Layout.css"; // Importa la hoja de estilos
+import SideNav from "../ui/SideNav";
+import "../../styles/layouts/Layout.css";
+
+const adminNavItems = [
+  { to: "/admin/dashboard", label: "Dashboard" },
+  { to: "/admin/usuarios", label: "Usuarios" },
+  { to: "/admin/configuracion", label: "Configuración" },
+];
 
 const AdminLayout = () => {
   return (
     <div className="layout">
-      <Header />
-
+      <Header items={adminNavItems} />
       <div className="layout__body">
-        <nav className="layout-nav__lateral">
-          <ul className="layout-nav__list">
-            <li className="layout-nav__item">
-              <Link to="/admin/dashboard" className="layout-nav__link">
-                Dashboard
-              </Link>
-            </li>
-            <li className="layout-nav__item">
-              <Link to="/admin/usuarios" className="layout-nav__link">
-                Usuarios
-              </Link>
-            </li>
-            <li className="layout-nav__item">
-              <Link to="/admin/configuracion" className="layout-nav__link">
-                Configuración
-              </Link>
-            </li>
-          </ul>
-        </nav>
-
+        <SideNav items={adminNavItems} />
         <main className="layout__main">
           <Outlet />
         </main>
       </div>
-
       <Footer />
     </div>
   );

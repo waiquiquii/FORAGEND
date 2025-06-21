@@ -1,48 +1,30 @@
 // src/components/layout/UserLayout.jsx
 import React from "react";
-import { Outlet, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import Footer from "../ui/Footer";
 import Header from "../ui/Header";
-import "../../styles/layouts/Layout.css"; // Importa la hoja de estilos
+import SideNav from "../ui/SideNav";
+import "../../styles/layouts/Layout.css";
 
-const UserLayout = () => {
+const userNavItems = [
+  { to: "/user/mis-citas", label: "Mis Citas" },
+  { to: "/user/agendar", label: "Agendar Cita" },
+  { to: "/user/perfil", label: "Mi Perfil" },
+  { to: "/user/consulta-medicos", label: "Consulta Medicos" },
+];
+
+export default function UserLayout() {
   return (
     <div className="layout">
-      <Header />
-
+      <Header items={userNavItems} />
       <div className="layout__body">
-        <nav className="layout-nav__lateral">
-          <ul className="layout-nav__list">
-            <li className="layout-nav__item">
-              <Link to="/user/mis-citas" className="layout-nav__link">
-                Mis Citas
-              </Link>
-            </li>
-            <li className="layout-nav__item">
-              <Link to="/user/agendar" className="layout-nav__link">
-                Agendar Cita
-              </Link>
-            </li>
-            <li className="layout-nav__item">
-              <Link to="/user/perfil" className="layout-nav__link">
-                Mi Perfil
-              </Link>
-            </li>
-            <li className="layout-nav__item">
-              <Link to="/user/consulta-medicos" className="layout-nav__link">
-                Consulta Medicos
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        <SideNav items={userNavItems} />
         <main className="layout__main">
           <Outlet />
         </main>
       </div>
-
       <Footer />
     </div>
   );
-};
-
-export default UserLayout;
+}
