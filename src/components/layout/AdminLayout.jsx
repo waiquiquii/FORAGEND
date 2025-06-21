@@ -9,7 +9,6 @@ import "../../styles/layouts/Layout.css";
 const adminNavItems = [
   { to: "/admin/dashboard", label: "Dashboard" },
   { to: "/admin/usuarios", label: "Usuarios" },
-  { to: "/admin/configuracion", label: "Configuración" },
 ];
 
 const AdminLayout = () => {

@@ -1,12 +1,21 @@
-/* Bloque principal */
+/* --- Base Styles & Reset --- */
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Roboto", Arial, sans-serif; /* Adjusted font stack */
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #343a40; /* Darker text for better readability */
+  background-color: #f8f9fa; /* Light background for the page */
+}
+
+/* --- Bloque principal: Dashboard Médico --- */
 .dashboard-medico {
   max-width: 800px;
-  margin: 2rem auto;
+  margin: 2rem auto; /* Consistent spacing */
   padding: 1.5rem;
-  background: #fff;
+  background: #ffffff; /* Pure white background */
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-  font-family: "Segoe UI", Arial, sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Slightly more prominent shadow */
 }
 
 .dashboard-medico__acciones {
@@ -22,24 +31,47 @@
   gap: 1rem;
 }
 
-/* Card de cita */
+/* --- Card de Cita --- */
 .cita-card {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #e9ecef; /* Softer border color */
   border-radius: 8px;
-  background: #f9f9f9;
-  transition: box-shadow 0.2s;
+  background: #ffffff; /* White background for cards too */
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out; /* Added transform for subtle lift */
 }
 
 .cita-card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); /* More pronounced shadow on hover */
+  transform: translateY(-2px); /* Gentle lift effect */
 }
 
 .cita-card__info {
   flex: 1;
+}
+
+.cita-card__info h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: #007bff; /* Primary blue for titles */
+  font-size: 1.125rem; /* Slightly larger font for clarity */
+}
+
+.cita-card__info p {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.cita-card__info p.hora {
+  font-weight: bold;
+  color: #343a40;
+}
+
+.cita-card__info p.paciente {
+  color: #6c757d; /* Lighter gray for secondary text */
+  font-size: 0.875rem; /* Smaller for less emphasis */
 }
 
 .cita-card__acciones {
@@ -48,35 +80,65 @@
   gap: 0.5rem;
 }
 
-/* Botones */
+/* --- Botones --- */
 .btn {
-  padding: 0.4rem 1rem;
+  padding: 0.6rem 1rem; /* Slightly more padding for better touch targets */
   border: none;
   border-radius: 4px;
-  font-weight: 500;
+  font-weight: 600; /* Bolder text for buttons */
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+  font-size: 0.875rem; /* Consistent font size for buttons */
+}
+
+.btn:active {
+  transform: translateY(1px); /* Click feedback */
 }
 
 .btn-aceptar {
-  background: #4caf50;
+  background: #28a745; /* Modern success green */
   color: #fff;
 }
 
 .btn-aceptar:hover {
-  background: #388e3c;
+  background: #218838; /* Darker green on hover */
 }
 
 .btn-rechazar {
-  background: #f44336;
+  background: #dc3545; /* Modern danger red */
   color: #fff;
 }
 
 .btn-rechazar:hover {
-  background: #c62828;
+  background: #c82333; /* Darker red on hover */
 }
 
-/* Checkbox alineado */
+/* --- Checkbox alineado --- */
 .cita-card > input[type="checkbox"] {
-  margin-top: 0.5rem;
+  margin-top: 0.5rem; /* Aligns checkbox with the content */
+  transform: scale(1.2); /* Slightly larger checkbox */
+  accent-color: #007bff; /* Colors the checkbox itself */
+}
+
+/* --- Media Queries (For Responsiveness) --- */
+@media (max-width: 600px) {
+  .dashboard-medico {
+    margin: 1.5rem 1rem; /* Less margin on smaller screens */
+    padding: 1rem;
+  }
+
+  .cita-card {
+    flex-direction: column; /* Stacks items vertically */
+    align-items: stretch; /* Stretches items to fill width */
+  }
+
+  .cita-card__acciones {
+    flex-direction: row; /* Buttons in a row */
+    justify-content: flex-end; /* Aligns buttons to the right */
+    margin-top: 0.5rem;
+  }
+
+  .btn {
+    flex: 1; /* Allows buttons to share available space */
+  }
 }

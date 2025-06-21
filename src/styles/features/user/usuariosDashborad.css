@@ -1,0 +1,72 @@
+/* Bloque principal */
+.usuarios-dashboard {
+  min-height: 100%;
+  padding: 2rem 4vw;
+  background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+/* Título */
+.usuarios-dashboard__titulo {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #22223b;
+  margin-bottom: 2rem;
+  letter-spacing: -1px;
+}
+
+/* Lista de usuarios */
+.usuarios-dashboard__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: flex-start;
+}
+
+/* Card de usuario */
+.usuarios-dashboard__card {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 6px 24px 0 rgba(30, 34, 90, 0.08);
+  padding: 2rem 1.5rem;
+  min-width: 260px;
+  max-width: 320px;
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.18s, box-shadow 0.18s;
+  border: 1.5px solid #e0e7ef;
+}
+
+.usuarios-dashboard__card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 32px 0 rgba(30, 34, 90, 0.13);
+  border-color: #a3bffa;
+}
+
+/* Info del usuario */
+.usuarios-dashboard__info {
+  margin-bottom: 0.5rem;
+}
+
+.usuarios-dashboard__campo {
+  margin: 0.4rem 0;
+  color: #3a3a40;
+  font-size: 1.08rem;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.usuarios-dashboard__campo strong {
+  color: #1976d2;
+  font-weight: 600;
+}
+
+/* Mensajes */
+.usuarios-dashboard__mensaje {
+  font-size: 1.15rem;
+  color: #6c757d;
+  margin-top: 2rem;
+  text-align: center;
+  letter-spacing: 0.2px;
+}

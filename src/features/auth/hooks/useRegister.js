@@ -127,7 +127,10 @@ export async function registerUser(formData) {
   await setDoc(doc(db, "medicosPublicData", uid), {
     idPublico,
     nombre,
+    email,
+    uid,
     especialidad,
+    activo: false,
     estado: "inactivo",
   });
 
