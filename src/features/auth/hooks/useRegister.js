@@ -124,5 +124,12 @@ export async function registerUser(formData) {
     },
   });
 
+  await setDoc(doc(db, "medicosPublicData", uid), {
+    idPublico,
+    nombre,
+    especialidad,
+    estado: "inactivo",
+  });
+
   return uid;
 }

@@ -299,15 +299,28 @@ export default function RegistroPage() {
               <label className="formulario__label" htmlFor="especialidad">
                 Especialidad *
               </label>
-              <input
+              <select
                 id="especialidad"
                 name="especialidad"
-                placeholder="Ej: Medicina General"
                 onChange={handleChange}
                 value={form.especialidad || ""}
                 className="formulario__input"
                 required
-              />
+              >
+                <option value="" disabled>
+                  Seleccione especialidad
+                </option>
+                <option value="Medicina General">Medicina General</option>
+                <option value="Pediatría">Pediatría</option>
+                <option value="Ginecología">Ginecología</option>
+                <option value="Cardiología">Cardiología</option>
+                <option value="Dermatología">Dermatología</option>
+                <option value="Psiquiatría">Psiquiatría</option>
+                <option value="Oftalmología">Oftalmología</option>
+                <option value="Ortopedia">Ortopedia</option>
+                <option value="Neurología">Neurología</option>
+                <option value="Anestesiología">Anestesiología</option>
+              </select>
             </div>
             <div className="formulario__grupo">
               <label className="formulario__label" htmlFor="fechaReTHUS">

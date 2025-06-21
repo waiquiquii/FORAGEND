@@ -2,8 +2,8 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../auth/firebase";
 import { generateIdWithPrefix } from "../../../services/generacionId";
 
-export async function guardarCita(citaData, userUid) {
-  const {
+export async function guardarCita(citaData, userUid, idPublicoDoctor) {
+  let {
     tipo_cita,
     cita_fecha,
     cita_hora,
@@ -13,6 +13,11 @@ export async function guardarCita(citaData, userUid) {
     cita_parentesco,
   } = citaData;
 
+  // Si consultorio es vacío o falsy, asignar "Sin asignar"
+  if (!cita_consultorio || cita_consultorio.trim() === "") {
+    cita_consultorio = "Sin asignar";
+  }
+
   // Validar campos requeridos
   if (
     !tipo_cita ||
@@ -20,7 +25,8 @@ export async function guardarCita(citaData, userUid) {
     !cita_hora ||
     !cita_doctor ||
     !cita_consultorio ||
-    !cita_paciente
+    !cita_paciente ||
+    !idPublicoDoctor
   ) {
     throw new Error("Todos los campos obligatorios deben estar llenos.");
   }
@@ -39,6 +45,7 @@ export async function guardarCita(citaData, userUid) {
     cita_consultorio,
     cita_paciente,
     cita_parentesco: cita_parentesco || null,
+    idPublicoDoctor,
   });
 
   return idCita;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Database } from "@sqlitecloud/drivers";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { PASOS_AGENDAR, allOpciones, titulos } from "../services/utilsAgendar";
 import Calendario from "../components/Calendario";
 import FormDependiente from "../components/FormDependiente";
@@ -10,9 +10,8 @@ import {
 } from "../context/AgendarCitasProvider";
 import { useAuth } from "../../../features/auth/context/AuthContext";
 import { guardarCita } from "../services/useAgendar";
+import { db } from "../../../features/auth/firebase";
 import "../../../styles/features/user/UserAgendar.css";
-
-const db = new Database(import.meta.env.VITE_SQLITECLOUD_URL_USERCLIENT);
 
 // Paso 1: Seleccionar Paciente
 function PasoSeleccionarPaciente({ onNext }) {
@@ -100,13 +99,17 @@ function PasoAgregarDependiente({ onPrev, onNext }) {
 
 // Paso 3: Seleccionar Fecha
 function PasoSeleccionarFecha({ onPrev, onNext }) {
-  const { seleccion } = useAgendarCitas();
+  const { seleccion, actualizarSeleccion } = useAgendarCitas();
   const fecha = seleccion.fecha;
+
+  const handleChange = (nuevaFecha) => {
+    actualizarSeleccion({ fecha: nuevaFecha });
+  };
 
   return (
     <div className="agendar__step">
       <div className="agendar__step-content">
-        <Calendario />
+        <Calendario onChange={handleChange} value={fecha} />
       </div>
       <div className="agendar__buttons">
         <button className="agendar__btn agendar__btn--prev" onClick={onPrev}>
@@ -237,13 +240,15 @@ function PasoSeleccionarEspecialidad({ especialidades, onPrev, onNext }) {
 function PasoSeleccionarDoctor({ doctores, onPrev, onNext }) {
   const { seleccion, actualizarSeleccion } = useAgendarCitas();
   const profesional = seleccion.profesional || {};
-  const doctorValue = profesional?.nombre || "";
+  const doctorValue = profesional?.idPublico || "";
 
   const handleChange = (e) => {
+    const doctor = doctores.find((doc) => doc.idPublico === e.target.value);
     actualizarSeleccion({
       profesional: {
-        nombre: e.target.value,
-        consultorio: "",
+        nombre: doctor?.nombre || "",
+        consultorio: doctor?.consultorio || "",
+        idPublico: doctor?.idPublico || "",
       },
     });
   };
@@ -265,8 +270,8 @@ function PasoSeleccionarDoctor({ doctores, onPrev, onNext }) {
               No hay doctores disponibles
             </option>
           ) : (
-            doctores.map((doctor, idx) => (
-              <option key={idx} value={doctor.nombre}>
+            doctores.map((doctor) => (
+              <option key={doctor.idPublico} value={doctor.idPublico}>
                 {doctor.nombre}
               </option>
             ))
@@ -291,7 +296,7 @@ function PasoSeleccionarDoctor({ doctores, onPrev, onNext }) {
   );
 }
 
-// Paso 7: Seleccionar Horario
+// Paso 7: Seleccionar Horario (estándar)
 function PasoSeleccionarHorario({ horarios, onPrev, onNext }) {
   const { seleccion, actualizarSeleccion } = useAgendarCitas();
   const hora = seleccion.hora || "";
@@ -399,55 +404,49 @@ function UserAgendarContent() {
   const [pasoActual, setPasoActual] = useState(
     PASOS_AGENDAR.SELECCIONAR_PACIENTE
   );
-  const [doctoresSQL, setDoctoresSQL] = useState([]);
-  const [especialidadesSQL, setEspecialidadesSQL] = useState([]);
-  const [respuestaSQL, setRespuestaSQL] = useState({
-    doctores: [],
-    especialidades: [],
-    horarios: [],
-  });
+  const [doctores, setDoctores] = useState([]);
+  const [especialidades, setEspecialidades] = useState([]);
+  const [horariosDisponibles, setHorariosDisponibles] = useState(
+    Object.entries(allOpciones.horarios)
+  );
 
-  // --- Efectos ---
-  // Traer todos los doctores al cargar el componente
+  // Traer todos los doctores desde Firebase
   useEffect(() => {
     (async () => {
       try {
-        const resultDoctores = await db.sql(`SELECT * FROM doctores`);
-        setRespuestaSQL((prev) => ({
-          ...prev,
-          doctores: resultDoctores,
-        }));
-        setDoctoresSQL(resultDoctores);
+        const q = query(
+          collection(db, "medicosPublicData"),
+          where("activo", "==", true)
+        );
+        const snapshot = await getDocs(q);
+        const docs = snapshot.docs.map((doc) => doc.data());
+        setDoctores(docs);
+
+        // Especialidades únicas
+        const especialidadesUnicas = [
+          ...new Set(docs.map((doc) => doc.especialidad)),
+        ].filter(Boolean);
+        setEspecialidades(especialidadesUnicas);
       } catch (error) {
-        console.error("Error al obtener doctores:", error);
+        setDoctores([]);
+        setEspecialidades([]);
       }
     })();
   }, []);
 
-  // Obtener especialidades únicas de los doctores al montar el componente
-  useEffect(() => {
-    const especialidadesUnicas = [
-      ...new Set((respuestaSQL.doctores || []).map((doc) => doc.especialidad)),
-    ].filter(Boolean);
-    setEspecialidadesSQL(especialidadesUnicas);
-  }, [respuestaSQL.doctores]);
-
   // Filtrar doctores por especialidad seleccionada
   useEffect(() => {
     if (!servicio?.especialidad) return;
-    setDoctoresSQL(
-      (respuestaSQL.doctores || []).filter(
-        (doc) => doc.especialidad === servicio.especialidad && doc.activo === 1
-      )
+    setDoctores((prev) =>
+      prev.filter((doc) => doc.especialidad === servicio.especialidad)
     );
-  }, [servicio?.especialidad, respuestaSQL.doctores]);
+  }, [servicio?.especialidad]);
 
-  // actualizar el consultorio segun el medico selecionado
-
+  // Actualizar el consultorio e idPublico según el médico seleccionado
   useEffect(() => {
-    if (!profesional?.nombre) return;
-    const doctorSeleccionado = (respuestaSQL.doctores || []).find(
-      (doc) => doc.nombre === profesional.nombre
+    if (!profesional?.idPublico) return;
+    const doctorSeleccionado = doctores.find(
+      (doc) => doc.idPublico === profesional.idPublico
     );
     if (
       doctorSeleccionado &&
@@ -457,38 +456,17 @@ function UserAgendarContent() {
         profesional: {
           nombre: doctorSeleccionado.nombre,
           consultorio: doctorSeleccionado.consultorio || "",
+          idPublico: doctorSeleccionado.idPublico,
         },
       });
     }
     // eslint-disable-next-line
-  }, [profesional?.nombre, respuestaSQL.doctores]);
+  }, [profesional?.idPublico, doctores]);
 
-  // Horarios dinámicos según el doctor seleccionado
-  const [horariosDisponibles, setHorariosDisponibles] = useState(
-    Object.entries(allOpciones.horarios)
-  );
+  // Horarios estándar (no personalizados por doctor)
   useEffect(() => {
-    if (!profesional?.nombre) {
-      setHorariosDisponibles(Object.entries(allOpciones.horarios));
-      return;
-    }
-    const doctor = doctoresSQL.find((doc) => doc.nombre === profesional.nombre);
-    if (!doctor || !doctor.horarios) {
-      setHorariosDisponibles(Object.entries(allOpciones.horarios));
-      return;
-    }
-    const horariosDoctor = Array.isArray(doctor.horarios)
-      ? doctor.horarios
-      : typeof doctor.horarios === "string"
-      ? doctor.horarios.split(",").map((h) => h.trim())
-      : [];
-    const filtrados = Object.entries(allOpciones.horarios).filter(
-      ([key, val]) => horariosDoctor.includes(val)
-    );
-    setHorariosDisponibles(
-      filtrados.length > 0 ? filtrados : Object.entries(allOpciones.horarios)
-    );
-  }, [profesional?.nombre, doctoresSQL]);
+    setHorariosDisponibles(Object.entries(allOpciones.horarios));
+  }, []);
 
   // Confirmar cita
   const confirmarCita = async () => {
@@ -503,7 +481,13 @@ function UserAgendarContent() {
         cita_paciente: paciente.nombre,
         cita_parentesco: paciente.parentesco,
       };
-      await guardarCita(citaData, user.uid);
+      console.log({
+        citaData,
+        userUid: user.uid,
+        idPublicoDoctor: profesional.idPublico,
+      });
+
+      await guardarCita(citaData, user.uid, profesional.idPublico);
       alert("¡Cita agendada exitosamente!");
       setPasoActual(PASOS_AGENDAR.SELECCIONAR_PACIENTE);
     } catch (error) {
@@ -564,7 +548,7 @@ function UserAgendarContent() {
     case PASOS_AGENDAR.SELECCION_ESPECIALIDAD:
       pasoComponent = (
         <PasoSeleccionarEspecialidad
-          especialidades={especialidadesSQL}
+          especialidades={especialidades}
           onPrev={() => setPasoActual(PASOS_AGENDAR.SELECCION_TIPO_CITA)}
           onNext={() => setPasoActual(PASOS_AGENDAR.SELECCION_MEDICO)}
         />
@@ -573,7 +557,7 @@ function UserAgendarContent() {
     case PASOS_AGENDAR.SELECCION_MEDICO:
       pasoComponent = (
         <PasoSeleccionarDoctor
-          doctores={doctoresSQL}
+          doctores={doctores}
           onPrev={() => setPasoActual(PASOS_AGENDAR.SELECCION_ESPECIALIDAD)}
           onNext={() => setPasoActual(PASOS_AGENDAR.SELECCION_HORA)}
         />
@@ -616,8 +600,14 @@ function UserAgendarContent() {
                 cita_fecha: seleccion.fecha || "No seleccionado",
                 cita_hora: seleccion.hora || "No seleccionado",
                 cita_doctor: seleccion.profesional?.nombre || "No seleccionado",
-                cita_consultorio:
-                  seleccion.profesional?.consultorio || "No asignado",
+                cita_consultorio: (() => {
+                  const doctor = doctores.find(
+                    (doc) => doc.idPublico === seleccion.profesional?.idPublico
+                  );
+                  return doctor?.consultorio && doctor.consultorio.trim() !== ""
+                    ? doctor.consultorio
+                    : "Sin asignar";
+                })(),
               }}
               isActive={true}
             />
