@@ -1,7 +1,15 @@
 // src/features/medico/pages/MedicoDashboard.jsx
-import React, { useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../auth/firebase";
+import { useAuth } from "../../auth/context/AuthContext";
 import "../../../styles/features/user/medicoDashborad.css";
 
 // Componente hijo: Card de cita individual
@@ -15,16 +23,19 @@ function CitaCard({ cita, seleccionado, onSelect, onAceptar, onRechazar }) {
       />
       <div className="cita-card__info">
         <p>
-          <strong>Paciente:</strong> {cita.paciente}
+          <strong>Paciente:</strong> {cita.cita_paciente}
         </p>
         <p>
-          <strong>Fecha:</strong> {cita.fecha}
+          <strong>Fecha:</strong> {cita.cita_fecha}
         </p>
         <p>
-          <strong>Hora:</strong> {cita.hora}
+          <strong>Hora:</strong> {cita.cita_hora}
         </p>
         <p>
-          <strong>Motivo:</strong> {cita.motivo}
+          <strong>Motivo:</strong> {cita.tipo_cita}
+        </p>
+        <p>
+          <strong>Consultorio:</strong> {cita.cita_consultorio}
         </p>
       </div>
       <div className="cita-card__acciones">
@@ -44,30 +55,36 @@ function CitaCard({ cita, seleccionado, onSelect, onAceptar, onRechazar }) {
 
 // Componente padre: Lista de citas y acciones globales
 export default function MedicoDashboard() {
-  const [citas, setCitas] = useState([
-    {
-      id: "1",
-      paciente: "Juan Pérez",
-      fecha: "2025-06-22",
-      hora: "09:00",
-      motivo: "Consulta general",
-    },
-    {
-      id: "2",
-      paciente: "Ana Gómez",
-      fecha: "2025-06-22",
-      hora: "10:00",
-      motivo: "Control",
-    },
-    {
-      id: "3",
-      paciente: "Luis Torres",
-      fecha: "2025-06-22",
-      hora: "11:00",
-      motivo: "Dolor de cabeza",
-    },
-  ]);
+  const { user } = useAuth();
+  const [citas, setCitas] = useState([]);
   const [seleccionadas, setSeleccionadas] = useState([]);
+
+  // Cargar citas del médico logueado con estado pendiente
+  useEffect(() => {
+    if (!user?.id_publico) {
+      console.log("No hay idPublico en el usuario:", user);
+      return;
+    }
+    console.log("Buscando citas para idPublicoDoctor:", user.id_publico);
+    const cargarCitas = async () => {
+      try {
+        const q = query(
+          collection(db, "citas"),
+          where("idPublicoDoctor", "==", user.id_publico),
+          where("cita_estado", "==", "pendiente")
+        );
+        const snapshot = await getDocs(q);
+        const docs = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCitas(docs);
+      } catch (error) {
+        setCitas([]);
+      }
+    };
+    cargarCitas();
+  }, [user?.idPublico]);
 
   // Seleccionar/deseleccionar una cita
   const handleSelect = (id) => {
@@ -91,10 +108,7 @@ export default function MedicoDashboard() {
       await updateDoc(doc(db, "citas", id), {
         cita_estado: nuevoEstado,
       });
-      // Opcional: Actualizar estado local si tienes las citas en tiempo real
-      setCitas((prev) =>
-        prev.map((c) => (c.id === id ? { ...c, cita_estado: nuevoEstado } : c))
-      );
+      setCitas((prev) => prev.filter((c) => c.id !== id));
     } catch (error) {
       alert("Error al actualizar la cita: " + error.message);
     }
