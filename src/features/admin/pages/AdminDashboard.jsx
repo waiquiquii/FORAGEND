@@ -7,6 +7,7 @@ import {
   doc,
   updateDoc,
   setDoc,
+  getDoc,
 } from "firebase/firestore";
 import { db } from "../../auth/firebase";
 import "../../../styles/features/user/medicoDashborad.css";
@@ -32,10 +33,7 @@ function MedicoCard({ medico, onAceptar, onRechazar }) {
         <button className="btn btn-aceptar" onClick={() => onAceptar(medico)}>
           Aceptar
         </button>
-        <button
-          className="btn btn-rechazar"
-          onClick={() => onRechazar(medico.idPublico)}
-        >
+        <button className="btn btn-rechazar" onClick={() => onRechazar(medico)}>
           Rechazar
         </button>
       </div>
@@ -115,20 +113,36 @@ export default function AdminDashboard() {
   // Aceptar médico: actualiza medicosPublicData y añade/actualiza en medicos
   const handleAceptar = async (medico) => {
     try {
-      await updateDoc(doc(db, "medicosPublicData", medico.idPublico), {
+      // Verifica que el documento exista antes de actualizar
+      const docRef = doc(db, "medicosPublicData", medico.uid);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) {
+        alert("El médico ya no existe en medicosPublicData.");
+        return;
+      }
+
+      // Actualiza medicosPublicData (solo para referencia de estado)
+      await updateDoc(docRef, {
         activo: true,
         estado: "activo",
+        rechazado: false,
       });
+
+      // Añade o actualiza en medicos usando el UID como ID del documento
       if (medico.uid) {
         await setDoc(doc(db, "medicos", medico.uid), {
           uid: medico.uid,
           email: medico.email,
           nombre: medico.nombre,
           especialidad: medico.especialidad,
-          idPublico: medico.idPublico,
           activo: true,
+          idPublico: medico.idPublico, // solo referencia
         });
+      } else {
+        alert("No se encontró el UID del médico. No se puede aceptar.");
+        return;
       }
+
       setMedicos((prev) =>
         prev.filter((m) => m.idPublico !== medico.idPublico)
       );
@@ -137,15 +151,24 @@ export default function AdminDashboard() {
     }
   };
 
-  // Rechazar médico
-  const handleRechazar = async (idPublico) => {
+  // Rechazar médico: actualiza medicosPublicData y elimina de la lista
+  const handleRechazar = async (medico) => {
     try {
-      await updateDoc(doc(db, "medicosPublicData", idPublico), {
+      // Verifica que el documento exista antes de actualizar
+      const docRef = doc(db, "medicosPublicData", medico.uid);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) {
+        alert("El médico ya no existe en medicosPublicData.");
+        return;
+      }
+
+      await updateDoc(docRef, {
         activo: false,
         rechazado: true,
         estado: "rechazado",
       });
-      setMedicos((prev) => prev.filter((m) => m.idPublico !== idPublico));
+
+      setMedicos((prev) => prev.filter((m) => m.uid !== medico.uid));
     } catch (error) {
       alert("Error al rechazar médico: " + error.message);
     }
